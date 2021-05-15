@@ -73,7 +73,7 @@ class MovieEvent extends CI_Controller {
         $this->load->view('CMS/Media/image', $data);
     }
 
-    public function New() {
+    public function newEvent() {
         $data = array();
         $tag_data = array();
         $tags = [];

@@ -38,7 +38,7 @@ $blog_menu = array(
     "active" => "",
     "sub_menu" => array(
         "Theater(s) List" => site_url("CMS/theaterSetting"),
-        "Add Movie/Event" => site_url("MovieEvent/New"),
+        "Add Movie/Event" => site_url("MovieEvent/newEvent"),
         "Movie/Event List" => site_url("MovieEvent/eventList"),
     ),
 );
