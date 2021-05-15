@@ -40,15 +40,11 @@ class UserManager extends CI_Controller {
     }
 
     public function usersReport() {
-        $data['users_vendor'] = $this->User_model->user_reports("Vendor");
-        $data['users_customer'] = $this->User_model->user_reports("Customer");
-        $data['users_all'] = $this->User_model->user_reports("");
-        $data['users_blocked'] = $this->User_model->user_reports("Blocked");
-        $data['users_manager'] = $this->User_model->user_reports("Manager");
-        if ($this->user_type == 'Vendor' || $this->user_type == 'Customer') {
-            redirect('UserManager/not_granted');
-        }
-
+        $this->db->group_by('email');
+        $this->db->order_by('id', 'desc');
+        $query = $this->db->get('movie_ticket_booking');
+        $customers = $query->result();
+        $data["customers"] = $customers;
         $this->load->view('userManager/usersReport', $data);
     }
 
@@ -440,7 +436,6 @@ class UserManager extends CI_Controller {
         }
         $data['measurements'] = $measurement_array;
         // Usermeasurement
-        
         //User Log
         $this->db->order_by('id', 'desc');
         $this->db->where('user_id', $user_id);

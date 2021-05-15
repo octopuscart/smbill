@@ -73,4 +73,65 @@ class MovieEvent extends CI_Controller {
         $this->load->view('CMS/Media/image', $data);
     }
 
+    public function New() {
+        $data = array();
+        $tag_data = array();
+        $tags = [];
+
+        $data['tags'] = $tags;
+
+
+        $data['categories'] = array();
+
+        $config['upload_path'] = 'assets/movies';
+        $config['allowed_types'] = '*';
+        if (isset($_POST['submit_data'])) {
+            $picture = '';
+
+            if (!empty($_FILES['picture']['name'])) {
+                $temp1 = rand(100, 1000000);
+                $config['overwrite'] = TRUE;
+                $ext1 = explode('.', $_FILES['picture']['name']);
+                $ext = strtolower(end($ext1));
+                $file_newname = $temp1 . "$userid." . $ext;
+                $picture = $file_newname;
+                $config['file_name'] = $file_newname;
+                //Load upload library and initialize configuration
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('picture')) {
+                    $uploadData = $this->upload->data();
+                    $picture = $uploadData['file_name'];
+                } else {
+                    $picture = '';
+                }
+            }
+
+
+
+            $tags = implode(", ", $this->input->post("tags"));
+
+            $blogArray = array(
+                "image" => $picture,
+                "tag" => $tags,
+                "category_id" => $this->input->post("category_id"),
+                "title" => $this->input->post("title"),
+                "description" => $this->input->post("description"),
+            );
+
+            $this->Curd_model->insert('style_tips', $blogArray);
+            redirect("CMS/newBlog");
+        }
+
+        $this->load->view('Movie/new_event', $data);
+    }
+
+    public function eventList() {
+        $this->db->order_by('id desc');
+        $query = $this->db->get('movie_show');
+        $image_list = $query->result_array();
+        $data['eventlist'] = $image_list;
+        $this->load->view('Movie/list', $data);
+    }
+
 }

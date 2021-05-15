@@ -41,15 +41,15 @@ $this->load->view('layout/topmenu');
 
 function userReportFunction($users) {
     ?>
-    <table id="tableDataOrder" class="table table-bordered table-striped">
+    <table id="tableDataOrder" class="table table-bordered table-striped" style='width:100%'>
         <thead>
             <tr>
                 <th style="width: 20px;">S.N.</th>
-                <th style="width:50px;">Activity Type</th>
-                <th style="width: 75px;">Details</th>
+                <th style="width:250px;">Activity Type</th>
+                <th >Details</th>
                 <th style="width: 100px;">Date Time </th>
 
-                <!--                <th style="width: 75px;">Edit</th>-->
+                    <!--                <th style="width: 75px;">Edit</th>-->
             </tr>
         </thead>
         <tbody>
@@ -89,33 +89,41 @@ function userReportFunction($users) {
 }
 ?>
 
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <!-- ============================================================== -->
+        <!-- Start Page Content -->
+        <!-- ============================================================== -->
 
-<section class="content">
-    <div class="">
+        <!-- begin #content -->
+        <div id="content" class="content">
+            <section class="content">
+                <div class="">
 
-        <div class="panel panel-inverse">
-            <div class="panel-heading">
-                <h3 class="panel-title">System Log Reports</h3>
-            </div>
-            <div class="box-body">
-                <!-- Tab panes -->
-                <div class="tab-content">
+                    <div class="panel panel-inverse">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">System Log Reports</h3>
+                        </div>
+                        <div class="box-body">
+                            <!-- Tab panes -->
+                            <div class="tab-content">
 
-                    <div class="row" style="padding:20px">
-                        <?php userReportFunction($systemlog); ?>
+                                <div class="row" style="padding:20px">
+                                    <?php userReportFunction($systemlog); ?>
+                                </div>
+                            </div>
+
+
+
+                        </div>
                     </div>
                 </div>
-
-
-
-            </div>
+            </section>
+            <!-- end col-6 -->
         </div>
+
     </div>
-</section>
-<!-- end col-6 -->
 </div>
-
-
 <?php
 $this->load->view('layout/footer');
 ?> 

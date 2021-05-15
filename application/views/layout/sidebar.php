@@ -7,47 +7,22 @@ if ($userdata) {
 }
 $menu_control = array();
 
-$product_menu = array(
-    "title" => "Product Manegement",
-    "icon" => "ion-cube",
-    "active" => "",
-    "sub_menu" => array(
-        "Add Product" => site_url("ProductManager/add_product"),
-        "Product Reports" => site_url("ProductManager/productReport"),
-        "Categories" => site_url("ProductManager/categories"),
-        "Product Out Of Stock" => site_url("ProductManager/productReportStockOut"),
-        "Product Removed" => site_url("ProductManager/productReportTrash"),
-//        "Items Prices" => site_url("ProductManager/categoryItems"),
-//        "Product Sorting" => site_url("ProductManager/productSorting"),
-//        "Product Colors" => site_url("ProductManager/productColors"),
-    ),
-);
-
-
-
-if (DEFAULT_PAYMENT == 'No') {
-    unset($product_menu['sub_menu']['Items Prices']);
-} else {
-    
-}
-
-array_push($menu_control, $product_menu);
 
 
 $order_menu = array(
-    "title" => "Order Manegement",
-    "icon" => "fa fa-list",
+    "title" => "Booking",
+    "icon" => "icon-Receipt-4",
     "active" => "",
     "sub_menu" => array(
-        "Orders Reports" => site_url("Order/orderslist"),
-        "Order Analytics" => site_url("Order/index"),
+        "Booking Reports" => site_url("Order/orderslist"),
+//        "Order Analytics" => site_url("Order/index"),
     ),
 );
 array_push($menu_control, $order_menu);
 
 $client_menu = array(
     "title" => "Client Manegement",
-    "icon" => "fa fa-users",
+    "icon" => "icon-Add-User",
     "active" => "",
     "sub_menu" => array(
         "Clients Reports" => site_url("UserManager/usersReport"),
@@ -58,14 +33,13 @@ array_push($menu_control, $client_menu);
 
 
 $blog_menu = array(
-    "title" => "Blog Management",
-    "icon" => "fa fa-edit",
+    "title" => "Event Management",
+    "icon" => "ti-video-camera",
     "active" => "",
     "sub_menu" => array(
-        "Categories" => site_url("CMS/blogCategories"),
-        "Add New" => site_url("CMS/newBlog"),
-        "Blog List" => site_url("CMS/blogList"),
-        "Tags" => site_url("CMS/blogTag"),
+        "Theater(s) List" => site_url("CMS/theaterSetting"),
+        "Add Movie/Event" => site_url("MovieEvent/New"),
+        "Movie/Event List" => site_url("MovieEvent/eventList"),
     ),
 );
 array_push($menu_control, $blog_menu);
@@ -74,7 +48,7 @@ array_push($menu_control, $blog_menu);
 
 $lookbook_menu = array(
     "title" => "Media Management",
-    "icon" => "fa fa-image",
+    "icon" => "ti-image",
     "active" => "",
     "sub_menu" => array(
         "Images" => site_url("Media/images"),
@@ -135,7 +109,7 @@ $user_menu = array(
 
 $setting_menu = array(
     "title" => "Settings",
-    "icon" => "fa fa-cogs",
+    "icon" => "ti-settings",
     "active" => "",
     "sub_menu" => array(
         "System Log" => site_url("Services/systemLogReport"),
@@ -150,7 +124,7 @@ array_push($menu_control, $setting_menu);
 
 $social_menu = array(
     "title" => "Social Management",
-    "icon" => "fa fa-calendar",
+    "icon" => "ti-share-alt",
     "active" => "",
     "sub_menu" => array(
         "Social Link" => site_url("CMS/socialLink"),
@@ -161,7 +135,7 @@ array_push($menu_control, $social_menu);
 
 $seo_menu = array(
     "title" => "SEO",
-    "icon" => "fa fa-calendar",
+    "icon" => "ti-world",
     "active" => "",
     "sub_menu" => array(
         "General" => site_url("CMS/siteSEOConfigUpdate"),
@@ -213,6 +187,30 @@ foreach ($menu_control as $key => $value) {
                     <!-- End User Profile-->
                 </li>
                 <!-- User Profile-->
+
+                <?php foreach ($menu_control as $mkey => $mvalue) { ?>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link has-arrow waves-effect waves-dark <?php echo $mvalue['active']; ?>" href="javascript:void(0)" aria-expanded="false">
+                            <i class="<?php echo $mvalue['icon']; ?>"></i>
+                            <span class="hide-menu"><?php echo $mvalue['title']; ?> </span>
+                        </a>
+
+                        <ul aria-expanded="false" class="collapse  first-level <?php echo $mvalue['active'] == 'active' ? 'in' : ''; ?>">
+                            <?php
+                            $submenu = $mvalue['sub_menu'];
+                            foreach ($submenu as $key => $value) {
+                                ?>
+                                <li class="sidebar-item">
+                                    <a href="<?php echo $value; ?>" class="sidebar-link">
+                                        <i class="mdi mdi-book-multiple"></i>
+                                        <span class="hide-menu"> <?php echo $key; ?> </span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </li>
+                <?php } ?>
+
 
             </ul>
         </nav>

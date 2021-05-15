@@ -20,7 +20,7 @@
         ?>
     </div>
     <div class="col-md-5 text-right">
-        <h4> Orders from <small><?php echo $daterange; ?></small></h4>
+        <h4> Booking from <small><?php echo $daterange; ?></small></h4>
     </div>
 
 </form>

@@ -43,12 +43,7 @@ function userReportFunction($users) {
                 <th style="width: 75px;">Name</th>
                 <th style="width: 100px;">Email </th>
                 <th style="width: 100px;">Contact No.</th>
-                <th style="width: 100px;">Gender </th>
-                <th style="width: 100px;">Birth Date </th>
-                <th style="width: 100px;">Profession </th>
-                <th style="width: 100px;">Country </th>
-                <th style="width: 100px;">Reg. Date/Time</th>
-                <th style="width: 75px;">Edit</th>
+
             </tr>
         </thead>
         <tbody>
@@ -64,7 +59,7 @@ function userReportFunction($users) {
                         <td>
 
 
-                            <img src = '<?php echo base_url(); ?>assets/profile_image/<?php echo $value->image; ?>' alt = "" class = "media-object rounded-corner" style = "    width: 30px;background: url(<?php echo base_url(); ?>assets/emoji/user.png);    height: 30px;background-size: cover;" />
+                            <img src = '<?php echo base_url(); ?>assets/emoji/user.png' alt = "" class = "media-object rounded-corner" style = "    width: 30px;background: url(<?php echo base_url(); ?>assets/emoji/user.png);    height: 30px;background-size: cover;" />
 
 
 
@@ -72,7 +67,7 @@ function userReportFunction($users) {
 
                         <td>
                             <span class="">
-                                <b><span class="seller_tag"><?php echo $value->first_name; ?> <?php echo $value->last_name; ?></span></b>
+                                <b><span class="seller_tag"><?php echo $value->name; ?></span></b>
                             </span>
                         </td>
 
@@ -90,41 +85,10 @@ function userReportFunction($users) {
                                 <?php echo $value->contact_no; ?>
                             </span>
                         </td>
-                        <td>
-                            <span class="">
-
-                                <?php echo $value->gender; ?>
-                            </span>
-                        </td>
-                        <td>
-                            <span class="">
-
-                                <?php echo $value->birth_date; ?>
-                            </span>
-                        </td>
-                        <td>
-                            <span class="">
-
-                                <?php echo $value->profession; ?>
-                            </span>
-                        </td>
-                        <td>
-                            <span class="">
-
-                                <?php echo $value->country; ?>
-                            </span>
-                        </td>
 
 
-                        <td>
-                            <span class="">
-                                <?php echo $value->registration_datetime; ?>
-                            </span>
-                        </td>
 
-                        <td>
-                            <a href="<?php echo site_url('userManager/user_details/' . $value->id); ?>" class="btn btn-danger"><i class="fa fa-eye "></i> View</a>
-                        </td>
+
                     </tr>
                     <?php
                     $count++;
@@ -137,45 +101,58 @@ function userReportFunction($users) {
 }
 ?>
 
+<div class="page-wrapper">
+    <!-- ============================================================== -->
+  
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+        <!-- ============================================================== -->
+        <!-- Start Page Content -->
+        <!-- ============================================================== -->
 
-<section class="content">
-    <div class="">
+        <!-- begin #content -->
+        <div id="content" class="content">
+            <section class="content">
+                <div class="">
 
-        <div class="panel panel-inverse">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    Users Reports
-                    <span class="pull-right label label-success">
-                        <a class="btn btn-success btn-xs" href="<?php echo site_url('userManager/user_profile_record_xls/all'); ?>"  targer="_blank">
-                            <i class="fa fa-file-excel-o"></i>  Export Data
-                        </a>
-                    </span>
-                </h3>
-                <div class="panel-tools">
+                    <div class="panel panel-inverse">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Users Reports
+                                <span class="pull-right label label-success">
+                                    <a class="btn btn-success btn-xs" href="<?php echo site_url('userManager/user_profile_record_xls/all'); ?>"  targer="_blank">
+                                        <i class="fa fa-file-excel-o"></i>  Export Data
+                                    </a>
+                                </span>
+                            </h3>
+                            <div class="panel-tools">
 
-                </div>
+                            </div>
 
-            </div>
-            <div class="box-body">
-
-
-
-                <!-- Tab panes -->
-                <div class="tab-content">
+                        </div>
+                        <div class="box-body">
 
 
-                    <div class="" style="padding:20px">
-                        <?php userReportFunction($users_all); ?>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+
+
+                                <div class="" style="padding:20px">
+                                    <?php userReportFunction($customers); ?>
+                                </div>
+                            </div>
+
+
+
+                        </div>
                     </div>
                 </div>
-
-
-
-            </div>
+            </section>
+            <!-- end col-6 -->
         </div>
     </div>
-</section>
-<!-- end col-6 -->
 </div>
 
 

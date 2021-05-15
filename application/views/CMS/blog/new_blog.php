@@ -8,7 +8,7 @@ $this->load->view('layout/topmenu');
 
 <link href="<?php echo base_url(); ?>assets/plugins/jquery-file-upload/css/jquery.fileupload.css" rel="stylesheet" />
 <link href="<?php echo base_url(); ?>assets/plugins/jquery-file-upload/css/jquery.fileupload-ui.css" rel="stylesheet" />
-
+<div class="page-wrapper">
 <!-- begin #content -->
 <!-- begin #content -->
 <div id="content" class="content content-full-width">
@@ -94,7 +94,7 @@ $this->load->view('layout/topmenu');
     <!-- end vertical-box -->
 </div>
 <!-- end #content -->
-
+</div>
 
 <?php
 $this->load->view('layout/footer');

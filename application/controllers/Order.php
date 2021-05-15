@@ -715,20 +715,19 @@ join movie_show as ms on ms.id = mtb.movie_id
 where mtb.select_time between '$date1'  and '$date2'";
             $query = $this->db->query($querystr);
             $orderlist = $query->result();
-            print_r($orderlist);
+          
             $orderslistr = [];
             foreach ($orderlist as $key => $value) {
                 $this->db->order_by('id', 'desc');
                 $this->db->where('movie_ticket_booking_id', $value->id);
                 $query = $this->db->get('movie_ticket');
-                $status = $query->result_array();
+                $tickets = $query->result();
 
-                $tempdata = array();
-                $itemarray = array();
+                $value->seats = $tickets;
 
                 array_push($orderslistr, $value);
             }
-            print_r($orderslistr);
+
             $data['orderslist'] = $orderslistr;
             $this->load->view('Order/orderslist', $data);
         }

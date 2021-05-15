@@ -10,7 +10,14 @@ $this->load->view('layout/topmenu');
 <link href="<?php echo base_url(); ?>assets/plugins/jquery-file-upload/css/jquery.fileupload-ui.css" rel="stylesheet" />
 
 <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-wysihtml5/src/bootstrap-wysihtml5.css" rel="stylesheet" />
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <!-- ============================================================== -->
+        <!-- Start Page Content -->
+        <!-- ============================================================== -->
 
+        <!-- begin #content -->
+        <div id="content" class="content">
 <!-- begin #content -->
 <!-- begin #content -->
 <div id="content" class="content content-full-width">
@@ -72,7 +79,10 @@ $this->load->view('layout/topmenu');
     <!-- end vertical-box -->
 </div>
 <!-- end #content -->
-
+        </div>
+    </div>
+</div>
+        
 
 <?php
 $this->load->view('layout/footer');

@@ -17,15 +17,15 @@ class CMS extends CI_Controller {
         $this->user_type = $this->session->logged_in['user_type'];
     }
 
-    public function blogCategories() {
+    public function theaterSetting() {
         $data = array();
-        $data['title'] = "Blog Categories";
+        $data['title'] = "Theater Setup";
         $data['description'] = "Blog Categories";
-        $data['form_title'] = "Add Category";
-        $data['table_name'] = 'style_category';
+        $data['form_title'] = "";
+        $data['table_name'] = 'movie_theater';
         $form_attr = array(
-            "category_name" => array("title" => "Category Name", "required" => true, "place_holder" => "Category Name", "type" => "text", "default" => ""),
-            "parent_id" => array("title" => "", "required" => false, "place_holder" => "", "type" => "hidden", "default" => ""),
+            "title" => array("title" => "Theater Name", "required" => true, "place_holder" => "Theater Name", "type" => "text", "default" => ""),
+            "description" => array("title" => "Description", "required" => false, "place_holder" => "", "type" => "hidden", "default" => ""),
             "display_index" => array("title" => "", "required" => false, "place_holder" => "", "type" => "hidden", "default" => ""),
         );
 
@@ -34,17 +34,18 @@ class CMS extends CI_Controller {
             foreach ($form_attr as $key => $value) {
                 $postarray[$key] = $this->input->post($key);
             }
-            $this->Curd_model->insert('style_category', $postarray);
+            $this->Curd_model->insert('movie_theater', $postarray);
             redirect("CMS/blogCategories");
         }
 
 
-        $categories_data = $this->Curd_model->get('style_category');
+        $categories_data = $this->Curd_model->get('movie_theater');
         $data['list_data'] = $categories_data;
 
         $fields = array(
             "id" => array("title" => "ID#", "width" => "100px"),
-            "category_name" => array("title" => "Category Name", "width" => "50%"),
+            "title" => array("title" => "Theater Name", "width" => "50%"),
+            "description" => array("title" => "Description", "width" => "50%"),
         );
 
         $data['fields'] = $fields;
@@ -387,15 +388,14 @@ class CMS extends CI_Controller {
             "LinkedIn" => array("title" => "LinkedIn", "icon" => "", "display_index" => 8),
         );
         foreach ($socialLinks as $sskey => $ssvalue) {
-            
+
             $this->db->where('title', $sskey);
             $query = $this->db->get('conf_social_link');
             $systemlog = $query->result();
-            if($systemlog){
+            if ($systemlog) {
                 
-            }
-            else{
-                
+            } else {
+
                 unset($ssvalue["icon"]);
                 $this->Curd_model->insert('conf_social_link', $ssvalue);
             }
@@ -405,8 +405,8 @@ class CMS extends CI_Controller {
         $data['list_data'] = $categories_data;
 
         $fields = array(
-            "title" => array("title" => "Social Account", "width" => "200px", "edit"=>0),
-            "link_url" => array("title" => "URL", "width" => "300px", "edit"=>1),
+            "title" => array("title" => "Social Account", "width" => "200px", "edit" => 0),
+            "link_url" => array("title" => "URL", "width" => "300px", "edit" => 1),
         );
 
         $data['fields'] = $fields;
@@ -459,7 +459,7 @@ class CMS extends CI_Controller {
         $data['site_data'] = $blog_data;
         if (isset($_POST['update_data'])) {
             $blogArray = array(
-                 "site_name" => $this->input->post("site_name"),
+                "site_name" => $this->input->post("site_name"),
                 "seo_keywords" => $this->input->post("keyword"),
                 "seo_title" => $this->input->post("title"),
                 "seo_desc" => $this->input->post("description"),

@@ -2,7 +2,25 @@
 $this->load->view('layout/header');
 $this->load->view('layout/topmenu');
 ?>
-
+<style>
+    .small_table td, .small_table th{
+        padding:5px;
+        font-size: 12px;
+    }
+    .bookingseats{
+        margin-left: 10px;
+        font-size: 12px;
+        border: 1px solid #22c6ab;
+        padding: 4px 10px;
+        margin-top: 10px;
+        background: orange;
+        font-weight: 600;
+        color: white;
+    }
+    .bookingseats.Purchase{
+        background: green;
+    }
+</style>
 <!-- ============================================================== -->
 <div class="page-wrapper">
     <!-- ============================================================== -->
@@ -48,18 +66,56 @@ $this->load->view('layout/topmenu');
                                 <div  style="clear:both"></div>
                             </div>
                             <!-- /.panel-header -->
-                            <div class="panel-body">
-
-                                <table id="tableDataOrder" class="table table-bordered  tableDataOrder">
+                            <div class="panel-body" style="margin-top: 20px;">
+                                <div class="row m-t-40">
+                                    <!-- Column -->
+                                    <div class="col-md-6 col-lg-3 col-xlg-3">
+                                        <div class="card card-hover">
+                                            <div class="box bg-info text-center">
+                                                <h1 class="font-light text-white">2,064</h1>
+                                                <h6 class="text-white">Total Tickets</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Column -->
+                                    <div class="col-md-6 col-lg-3 col-xlg-3">
+                                        <div class="card card-hover">
+                                            <div class="box bg-primary text-center">
+                                                <h1 class="font-light text-white">1,738</h1>
+                                                <h6 class="text-white">Responded</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Column -->
+                                    <div class="col-md-6 col-lg-3 col-xlg-3">
+                                        <div class="card card-hover">
+                                            <div class="box bg-success text-center">
+                                                <h1 class="font-light text-white">1100</h1>
+                                                <h6 class="text-white">Resolve</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Column -->
+                                    <div class="col-md-6 col-lg-3 col-xlg-3">
+                                        <div class="card card-hover">
+                                            <div class="box bg-dark text-center">
+                                                <h1 class="font-light text-white">964</h1>
+                                                <h6 class="text-white">Pending</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Column -->
+                                </div>
+                                <table id="tableDataOrder" class="table table-bordered   tableDataOrder" >
                                     <thead>
                                         <tr>
                                             <th style="width: 70px">S. No.</th>
-                                            <th style="width:200px">Order Information</th>
-                                            <th style="width:200px">Customer Information</th>
-                                            <th style="width:250px">Shipping Address</th>
-                                            <th style="width:100px">Payment Type</th>
-                                            <th>Status</th>
-                                            <th></th>
+                                            <th style="width:25%">Booking Information</th>
+                                            <th style="width:25%">Customer Information</th>
+                                            <th style="width:25%">Event Information</th>
+                                            <th style="width:25%">Booking Type</th>
+
+
 
                                         </tr>
                                     </thead>
@@ -77,42 +133,53 @@ $this->load->view('layout/topmenu');
 
                                                         <table class="small_table">
                                                             <tr>
-                                                                <th>Ord. No.</th>
+                                                                <th>Booking. No.</th>
                                                                 <td>: <?php echo $value->booking_no; ?></td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Total Amt.</th>
                                                                 <td>: {{<?php echo $value->total_price; ?>|currency:" "}}</td>
                                                             </tr>
-                                                   
+                                                            <tr>
+                                                                <th>Date/Time</th>
+                                                                <td>:<?php echo $value->select_time; ?> <?php echo $value->select_date; ?></td>
+                                                            </tr>
+
                                                         </table>
 
                                                     </td>
 
                                                     <td>
 
-                                                        <b> <?php echo $value->name; ?></b>
+
                                                         <table class="small_table">
                                                             <tr>
-                                                                <th><i class="fa fa-envelope"></i> &nbsp; </th>
-                                                                <td class="overtext"> <a href="#" title="<?php echo $value->email; ?>"><?php echo $value->email; ?></a></td>
+                                                                <th><i class="fa fa-user"></i></th>
+                                                                <td class="overtext"><?php echo $value->name; ?></td>
                                                             </tr>
                                                             <tr>
-                                                                <th><i class="fa fa-phone"></i>  &nbsp;</th>
+                                                                <th><i class="fa fa-envelope"></i></th>
+                                                                <td class="overtext"> <?php echo $value->email; ?></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th><i class="fa fa-phone"></i> </th>
                                                                 <td> <?php echo $value->contact_no; ?></td>
                                                             </tr>
 
                                                         </table>
 
                                                     </td>
-                                                    <td style="font-size: 10px;">
+                                                    <td >
+                                                        <b><?php echo $value->movie ?></b><br/>
+                                                        <?php echo $value->theater ?><br/>
+                                                        <div class="row" style="margin-top: 10px;">
+                                                            <?php
+                                                            foreach ($value->seats as $skey => $svalue) {
+                                                                echo "<span class='bookingseats $value->booking_type'>" . $svalue->seat . "</span>";
+                                                            }
+                                                            ?>
+                                                        </div>
 
-                                                        <?php echo $value->address1; ?><br/>
-                                                        <?php echo $value->address2; ?><br/>
-                                                        <?php echo $value->state; ?>
-                                                        <?php echo $value->city; ?>
-
-                                                        <?php echo $value->country; ?> <?php echo $value->zipcode; ?>
 
 
                                                     </td>
@@ -120,18 +187,10 @@ $this->load->view('layout/topmenu');
 
                                                     <td>
                                                         <?php
-                                                        echo $value->payment_mode;
+                                                        echo $value->booking_type;
                                                         ?>
-                                                    </td>
-
-                                                    <td>
-                                                        <?php
-                                                        echo "" . $value->status . "<br/>";
-                                                        echo $value->status_datetime;
-                                                        ?>
-                                                    </td>
-                                                    <td>
-                                                        <a href="<?php echo site_url("order/orderdetails/" . $value->order_key); ?>" class="btn btn-primary btn-sm" style="    margin-top: 20%;">Update <i class="fa fa-arrow-circle-right"></i></a>
+                                                        <br/>
+                                                        <a href="<?php echo site_url("order/orderdetails/" . $value->booking_id); ?>" class="btn btn-primary btn-sm" style="    margin-top: 20%;">Update <i class="fa fa-arrow-circle-right"></i></a>
                                                     </td>
                                                 </tr>
                                                 <?php
@@ -171,7 +230,7 @@ $this->load->view('layout/footer');
 
 
     $(function () {
-      $("#daterangepicker").daterangepicker({
+        $("#daterangepicker").daterangepicker({
             format: 'YYYY-MM-DD',
             showDropdowns: true,
             showWeekNumbers: true,
@@ -192,7 +251,7 @@ $this->load->view('layout/footer');
             applyClass: 'btn-primary',
             cancelClass: 'btn-default',
             separator: ' to ',
-            
+
         }, function (start, end, label) {
             $('input[name=daterange]').val(start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
         });
