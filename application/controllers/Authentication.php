@@ -38,6 +38,7 @@ class Authentication extends CI_Controller {
                 if ($username == $usr && md5($password) == $pwd) {
                     $sess_data = array(
                         'username' => $username,
+                        'email' => $username,
                         'first_name' => $checkuser->first_name,
                         'last_name' => $checkuser->last_name,
                         'login_id' => $checkuser->id,
