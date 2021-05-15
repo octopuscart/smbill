@@ -73,7 +73,7 @@ $this->load->view('layout/topmenu');
                                         <div class="card card-hover">
                                             <div class="box bg-info text-center">
                                                 <h1 class="font-light text-white">2,064</h1>
-                                                <h6 class="text-white">Total Tickets</h6>
+                                                <h6 class="text-white">Total Seats</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -82,7 +82,7 @@ $this->load->view('layout/topmenu');
                                         <div class="card card-hover">
                                             <div class="box bg-primary text-center">
                                                 <h1 class="font-light text-white">1,738</h1>
-                                                <h6 class="text-white">Responded</h6>
+                                                <h6 class="text-white">Reserved</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -91,7 +91,7 @@ $this->load->view('layout/topmenu');
                                         <div class="card card-hover">
                                             <div class="box bg-success text-center">
                                                 <h1 class="font-light text-white">1100</h1>
-                                                <h6 class="text-white">Resolve</h6>
+                                                <h6 class="text-white">Purchase</h6>
                                             </div>
                                         </div>
                                     </div>
