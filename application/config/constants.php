@@ -68,6 +68,20 @@ if (strpos($baselink, '192.168')) {
 define('MAIN_WEBSITE', $baselinkmainsite);
 
 
+switch ($baselink) {
+    case "http://localhost":
+        $adminlinkmain = $baselink . "/maharajaticketsmanage";
+        break;
+    case "http://192.168.1.2":
+          $adminlinkmain = $baselink . "/maharajaticketsmanage";
+        break;
+    default:
+        $adminlinkmain = "https://admin.maharajatickets.com/";
+}
+
+define('ADMINURL', $adminlinkmain);
+
+define('MOVIEPOSTER', $adminlinkmain."/assets/movies/");
 
 /*
   |--------------------------------------------------------------------------

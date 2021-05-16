@@ -12,6 +12,7 @@ class MovieEvent extends CI_Controller {
         parent::__construct();
         $this->load->model('Product_model');
         $this->load->model('User_model');
+        $this->load->model('Movie');
         $this->load->library('session');
         $this->user_id = $this->session->userdata('logged_in')['login_id'];
         $this->user_type = $this->session->logged_in['user_type'];
@@ -132,6 +133,125 @@ class MovieEvent extends CI_Controller {
         $image_list = $query->result_array();
         $data['eventlist'] = $image_list;
         $this->load->view('Movie/list', $data);
+    }
+
+    public function newsTheaterTemplate($theater_id = 0) {
+        $data["theater_id"] = $theater_id;
+        $query = $this->db->get('movie_theater');
+        $theaterlist = $query->result_array();
+        $data["theater_list"] = $theaterlist;
+
+        $this->db->where('id', $theater_id);
+        $query = $this->db->get('movie_theater');
+        $theaterobj = $query->row_array();
+        $data["theaterobj"] = $theaterobj;
+
+        if (isset($_POST['addtemplate'])) {
+            $templatearray = array(
+                "theater_id" => $theater_id,
+                "title" => $this->input->post("template_name"),
+                "reserve_seats" => $this->input->post("reserved_seats"),
+                "status" => "active"
+            );
+            $this->db->insert('movie_theater_template', $templatearray);
+            $last_id = $this->db->insert_id();
+
+            $classname = $this->input->post("class");
+            $price = $this->input->post("price");
+            foreach ($classname as $key => $value) {
+                $templateattr = array(
+                    "template_id" => $last_id,
+                    "class_name" => $classname[$key],
+                    "class_price" => $price[$key],
+                );
+                $this->db->insert('movie_theater_template_class', $templateattr);
+            }
+        }
+
+        $this->load->view('Movie/theater_template_create', $data);
+    }
+
+    function createEvent() {
+        $query = $this->db->get('movie_theater');
+        $theaterlist = $query->result_array();
+        $data["theater_list"] = $theaterlist;
+
+        $this->db->order_by('id desc');
+        $query = $this->db->get('movie_show');
+        $image_list = $query->result_array();
+        $data['eventlist'] = $image_list;
+
+
+        if (isset($_POST['submit_data'])) {
+            $templatearray = array(
+                "movie_id" => $this->input->post("movie_id"),
+                "theater_id" => $this->input->post("theater_id"),
+                "theater_template_id" => "",
+                "status" => "1"
+            );
+            $this->db->insert('movie_event', $templatearray);
+            $last_id = $this->db->insert_id();
+            redirect("MovieEvent/updateEvent/$last_id");
+        }
+        $this->load->view('Movie/create_event', $data);
+    }
+
+    function updateEvent($event_id) {
+
+        $this->db->where('id', $event_id);
+        $query = $this->db->get('movie_event');
+        $movie_event = $query->row_array();
+
+        $theater_id = $movie_event["theater_id"];
+        $movie_id = $movie_event["movie_id"];
+
+        $this->db->where('id', $theater_id);
+        $query = $this->db->get('movie_theater');
+        $theaterobj = $query->row_array();
+        $data["theaterobj"] = $theaterobj;
+
+        $this->db->select("*, description as about");
+        $this->db->where('id', $movie_id);
+        $query = $this->db->get('movie_show');
+        $movieobj = $query->row_array();
+        $movieobj["image"] = MOVIEPOSTER . $movieobj["image"];
+        $data["movie"] = $movieobj;
+
+        $data["theater_id"] = $theater_id;
+
+        if (isset($_POST["submit_data"])) {
+            $inputdata = $this->input->post();
+
+            $this->db->set("theater_template_id", $inputdata["template_id"]);
+            $this->db->where('id', $event_id);
+            $query = $this->db->update('movie_event');
+
+
+            $eventdate = $inputdata["event_date"];
+            $eventtime = $inputdata["event_time"];
+            foreach ($eventdate as $key => $value) {
+                $e_date = $eventdate[$key];
+                $e_time = $eventtime[$key];
+                $eventdata = array(
+                    "event_id" => $event_id,
+                    "event_date" => $e_date,
+                    "event_time" => $e_time
+                );
+                $this->db->insert('movie_event_datetime', $eventdata);
+            }
+            redirect("MovieEvent/evenMovietList");
+        }
+
+
+        $this->load->view('Movie/updateevent', $data);
+    }
+    
+    public function evenMovietList() {
+        $eventlist =  $this->Movie->getEventsList();
+//        echo "<pre>";
+//        print_r($eventlist);
+        $data['eventlist'] =$eventlist;
+        $this->load->view('movie/eventlist', $data);
     }
 
 }

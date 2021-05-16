@@ -37,12 +37,23 @@ $blog_menu = array(
     "icon" => "ti-video-camera",
     "active" => "",
     "sub_menu" => array(
-        "Theater(s) List" => site_url("CMS/theaterSetting"),
+        "Create Event" => site_url("MovieEvent/createEvent"),
         "Add Movie/Event" => site_url("MovieEvent/newEvent"),
         "Movie/Event List" => site_url("MovieEvent/eventList"),
     ),
 );
 array_push($menu_control, $blog_menu);
+
+$theater = array(
+    "title" => "Theater Management",
+    "icon" => "ti-blackboard",
+    "active" => "",
+    "sub_menu" => array(
+        "Theater(s) List" => site_url("CMS/theaterSetting"),
+        "Create Template" => site_url("MovieEvent/newsTheaterTemplate"),
+    ),
+);
+array_push($menu_control, $theater);
 
 
 
