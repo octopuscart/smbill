@@ -251,7 +251,7 @@ class MovieEvent extends CI_Controller {
 //        echo "<pre>";
 //        print_r($eventlist);
         $data['eventlist'] =$eventlist;
-        $this->load->view('movie/eventlist', $data);
+        $this->load->view('MovieEvent/eventlist', $data);
     }
 
 }

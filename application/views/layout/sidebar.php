@@ -39,7 +39,7 @@ $blog_menu = array(
     "sub_menu" => array(
         "Create Event" => site_url("MovieEvent/createEvent"),
         "Add Movie/Event" => site_url("MovieEvent/newEvent"),
-        "Movie/Event List" => site_url("MovieEvent/eventList"),
+        "Movie/Event List" => site_url("MovieEvent/evenMovietList"),
     ),
 );
 array_push($menu_control, $blog_menu);
