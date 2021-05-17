@@ -275,7 +275,7 @@ class MovieEvent extends CI_Controller {
         $this->db->set("status", "1");
         $this->db->where('movie_ticket_booking_id', $bid); //set column_name and value in which row need to update
         $this->db->update('movie_ticket');
-        redirect("MovieEvent/yourTicket/$bookid");
+        redirect("MovieEvent/yourTicketMail/$bookid");
     }
 
     function cancleBooking($bookid) {
@@ -296,7 +296,7 @@ class MovieEvent extends CI_Controller {
         $this->db->set("status", "0");
         $this->db->where('movie_ticket_booking_id', $bid); //set column_name and value in which row need to update
         $this->db->update('movie_ticket');
-        redirect("MovieEvent/yourTicket/$bookid");
+        redirect("MovieEvent/yourTicketMail/$bookid");
     }
 
     function refundBooking($bookid) {
@@ -317,7 +317,54 @@ class MovieEvent extends CI_Controller {
         $this->db->set("status", "0");
         $this->db->where('movie_ticket_booking_id', $bid); //set column_name and value in which row need to update
         $this->db->update('movie_ticket');
-        redirect("MovieEvent/yourTicket/$bookid");
+        redirect("MovieEvent/yourTicketMail/$bookid");
+    }
+
+    public function yourTicketMail($bookingid) {
+        $this->db->where('booking_id', $bookingid);
+        $query = $this->db->get('movie_ticket_booking');
+
+        $bookingobj = $query->row_array();
+        $movies = $this->Movie->movieInforamtion($bookingobj['movie_id']);
+        $data['movieobj'] = $movies;
+
+        $theaters = $this->Movie->theaterInformation($bookingobj['theater_id']);
+        $data['theater'] = $theaters;
+
+        $data['booking'] = $bookingobj;
+        $data['seats'] = $this->Movie->bookedSeatById($bookingobj['id']);
+
+
+        $emailsender = EMAIL_SENDER;
+        $sendername = EMAIL_SENDER_NAME;
+        $email_bcc = EMAIL_BCC;
+
+        $this->email->set_newline("\r\n");
+        $this->email->from(EMAIL_BCC, $sendername);
+        $this->email->to($bookingobj['email']);
+        $this->email->bcc(EMAIL_BCC);
+
+        $subject = "Your Movie Ticket(s) for " . $movies['title'];
+        $this->email->subject($subject);
+
+
+        $message = $this->load->view('Movie/ticketviewemail', $data, true);
+        setlocale(LC_MONETARY, 'en_US');
+        $checkcode = REPORT_MODE;
+        $checkcode = 1;
+        if ($checkcode) {
+            $this->email->message($message);
+            $this->email->print_debugger();
+            $send = $this->email->send();
+            if ($send) {
+                redirect("MovieEvent/yourTicket/$bookingid");
+            } else {
+                $error = $this->email->print_debugger(array('headers'));
+                redirect("MovieEvent/yourTicket/$bookingid");
+            }
+        } else {
+            redirect("MovieEvent/yourTicket/$bookingid");
+        }
     }
 
 }
