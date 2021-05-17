@@ -92,7 +92,9 @@ $this->load->view('layout/topmenu');
                                                     </tr>
                                                     <?php
                                                     $theaterlist = $value["event_datetime"];
+                                               
                                                     foreach ($theaterlist as $key => $evalue) {
+                                                       
                                                         ?>
                                                         <tr >
 

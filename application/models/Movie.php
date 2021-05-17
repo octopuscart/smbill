@@ -127,45 +127,58 @@ class Movie extends CI_Model {
         return $seats;
     }
 
+    function movieInforamtion($movie_id) {
+        $this->db->select("*, description as about");
+        $this->db->where('id', $movie_id);
+        $query = $this->db->get('movie_show');
+        $movieobj = $query->row_array();
+        $movieobj["image"] = MOVIEPOSTER . $movieobj["image"];
+        return $movieobj;
+    }
+
+    function theaterInformation($theater_id) {
+        $this->db->where('id', $theater_id);
+        $query = $this->db->get('movie_theater');
+        $theaterobj = $query->row_array();
+        return $theaterobj;
+    }
+
     function getEventsList($cdate = "") {
         if ($cdate == "") {
             $cdate = date("Y-m-d");
         }
-        $this->db->group_by("event_id");
+        $this->db->group_by("movie_id");
         $this->db->where('event_date>=', $cdate);
-        $query = $this->db->get('movie_event_datetime');
+        $query = $this->db->get('movie_event');
         $event_list = $query->result_array();
         $eventlistarray = array();
         foreach ($event_list as $ekey => $evalue) {
             $temparray = array();
-            $event_id = $evalue["event_id"];
 
-            $this->db->where('id', $event_id);
-            $query = $this->db->get('movie_event');
-            $movie_event = $query->row_array();
 
-            $theater_id = $movie_event["theater_id"];
-            $movie_id = $movie_event["movie_id"];
 
-            $this->db->where('id', $theater_id);
-            $query = $this->db->get('movie_theater');
-            $theaterobj = $query->row_array();
+            $theater_id = $evalue["theater_id"];
+            $movie_id = $evalue["movie_id"];
+            $template_id = $evalue["theater_template_id"];
+
+            $theaterobj = $this->theaterInformation($theater_id);
             $temparray["theaterobj"] = $theaterobj;
-            
-            $temparray["template"] = $this->theaterTemplate($theater_id)[$movie_event["theater_template_id"]];
 
-            $this->db->select("*, description as about");
-            $this->db->where('id', $movie_id);
-            $query = $this->db->get('movie_show');
-            $movieobj = $query->row_array();
-            $movieobj["image"] = MOVIEPOSTER . $movieobj["image"];
+
+            $temparray["template"] = $this->theaterTemplate($theater_id)[$evalue["theater_template_id"]];
+
+            $movieobj = $this->movieInforamtion($movie_id);
             $temparray["movie"] = $movieobj;
 
-            $this->db->where('event_id', $event_id);
-            $query = $this->db->get('movie_event_datetime');
-            $event_list2 = $query->result_array();
-            $temparray["event_datetime"] = $event_list2;
 
+            $this->db->where('movie_id', $movie_id);
+            $this->db->where('theater_id', $theater_id);
+            $this->db->where('theater_template_id', $template_id);
+            $query = $this->db->get('movie_event');
+            $theaterobj = $query->result_array();
+            $temparray["event_datetime"] = $theaterobj;
+            
+            
             array_push($eventlistarray, $temparray);
         }
         return $eventlistarray;

@@ -183,27 +183,15 @@ class MovieEvent extends CI_Controller {
 
 
         if (isset($_POST['submit_data'])) {
-            $templatearray = array(
-                "movie_id" => $this->input->post("movie_id"),
-                "theater_id" => $this->input->post("theater_id"),
-                "theater_template_id" => "",
-                "status" => "1"
-            );
-            $this->db->insert('movie_event', $templatearray);
-            $last_id = $this->db->insert_id();
-            redirect("MovieEvent/updateEvent/$last_id");
+            $movie_id = $this->input->post("movie_id");
+            $theater_id = $this->input->post("theater_id");
+            redirect("MovieEvent/updateEvent/$theater_id/$movie_id");
         }
         $this->load->view('Movie/create_event', $data);
     }
 
-    function updateEvent($event_id) {
+    function updateEvent($theater_id, $movie_id) {
 
-        $this->db->where('id', $event_id);
-        $query = $this->db->get('movie_event');
-        $movie_event = $query->row_array();
-
-        $theater_id = $movie_event["theater_id"];
-        $movie_id = $movie_event["movie_id"];
 
         $this->db->where('id', $theater_id);
         $query = $this->db->get('movie_theater');
@@ -215,29 +203,27 @@ class MovieEvent extends CI_Controller {
         $query = $this->db->get('movie_show');
         $movieobj = $query->row_array();
         $movieobj["image"] = MOVIEPOSTER . $movieobj["image"];
+
         $data["movie"] = $movieobj;
 
         $data["theater_id"] = $theater_id;
 
         if (isset($_POST["submit_data"])) {
             $inputdata = $this->input->post();
-
-            $this->db->set("theater_template_id", $inputdata["template_id"]);
-            $this->db->where('id', $event_id);
-            $query = $this->db->update('movie_event');
-
-
+            $template_id = $inputdata["template_id"];
             $eventdate = $inputdata["event_date"];
             $eventtime = $inputdata["event_time"];
             foreach ($eventdate as $key => $value) {
                 $e_date = $eventdate[$key];
                 $e_time = $eventtime[$key];
                 $eventdata = array(
-                    "event_id" => $event_id,
+                    "theater_id" => $theater_id,
+                    "movie_id" => $movie_id,
+                    "theater_template_id" => $template_id,
                     "event_date" => $e_date,
                     "event_time" => $e_time
                 );
-                $this->db->insert('movie_event_datetime', $eventdata);
+                $this->db->insert('movie_event', $eventdata);
             }
             redirect("MovieEvent/evenMovietList");
         }
@@ -245,12 +231,12 @@ class MovieEvent extends CI_Controller {
 
         $this->load->view('Movie/updateevent', $data);
     }
-    
+
     public function evenMovietList() {
-        $eventlist =  $this->Movie->getEventsList();
+        $eventlist = $this->Movie->getEventsList();
 //        echo "<pre>";
 //        print_r($eventlist);
-        $data['eventlist'] =$eventlist;
+        $data['eventlist'] = $eventlist;
         $this->load->view('Movie/eventlist', $data);
     }
 
