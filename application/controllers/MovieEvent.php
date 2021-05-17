@@ -240,4 +240,84 @@ class MovieEvent extends CI_Controller {
         $this->load->view('Movie/eventlist', $data);
     }
 
+    public function yourTicket($bookingid) {
+        $data["booking_id"] = $bookingid;
+        $this->db->where('booking_id', $bookingid);
+        $query = $this->db->get('movie_ticket_booking');
+        $bookingobj = $query->row_array();
+        $movies = $this->Movie->movieInforamtion($bookingobj['movie_id']);
+        $data['movieobj'] = $movies;
+
+
+        $theaters = $movies = $this->Movie->theaterInformation($bookingobj['theater_id']);
+        $data['theater'] = $theaters;
+
+        $data['booking'] = $bookingobj;
+        $data['seats'] = $this->Movie->bookedSeatById($bookingobj['id']);
+        $this->load->view('Movie/ticketview', $data);
+    }
+
+    function paidBooking($bookid) {
+        $this->db->where('booking_id', $bookid);
+        $query = $this->db->get('movie_ticket_booking');
+        $bookingobj = $query->row_array();
+        $bid = $bookingobj["id"];
+        $bookingArray = array(
+            "payment_attr" => "Payment Received",
+            "booking_type" => "Paid",
+            "booking_time" => Date('Y-m-d'),
+            "booking_date" => date('H:i:s'),
+        );
+        $this->db->set($bookingArray);
+        $this->db->where('id', $bid);  //set column_name and value in which row need to update
+        $this->db->update('movie_ticket_booking');
+
+        $this->db->set("status", "1");
+        $this->db->where('movie_ticket_booking_id', $bid); //set column_name and value in which row need to update
+        $this->db->update('movie_ticket');
+        redirect("MovieEvent/yourTicket/$bookid");
+    }
+
+    function cancleBooking($bookid) {
+        $this->db->where('booking_id', $bookid);
+        $query = $this->db->get('movie_ticket_booking');
+        $bookingobj = $query->row_array();
+        $bid = $bookingobj["id"];
+        $bookingArray = array(
+            "payment_attr" => "Admin Cancelled",
+            "booking_type" => "Cancelled",
+            "booking_time" => Date('Y-m-d'),
+            "booking_date" => date('H:i:s'),
+        );
+        $this->db->set($bookingArray);
+        $this->db->where('id', $bid);  //set column_name and value in which row need to update
+        $this->db->update('movie_ticket_booking');
+
+        $this->db->set("status", "0");
+        $this->db->where('movie_ticket_booking_id', $bid); //set column_name and value in which row need to update
+        $this->db->update('movie_ticket');
+        redirect("MovieEvent/yourTicket/$bookid");
+    }
+
+    function refundBooking($bookid) {
+        $this->db->where('booking_id', $bookid);
+        $query = $this->db->get('movie_ticket_booking');
+        $bookingobj = $query->row_array();
+        $bid = $bookingobj["id"];
+        $bookingArray = array(
+            "payment_attr" => "Admin Refund",
+            "booking_type" => "Refund",
+            "booking_time" => Date('Y-m-d'),
+            "booking_date" => date('H:i:s'),
+        );
+        $this->db->set($bookingArray);
+        $this->db->where('id', $bid);  //set column_name and value in which row need to update
+        $this->db->update('movie_ticket_booking');
+
+        $this->db->set("status", "0");
+        $this->db->where('movie_ticket_booking_id', $bid); //set column_name and value in which row need to update
+        $this->db->update('movie_ticket');
+        redirect("MovieEvent/yourTicket/$bookid");
+    }
+
 }

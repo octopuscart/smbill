@@ -17,8 +17,20 @@ $this->load->view('layout/topmenu');
         font-weight: 600;
         color: white;
     }
-    .bookingseats.Purchase{
+    .bookingseats.Purchased{
+        background: lightgreen;
+    }
+
+    .bookingseats.Paid{
         background: green;
+    }
+
+    .bookingseats.Reserved{
+        background: orange;
+    }
+    
+    .bookingseats.Cancelled{
+        background: red;
     }
 </style>
 
@@ -196,7 +208,7 @@ $this->load->view('layout/topmenu');
                                                         echo $value->booking_type;
                                                         ?>
                                                         <br/>
-                                                        <a href="<?php echo site_url("order/orderdetails/" . $value->booking_id); ?>" class="btn btn-primary btn-sm" style="    margin-top: 20%;">Update <i class="fa fa-arrow-circle-right"></i></a>
+                                                        <a href="<?php echo site_url("MovieEvent/yourTicket/" . $value->booking_id); ?>" class="btn btn-primary btn-sm" style="    margin-top: 20%;">Update <i class="fa fa-arrow-circle-right"></i></a>
                                                     </td>
                                                 </tr>
                                                 <?php
@@ -204,10 +216,10 @@ $this->load->view('layout/topmenu');
                                             }
                                         } else {
                                             ?>
-                                   
-                                        <?php
-                                    }
-                                    ?>
+
+                                            <?php
+                                        }
+                                        ?>
 
                                     </tbody>
                                 </table>
@@ -226,47 +238,47 @@ $this->load->view('layout/footer');
 ?> 
 
 <script>
-    $(function () {
+$(function () {
 
-        setTimeout(function () {
-            location.reload();
-        }, 500000);
+    setTimeout(function () {
+        location.reload();
+    }, 500000);
 
+})
+
+
+$(function () {
+    $("#daterangepicker").daterangepicker({
+        format: 'YYYY-MM-DD',
+        showDropdowns: true,
+        showWeekNumbers: true,
+        timePicker: false,
+        timePickerIncrement: 1,
+        timePicker12Hour: true,
+        ranges: {
+            "Today's": [moment(), moment()],
+            "Tomorrow's": [moment().add(1, 'days'), moment().add(1, 'days')],
+            'Next 7 Days': [moment(), moment().add(6, 'days')],
+            'Next 30 Days': [moment(), moment().add(29, 'days')],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        opens: 'right',
+        drops: 'down',
+        buttonClasses: ['btn', 'btn-sm'],
+        applyClass: 'btn-primary',
+        cancelClass: 'btn-default',
+        separator: ' to ',
+
+    }, function (start, end, label) {
+        $('input[name=daterange]').val(start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    });
+    $('#tableDataOrder').DataTable({
+        "language": {
+            "search": "Search Order By Email, Mobile No., Moive Name Etc.  "
+        }
     })
-
-
-    $(function () {
-        $("#daterangepicker").daterangepicker({
-            format: 'YYYY-MM-DD',
-            showDropdowns: true,
-            showWeekNumbers: true,
-            timePicker: false,
-            timePickerIncrement: 1,
-            timePicker12Hour: true,
-            ranges: {
-                "Today's": [moment(), moment()],
-                "Tomorrow's": [moment().add(1, 'days'), moment().add(1, 'days')],
-                'Next 7 Days': [moment(), moment().add(6, 'days')],
-                'Next 30 Days': [moment(), moment().add(29, 'days')],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-            },
-            opens: 'right',
-            drops: 'down',
-            buttonClasses: ['btn', 'btn-sm'],
-            applyClass: 'btn-primary',
-            cancelClass: 'btn-default',
-            separator: ' to ',
-
-        }, function (start, end, label) {
-            $('input[name=daterange]').val(start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-        });
-        $('#tableDataOrder').DataTable({
-            "language": {
-                "search": "Search Order By Email, Mobile No., Moive Name Etc.  "
-            }
-        })
-    })
+})
 </script>
 
 <script>
