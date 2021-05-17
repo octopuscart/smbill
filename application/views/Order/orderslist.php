@@ -21,6 +21,12 @@ $this->load->view('layout/topmenu');
         background: green;
     }
 </style>
+
+<link href="<?php echo base_url(); ?>assets/plugins/DataTables/css/data-table.css" rel="stylesheet" />
+
+
+
+<script src="<?php echo base_url(); ?>assets/plugins/DataTables/js/jquery.dataTables.js"></script>
 <!-- ============================================================== -->
 <div class="page-wrapper">
     <!-- ============================================================== -->
@@ -198,7 +204,7 @@ $this->load->view('layout/topmenu');
                                             }
                                         } else {
                                             ?>
-                                        <h4><i class="fa fa-warning"></i> No order found</h4>
+                                   
                                         <?php
                                     }
                                     ?>
@@ -257,8 +263,20 @@ $this->load->view('layout/footer');
         });
         $('#tableDataOrder').DataTable({
             "language": {
-                "search": "Search Order By Email, Order No., Order Date Etc."
+                "search": "Search Order By Email, Mobile No., Moive Name Etc.  "
             }
         })
     })
+</script>
+
+<script>
+    $(function () {
+
+//        $('#tableDataOrder').DataTable({
+//            language: {
+//                "search": "Apply filter _INPUT_ to table"
+//            }
+//        })
+    })
+
 </script>
