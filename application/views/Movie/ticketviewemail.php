@@ -239,29 +239,9 @@
                     </tr>
 
                     <?php
-                    if ($booking['booking_type'] == 'Reserve') {
+                    if ($booking['booking_type'] == 'Paid') {
                         ?>
-                        <tr>
-                            <td  colspan="2" style="text-align: center;">
-
-                                <img src="https://maharajatickets.com/assets/paymentstatus/payment.jpg" style="height: 75px;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <p>Click here to make the payment. <a href='<?php echo "https://maharajatickets.com/Movies/ticketPayment/" . $booking['booking_id']; ?>'>Proceed For Payment</a></p>
-                            </td>
-                        </tr>
-                        <tr style='height: 50px;'>
-                            <td colspan="2">
-                                <p>For other payment option connect us on WhatsApp: <span style='font-weight: 600;
-                                                                                          color: #0fc105;
-                                                                                          font-size: 14px;'>+(852)  6142 8189</span></p>
-                            </td>
-                        </tr>
-                        <?php
-                    } else {
-                        ?>
+                        
 
                         <tr style='font-size: 15px;height: 50px;'>
                             <th style='width: 60%;text-align: right;    border-bottom: 1px solid #000;'>Payment Mode:</th><th style='text-align: right;    border-bottom: 1px solid #000;'> <?php echo $booking['payment_type']; ?></th>
@@ -270,18 +250,7 @@
                     }
                     ?>
 
-                    <?php
-                    if ($booking['booking_type'] != 'Cancle') {
-                        ?>
-                        <tr>
-                            <td colspan="2" style="height: 50px;">
-                                <p>For booking cancellation. <a href='<?php echo "https://maharajatickets.com/Movies/ticketPaymentCancel/" . $booking['booking_id']; ?>'>click here</a></p>
-                            </td>
-                        </tr>
-
-                        <?php
-                    }
-                    ?>
+                  
 
 
 
@@ -296,7 +265,7 @@
                 <tr>
                     <td colspan="2" style='font-size: 11px;'>
                         <p><b>Important Notes:</b></p>
-                        <p>Please collect your ticket from Box office.</p>
+                        <p>Please collect your ticket from Maharaja Mart.</p>
                         <p>Tickets once booked cannot be exchanged, cancelled or refunded.</p>
                         <p>Unpaid reserved Tickets automatic cancelled within 24 hours.</p>
                     </td>

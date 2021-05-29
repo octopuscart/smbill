@@ -712,7 +712,7 @@ class Order extends CI_Controller {
             $querystr = "SELECT mtb.*, ms.title as movie, mt.title as theater FROM movie_ticket_booking as mtb
 join movie_theater as mt on mt.id = mtb.theater_id
 join movie_show as ms on ms.id = mtb.movie_id
-where mtb.select_time between '$date1'  and '$date2' order by mtb.id desc";
+where mtb.select_date between '$date1'  and '$date2' order by mtb.id desc";
             $query = $this->db->query($querystr);
             $orderlist = $query->result();
           

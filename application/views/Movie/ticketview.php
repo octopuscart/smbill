@@ -4,7 +4,7 @@ $this->load->view('layout/topmenu');
 
 $bktype = $booking['booking_type'];
 $statusarray = array(
-    "Refund"=>array("status" => "Cancelled", "payment" => "Payment Refund"),
+    "Refund" => array("status" => "Cancelled", "payment" => "Payment Refund"),
     "Paid" => array("status" => "Paid", "payment" => "Payment Confirmed"),
     "Purchased" => array("status" => "Confirmed (Payment Awaiting)", "payment" => "Awaiting Payment Confirmation"),
     "Reserved" => array("status" => "Reserved", "payment" => "Unpaid"),
@@ -88,7 +88,7 @@ $paymenttype = $statusarray[$bktype]["payment"];
 
 
 
-                <div class="portfolio2-page-area1" style="padding: 30px" ng-controller="checkoutContoller">
+                <div class="portfolio2-page-area1" style="padding: 30px" >
                     <div class="container">
                         <style>
                             .carttable{
@@ -201,17 +201,54 @@ $paymenttype = $statusarray[$bktype]["payment"];
                             }
                         </style>
 
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#payment" role="tab"><span class="hidden-sm-up"><i class="ti-wallet"></i></span> <span class="hidden-xs-down">Payment</span></a> </li>
+                            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#cancel" role="tab"><span class="hidden-sm-up"><i class="ti-close"></i></span> <span class="hidden-xs-down">Cancellation</span></a> </li>
+                            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#refund" role="tab"><span class="hidden-sm-up"><i class="ti-back-left"></i></span> <span class="hidden-xs-down">Refund</span></a> </li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content tabcontent-border">
+                            <div class="tab-pane active" id="payment" role="tabpanel">
+                                <div class="mt-4">
+                                    <h3>Booking Payment Confirmation</h3>
 
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <div class="form-group m-b-30">
+                                                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" ng-model="paymentmode" ng-init="paymentmode = 'Cash Payment'">
+                                                    <option value="Cash Payment">Cash Payment</option>
+                                                    <option value="PayMe">PayMe</option>
+                                                    <option value="Bank Transfer">Bank Transfer</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <a type="button" class="btn waves-effect waves-light btn-success" href="<?php echo site_url("MovieEvent/paidBooking/" . $booking_id); ?>/{{paymentmode}}">Set As Paid</a>
+                                </div>
+                            </div>
+                            <div class="tab-pane  p-20" id="cancel" role="tabpanel">
+                                <div class="mt-4">
+                                    <a type="button" class="btn waves-effect waves-light btn-danger" href="<?php echo site_url("MovieEvent/cancleBooking/" . $booking_id); ?>">Cancel Booking</a>
+                                </div>
+                            </div>
+                            <div class="tab-pane p-20" id="refund" role="tabpanel">
+                                <div class="mt-4">
+                                    <a type="button" class="btn waves-effect waves-light btn-warning" href="<?php echo site_url("MovieEvent/refundBooking/" . $booking_id); ?>">Set As Refund Payment</a>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="" style="0px;text-align: center">
+
+
+
 
                             <table class="carttable"  border-color= "#fff" align="center" border="0" cellpadding="0" cellspacing="0" width="700" style="background: #fff;padding:20px;margin-bottom: 50px;">
                                 <tr>
                                     <td >
                                         <div class="button-group">
-                                            <a type="button" class="btn waves-effect waves-light btn-success" href="<?php echo site_url("MovieEvent/paidBooking/".$booking_id); ?>">Set As Paid</a>
-                                            <a type="button" class="btn waves-effect waves-light btn-danger" href="<?php echo site_url("MovieEvent/cancleBooking/".$booking_id); ?>">Cancel Booking</a>
-                                            <a type="button" class="btn waves-effect waves-light btn-warning" href="<?php echo site_url("MovieEvent/refundBooking/".$booking_id); ?>">Set As Refund Payment</a>
 
                                         </div>
                                     </td>
@@ -310,13 +347,11 @@ $paymenttype = $statusarray[$bktype]["payment"];
                                     </tr>
 
                                     <?php
-                                    if ($booking['booking_type'] == 'Reserve') {
+                                    if ($booking['booking_type'] == 'Paid') {
                                         ?>
 
-                                        <tr>
-                                            <td colspan="2">
-                                                <p>Click here to make the payment. <a href='<?php echo site_url('Movies/ticketPayment/' . $booking['booking_id']) ?>'>Proceed Payment</a></p>
-                                            </td>
+                                        <tr style='font-size: 15px;height: 50px;'>
+                                            <th style='width: 60%;text-align: right;    border-bottom: 1px solid #000;'>Payment Mode:</th><th style='text-align: right;    border-bottom: 1px solid #000;'> <?php echo $booking['payment_type']; ?></th>
                                         </tr>
 
                                         <?php

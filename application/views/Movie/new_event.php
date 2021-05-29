@@ -45,7 +45,7 @@ $this->load->view('layout/topmenu');
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label for="inputcom" class="control-label col-form-label">Short Description</label>
-                                                    <input type="text" class="form-control" name="attr" id="inputcom" placeholder="Short Into like 2021 Legal Drama 2h 36m" name='title'>
+                                                    <input type="text" class="form-control" name="attr" id="inputcom" placeholder="Short Into like 2021 Legal Drama 2h 36m" name='attr'>
                                                 </div>
                                             </div>
                                         </div>
@@ -67,7 +67,7 @@ $this->load->view('layout/topmenu');
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label class="control-label col-form-label">About Movie/Event</label>
-                                                    <textarea class="form-control" name="trailer_link" name="description" aria-label="With textarea" placeholder="About Movie/Event"></textarea>
+                                                    <textarea class="form-control" name="description" aria-label="With textarea" placeholder="About Movie/Event"></textarea>
                                                 </div>
                                             </div>
 

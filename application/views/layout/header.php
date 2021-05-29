@@ -42,6 +42,9 @@
 
         <!--angular js-->
         <script src="<?php echo base_url(); ?>assets/angular/angular.min.js"></script>
+              <!--sweet alert-->
+        <script src="<?php echo base_url(); ?>assets/sweetalert2/sweetalert2.min.js"></script>
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/sweetalert2/sweetalert2.min.css">
 
         <!--custom style-->
         <style>

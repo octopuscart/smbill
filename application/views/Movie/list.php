@@ -16,6 +16,8 @@ $this->load->view('layout/topmenu');
 
         <!-- begin #content -->
         <div id="content" class="content">
+            <a type="button"  class="btn btn-primary p-l-40 p-r-40" href="<?php echo site_url("MovieEvent/newEvent"); ?>" ><i class="ti-plus"></i> Add New Movie / Event</a>
+            <hr/>
             <!-- begin #content -->
             <!-- begin #content -->
             <div id="content" class="content content-full-width">
@@ -28,7 +30,7 @@ $this->load->view('layout/topmenu');
                         <div class="col-lg-3 col-md-6">
                             <div class="card">
                                 <div class="el-card-item">
-                                    <div class="el-card-avatar el-overlay-1"> <img src="<?php echo base_url(); ?>assets/movies/default.png" alt="user" style="background: url(<?php echo base_url(); ?>assets/movies/<?php echo $value['image'];?>);background-size:cover;" />
+                                    <div class="el-card-avatar el-overlay-1"> <img src="<?php echo base_url(); ?>assets/movies/default.png" alt="user" style="background: url(<?php echo base_url(); ?>assets/movies/<?php echo $value['image']; ?>);background-size:cover;" />
                                         <div class="el-overlay">
                                             <ul class="list-style-none el-info">
                                                 <li class="el-item"><a class="btn default btn-outline el-link" href="javascript:void(0);"><i class="sl-icon-link"></i></a></li>
@@ -36,7 +38,7 @@ $this->load->view('layout/topmenu');
                                         </div>
                                     </div>
                                     <div class="el-card-content">
-                                        <h4 class="m-b-0"><?php echo $value['title'];?></h4> <span class="text-muted"><?php echo $value['attr'];?></span>
+                                        <h4 class="m-b-0"><?php echo $value['title']; ?></h4> <span class="text-muted"><?php echo $value['attr']; ?></span>
                                     </div>
                                 </div>
                             </div>
