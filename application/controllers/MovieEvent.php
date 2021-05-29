@@ -347,7 +347,7 @@ class MovieEvent extends CI_Controller {
         $message = $this->load->view('Movie/ticketviewemail', $data, true);
         setlocale(LC_MONETARY, 'en_US');
         $checkcode = REPORT_MODE;
-        $checkcode = 0;
+//        $checkcode = 0;
         if ($checkcode) {
             $this->email->message($message);
             $this->email->print_debugger();
