@@ -37,9 +37,9 @@ $blog_menu = array(
     "icon" => "ti-video-camera",
     "active" => "",
     "sub_menu" => array(
-        "Create Event" => site_url("MovieEvent/createEvent"),
-        "Add Movie/Event" => site_url("MovieEvent/eventList"),
-        "Movie/Event List" => site_url("MovieEvent/evenMovietList"),
+        "Add Movie/Show" => site_url("MovieEvent/eventList"),
+        "Create Movie/Show Event" => site_url("MovieEvent/createEvent"),
+        "Movie/Show Event List" => site_url("MovieEvent/evenMovietList"),
     ),
 );
 array_push($menu_control, $blog_menu);
