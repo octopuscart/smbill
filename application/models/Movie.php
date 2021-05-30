@@ -211,6 +211,7 @@ class Movie extends CI_Model {
         $this->db->where('event_date>=', $cdate);
          $this->db->group_by("movie_id");
          $this->db->group_by("theater_id");
+         $this->db->group_by("id");
         $query = $this->db->get('movie_event');
         $event_list = $query->result_array();
      

@@ -502,7 +502,7 @@ class MovieEvent extends CI_Controller {
         $date2 = date('Y-m-t');
         if (isset($_GET['daterange'])) {
             $daterange = $this->input->get('daterange');
-            $datelist = explode(" to ", $datarange);
+            $datelist = explode(" to ", $daterange);
             $date1 = $datelist[0];
             $date2 = $datelist[1];
         }
@@ -531,6 +531,51 @@ where mtb.select_date between '$date1'  and '$date2' and mtb.event_id='$event_id
 
             $data['orderslist'] = $orderslistr;
             $this->load->view('Movie/eventreport', $data);
+        }
+    }
+    
+     function eventReportAll() {
+
+      
+
+      
+
+
+        $data['exportdata'] = 'yes';
+        $date1 = date('Y-m-') . "01";
+
+        $date2 = date('Y-m-t');
+        if (isset($_GET['daterange'])) {
+            $daterange = $this->input->get('daterange');
+            $datelist = explode(" to ", $daterange);
+            $date1 = $datelist[0];
+            $date2 = $datelist[1];
+        }
+        $daterange = $date1 . " to " . $date2;
+        $data['daterange'] = $daterange;
+        if ($this->user_type == 'Admin' || $this->user_type == 'Manager') {
+
+            $querystr = "SELECT mtb.*, ms.title as movie, mt.title as theater FROM movie_ticket_booking as mtb
+join movie_theater as mt on mt.id = mtb.theater_id
+join movie_show as ms on ms.id = mtb.movie_id
+where mtb.select_date between '$date1'  and '$date2'  order by mtb.id desc";
+            $query = $this->db->query($querystr);
+            $orderlist = $query->result();
+
+            $orderslistr = [];
+            foreach ($orderlist as $key => $value) {
+                $this->db->order_by('id', 'desc');
+                $this->db->where('movie_ticket_booking_id', $value->id);
+                $query = $this->db->get('movie_ticket');
+                $tickets = $query->result();
+
+                $value->seats = $tickets;
+
+                array_push($orderslistr, $value);
+            }
+
+            $data['orderslist'] = $orderslistr;
+            $this->load->view('Movie/eventreportall', $data);
         }
     }
 

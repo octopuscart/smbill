@@ -16,6 +16,7 @@ $order_menu = array(
     "sub_menu" => array(
         "Booking Reports" => site_url("MovieEvent/deshboard"),
         "Book Now" => site_url("MovieEvent/bookingList"),
+        "Search Booking"=>site_url("MovieEvent/eventReportAll"),
     ),
 );
 array_push($menu_control, $order_menu);
@@ -38,7 +39,7 @@ $blog_menu = array(
     "active" => "",
     "sub_menu" => array(
         "Add Movie/Show" => site_url("MovieEvent/eventList"),
-        "Create Movie/Show Event" => site_url("MovieEvent/createEvent"),
+        "Create Movie/Show Event" => site_url("MovieEvent/widgetEvent"),
         "Movie/Show Event List" => site_url("MovieEvent/evenMovietList"),
     ),
 );
