@@ -24,21 +24,8 @@ $this->load->view('layout/topmenu');
                         <form action="#" method="post" enctype="multipart/form-data">
                             <!-- begin email to -->
                             <div class="card-body bg-light">
-                                <h4 class="card-title">Create Movie/Event List</h4>
-                                <div class="form-group has-success">
-                                    <label class="control-label">Select Theater</label>
-                                    <select class="form-control custom-select" name="theater_id">
-                                        <?php
-                                        foreach ($theater_list as $key => $value) {
-                                            ?>
-                                            <option value = "<?php echo $value["id"]; ?>"><?php echo $value["title"]; ?> </option>
-                                            <?php
-                                        }
-                                        ?>
-
-                                    </select>
-                                    <small class="form-control-feedback"> Select Theater For Event Here </small> 
-                                </div>
+                                <h4 class="card-title">Set Event Price & Date/Time</h4>
+                               
 
 
 

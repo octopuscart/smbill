@@ -546,8 +546,8 @@ where mtb.select_date between '$date1'  and '$date2' and mtb.event_id='$event_id
         $eventobj = $query->row_array();
         $theater = $this->Movie->theaterInformation($eventobj["theater_id"]);
         $movie = $this->Movie->movieInforamtion($eventobj["movie_id"]);
-        
-        $filename = $movie["title"]. "-".$theater["title"]."-".$eventobj["event_date"]."-".$eventobj["event_date"].".csv";
+
+        $filename = $movie["title"] . "-" . $theater["title"] . "-" . $eventobj["event_date"] . "-" . $eventobj["event_date"] . ".csv";
 
         $fields = array(
             "S. No.",
@@ -560,10 +560,9 @@ where mtb.select_date between '$date1'  and '$date2' and mtb.event_id='$event_id
             "Total Amount",
             "Payment Status",
             "Payment Type",
-         
             "Booking Date/Time");
         $delimiter = ",";
-     
+
         $f = fopen('php://memory', 'w');
         fputcsv($f, $fields, $delimiter);
         $orderslistr = [];
@@ -606,7 +605,7 @@ where mtb.select_date between '$date1'  and '$date2' and mtb.event_id='$event_id
                 $value->total_price,
                 $value->payment_attr,
                 $value->payment_type,
-                 $value->booking_date. " ". $value->booking_time,
+                $value->booking_date . " " . $value->booking_time,
             );
             fputcsv($f, $lineData, $delimiter);
         }
@@ -616,6 +615,101 @@ where mtb.select_date between '$date1'  and '$date2' and mtb.event_id='$event_id
         //output all remaining data on a file pointer
         fpassthru($f);
         exit;
+    }
+
+    //widget start data
+    function widgetEvent() {
+        $query = $this->db->get('movie_theater');
+        $theaterlist = $query->result_array();
+        $data["theater_list"] = $theaterlist;
+
+        $this->db->order_by('id desc');
+        $query = $this->db->get('movie_show');
+        $image_list = $query->result_array();
+        $data['eventlist'] = $image_list;
+
+
+        if (isset($_POST['submit_data'])) {
+            $movie_id = $this->input->post("movie_id");
+            $theater_id = $this->input->post("theater_id");
+            redirect("MovieEvent/widgetTheaterPrice/$theater_id/$movie_id");
+        }
+        $this->load->view('MovieWidget/create_event', $data);
+    }
+
+    function widgetTheaterPrice($theater_id, $movie_id) {
+        $data = array();
+        $data["theater_id"] = $theater_id;
+        $query = $this->db->get('movie_theater');
+        $theaterlist = $query->result_array();
+        $data["theater_list"] = $theaterlist;
+
+        $movies = $this->Movie->movieInforamtion($movie_id);
+        $data["movieobj"] = $movies;
+
+        $this->db->where('id', $theater_id);
+        $query = $this->db->get('movie_theater');
+        $theaterobj = $query->row_array();
+        $data["theaterobj"] = $theaterobj;
+
+        if (isset($_POST['addtemplate'])) {
+            $templatearray = array(
+                "theater_id" => $theater_id,
+                "title" => "$theater_id$movie_id" . date("Ymd"),
+                "reserve_seats" => $this->input->post("reserved_seats"),
+                "status" => "active"
+            );
+            $this->db->insert('movie_theater_template', $templatearray);
+            $last_id = $this->db->insert_id();
+
+            $classname = $this->input->post("class");
+            $price = $this->input->post("price");
+            foreach ($classname as $key => $value) {
+                $templateattr = array(
+                    "template_id" => $last_id,
+                    "class_name" => $classname[$key],
+                    "class_price" => $price[$key],
+                );
+                $this->db->insert('movie_theater_template_class', $templateattr);
+            }
+            redirect("MovieEvent/widgetCreateEvent/$theater_id/$movie_id/$last_id");
+        }
+        $this->load->view('MovieWidget/theater_template_create', $data);
+    }
+
+    function widgetCreateEvent($theater_id, $movie_id, $template_id) {
+
+     
+
+        $data["theaterobj"] = $this->Movie->theaterInformation($theater_id);
+        $data["movie"] = $this->Movie->movieInforamtion($movie_id);
+        $data["theater_id"] = $theater_id;
+        $data["movie_id"] = $movie_id;
+        $data["templateobj"] = $this->Movie->theaterTemplateSingle($template_id);
+
+
+        if (isset($_POST["submit_data"])) {
+            $inputdata = $this->input->post();
+
+            $eventdate = $inputdata["event_date"];
+            $eventtime = $inputdata["event_time"];
+            foreach ($eventdate as $key => $value) {
+                $e_date = $eventdate[$key];
+                $e_time = $eventtime[$key];
+                $eventdata = array(
+                    "theater_id" => $theater_id,
+                    "movie_id" => $movie_id,
+                    "theater_template_id" => $template_id,
+                    "event_date" => $e_date,
+                    "event_time" => $e_time
+                );
+                $this->db->insert('movie_event', $eventdata);
+            }
+            redirect("MovieEvent/evenMovietList");
+        }
+
+
+        $this->load->view('MovieWidget/updateevent', $data);
     }
 
 }
