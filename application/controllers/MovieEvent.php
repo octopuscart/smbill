@@ -541,7 +541,7 @@ where mtb.select_date between '$date1'  and '$date2' and mtb.event_id='$event_id
       
 
 
-        $data['exportdata'] = 'yes';
+        $data['exportdata'] = 'no';
         $date1 = date('Y-m-') . "01";
 
         $date2 = date('Y-m-t');
