@@ -36,6 +36,16 @@ Admin.controller('theaterController', function ($scope, $http, $timeout, $interv
 })
 
 
+
+Admin.controller('booknowEventController', function ($scope, $http, $timeout, $interval, $filter) {
+    $scope.booking = {"no_of_seats": 1, "event_id": ""};
+    $scope.selectBookingSeats = function (event_id) {
+        $scope.booking.event_id = event_id;
+    }
+
+})
+
+
 Admin.controller('updateEventController', function ($scope, $http, $timeout, $interval, $filter) {
 
     $scope.eventselectionSelection = {"templatelist": {}, "selected_template": "0", "datetimelist": {"100": {"event_time": event_time, "event_date": event_date}}};
@@ -63,13 +73,6 @@ Admin.controller('updateEventController', function ($scope, $http, $timeout, $in
     $scope.removeLastDate = function (removeid) {
         delete    $scope.eventselectionSelection.datetimelist[removeid];
     }
-
-
-
-
-
-
-
 
 })
 

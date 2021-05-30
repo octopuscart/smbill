@@ -8,14 +8,14 @@ $this->load->view('layout/topmenu');
         font-size: 12px;
     }
     .bookingseats{
-        margin-left: 10px;
-        font-size: 12px;
-        border: 1px solid #22c6ab;
-        padding: 4px 10px;
-        margin-top: 10px;
-        background: orange;
-        font-weight: 600;
-        color: white;
+           margin-left: 5px;
+    font-size: 10px;
+    border: 1px solid #22c6ab;
+    padding: 5px 5px;
+    margin-top: 5px;
+    background: orange;
+    font-weight: 600;
+    color: white;
     }
     .bookingseats.Purchased{
         background: lightgreen;
@@ -28,7 +28,7 @@ $this->load->view('layout/topmenu');
     .bookingseats.Reserved{
         background: orange;
     }
-    
+
     .bookingseats.Cancelled{
         background: red;
     }
@@ -77,9 +77,33 @@ $this->load->view('layout/topmenu');
                 <div class="row">
                     <div class="col-md-12">
                         <div class="panel panel-default">
+                            <table class="table">
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="m-r-10">
+                                                <img src="<?php echo $eventobj["movie"]['image']; ?>" alt="user" class="" width="45">
+                                            </div>
+                                            <div class="m-l-10" style="margin-left: 10px;">
+                                                <h4 class="m-b-0 font-16"><?php echo $eventobj["movie"]['title']; ?></h4>
+                                                <span style="font-size: 10px;"><?php echo $eventobj["movie"]['attr']; ?></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                           
+                                            <div class="m-l-10" style="margin-left: 10px;">
+                                                <h4 class="m-b-0 font-16"><?php echo $eventobj["theater"]['title']; ?></h4>
+                                                <span ><?php echo $eventobj["event_date"]; ?> <?php echo $eventobj["event_time"]; ?></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
                             <div class="panel-heading with-border">
                                 <?php
-                                $this->load->view('Order/orderdates');
+                                $this->load->view('Movie/eventdates', array("event_id"=>$eventobj["id"]));
                                 ?>
                                 <div  style="clear:both"></div>
                             </div>
@@ -90,7 +114,9 @@ $this->load->view('layout/topmenu');
                                     <div class="col-md-6 col-lg-3 col-xlg-3">
                                         <div class="card card-hover">
                                             <div class="box bg-info text-center">
-                                                <h1 class="font-light text-white">2,064</h1>
+                                                <h1 class="font-light text-white">
+                                                    <?php echo $totaldata["totalseats"]?>
+                                                </h1>
                                                 <h6 class="text-white">Total Seats</h6>
                                             </div>
                                         </div>
@@ -98,8 +124,10 @@ $this->load->view('layout/topmenu');
                                     <!-- Column -->
                                     <div class="col-md-6 col-lg-3 col-xlg-3">
                                         <div class="card card-hover">
-                                            <div class="box bg-primary text-center">
-                                                <h1 class="font-light text-white">1,738</h1>
+                                            <div class="box bg-orange text-center">
+                                                <h1 class="font-light text-white">
+                                                    <?php echo $totaldata["reserved"]?>
+                                                </h1>
                                                 <h6 class="text-white">Reserved</h6>
                                             </div>
                                         </div>
@@ -107,8 +135,10 @@ $this->load->view('layout/topmenu');
                                     <!-- Column -->
                                     <div class="col-md-6 col-lg-3 col-xlg-3">
                                         <div class="card card-hover">
-                                            <div class="box bg-success text-center">
-                                                <h1 class="font-light text-white">1100</h1>
+                                            <div class="box bg-green-darker text-center" style="background: green;">
+                                                <h1 class="font-light text-white">
+                                                    <?php echo $totaldata["paid"]?>
+                                                </h1>
                                                 <h6 class="text-white">Purchase</h6>
                                             </div>
                                         </div>
@@ -117,7 +147,9 @@ $this->load->view('layout/topmenu');
                                     <div class="col-md-6 col-lg-3 col-xlg-3">
                                         <div class="card card-hover">
                                             <div class="box bg-dark text-center">
-                                                <h1 class="font-light text-white">964</h1>
+                                                <h1 class="font-light text-white">
+                                                    <?php echo $totaldata["pending"]?>
+                                                </h1>
                                                 <h6 class="text-white">Pending</h6>
                                             </div>
                                         </div>
@@ -129,9 +161,10 @@ $this->load->view('layout/topmenu');
                                         <tr>
                                             <th style="width: 70px">S. No.</th>
                                             <th style="width:25%">Booking Information</th>
-                                            <th style="width:25%">Customer Information</th>
-                                            <th style="width:25%">Event Information</th>
+                                            <th style="width:20%">Customer Information</th>
+                                            <th style="width:25%">Seat(s) Information</th>
                                             <th style="width:25%">Booking Type</th>
+                                            <th style="width:25%">Action</th>
 
 
 
@@ -152,15 +185,15 @@ $this->load->view('layout/topmenu');
                                                         <table class="small_table">
                                                             <tr>
                                                                 <th>Booking. No.</th>
-                                                                <td>: <?php echo $value->booking_no; ?></td>
+                                                                <td><?php echo $value->booking_no; ?></td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Total Amt.</th>
-                                                                <td>: {{<?php echo $value->total_price; ?>|currency:" "}}</td>
+                                                                <td>{{<?php echo $value->total_price; ?>|currency:" "}}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Date/Time</th>
-                                                                <td>:<?php echo $value->select_time; ?> <?php echo $value->select_date; ?></td>
+                                                                <td><?php echo $value->booking_date; ?> <?php echo $value->booking_time; ?></td>
                                                             </tr>
 
                                                         </table>
@@ -188,8 +221,7 @@ $this->load->view('layout/topmenu');
 
                                                     </td>
                                                     <td >
-                                                        <b><?php echo $value->movie ?></b><br/>
-                                                        <?php echo $value->theater ?><br/>
+
                                                         <div class="row" style="margin-top: 10px;">
                                                             <?php
                                                             foreach ($value->seats as $skey => $svalue) {
@@ -207,13 +239,16 @@ $this->load->view('layout/topmenu');
                                                         <?php
                                                         echo $value->booking_type;
                                                         ?>
-                                                        
+
                                                         <br/>
                                                         <?php
                                                         echo $value->payment_type;
                                                         ?>
-                                                        <br/>
+                                                    </td>
+                                                    <td>
+                                                         
                                                         <a href="<?php echo site_url("MovieEvent/yourTicket/" . $value->booking_id); ?>" class="btn btn-primary btn-sm" style="    margin-top: 20%;">Update <i class="fa fa-arrow-circle-right"></i></a>
+                                                    
                                                     </td>
                                                 </tr>
                                                 <?php
@@ -280,7 +315,7 @@ $(function () {
     });
     $('#tableDataOrder').DataTable({
         "language": {
-            "search": "Search Order By Email, Mobile No., Movie Name Etc.  "
+            "search": "Search Order By Email, Mobile No., Booking Date Etc.  "
         }
     })
 })

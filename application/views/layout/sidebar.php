@@ -14,7 +14,7 @@ $order_menu = array(
     "icon" => "icon-Receipt-4",
     "active" => "",
     "sub_menu" => array(
-        "Booking Reports" => site_url("Order/orderslist"),
+        "Booking Reports" => site_url("MovieEvent/deshboard"),
         "Book Now" => site_url("MovieEvent/bookingList"),
     ),
 );

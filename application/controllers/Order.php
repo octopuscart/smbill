@@ -698,7 +698,7 @@ class Order extends CI_Controller {
     public function orderslist() {
         $data['exportdata'] = 'yes';
         $date1 = date('Y-m-') . "01";
-        $date2 = date('Y-m-d');
+        $date2 = date('Y-m-t');
         if (isset($_GET['daterange'])) {
             $daterange = $this->input->get('daterange');
             $datelist = explode(" to ", $daterange);
@@ -715,7 +715,7 @@ join movie_show as ms on ms.id = mtb.movie_id
 where mtb.select_date between '$date1'  and '$date2' order by mtb.id desc";
             $query = $this->db->query($querystr);
             $orderlist = $query->result();
-          
+
             $orderslistr = [];
             foreach ($orderlist as $key => $value) {
                 $this->db->order_by('id', 'desc');
@@ -737,64 +737,26 @@ where mtb.select_date between '$date1'  and '$date2' order by mtb.id desc";
     public function orderslistxls($daterange) {
         $datelist = explode(" to ", urldecode($daterange));
         $date1 = $datelist[0];
-        $date2 = $datelist[1]
+        $date2 = $datelist[1];
 
-        ;
-        $daterange = $date1 . " to " . $date2;
-        $data['daterange'] = $daterange;
-        if ($this->user_type == 'Admin' || $this->user_type == 'Manager') {
+        $querystr = "SELECT mtb.*, ms.title as movie, mt.title as theater FROM movie_ticket_booking as mtb
+join movie_theater as mt on mt.id = mtb.theater_id
+join movie_show as ms on ms.id = mtb.movie_id
+where mtb.select_date between '$date1'  and '$date2' order by mtb.id desc";
+        $query = $this->db->query($querystr);
+        $orderlist = $query->result();
+        $orderslistr = [];
+        foreach ($orderlist as $key => $value) {
             $this->db->order_by('id', 'desc');
-            $this->db->where('order_date between "' . $date1 . '" and "' . $date2 . '"');
-            $query = $this->db->get('user_order');
-            $orderlist = $query->result();
-            $orderslistr = [];
-            foreach ($orderlist as $key => $value) {
-                $this->db->order_by('id', 'desc');
-                $this->db->where('order_id', $value->id);
-                $query = $this->db->get('user_order_status');
-                $status = $query->row();
-                $value->status = $status ? $status->status : $value->status;
-//                array_push($orderslistr, $value);
-
-                $this->db->order_by('id', 'desc');
-                $this->db->where('order_id', $value->id);
-                $query = $this->db->get('cart');
-                $cartdata = $query->result();
-                $tempdata = array();
-                foreach ($cartdata as $key1 => $value1) {
-                    array_push($tempdata, $value1->item_name . "(" . $value1->quantity . ")");
-                }
-
-                $value->items = implode(", ", $tempdata);
-                array_push($orderslistr, $value);
-            }
-            $data['orderslist'] = $orderslistr;
-            $html = $this->load->view('Order/orderslist_xls', $data, TRUE);
+            $this->db->where('movie_ticket_booking_id', $value->id);
+            $query = $this->db->get('movie_ticket');
+            $tickets = $query->result();
+            $value->seats = $tickets;
+            array_push($orderslistr, $value);
         }
-        if ($this->user_type == 'Vendor') {
-            $this->db->order_by('vo.id', 'desc');
-            $this->db->group_by('vo.id');
-            $this->db->select('o.order_no, vo.id, o.name, o.email, o.address, o.city, o.contact_no, o.pincode,'
-                    . 'o.state, vo.vendor_order_no, vo.total_price, vo.total_quantity, vo.c_date, vo.c_time');
-            $this->db->join('user_order as o', 'o.id = vo.order_id', 'left');
-            $this->db->where('vo.vendor_id', $this->user_id);
-            $this->db->where('c_date between "' . $date1 . '" and "' . $date2 . '"');
+        $data['orderslist'] = $orderslistr;
+        $this->load->view('Order/orderslist', $data);
 
-            $this->db->from('vendor_order as vo');
-            $query = $this->db->get();
-            $orderlist = $query->result();
-            $orderslistr = [];
-            foreach ($orderlist as $key => $value) {
-                $this->db->order_by('id', 'desc');
-                $this->db->where('vendor_order_id', $value->id);
-                $query = $this->db->get('vendor_order_status');
-                $status = $query->row();
-                $value->status = $status ? $status->status : $value->status;
-                array_push($orderslistr, $value);
-            }
-            $data['orderslist'] = $orderslistr;
-            $html = $this->load->view('Order/vendororderslist_xls', $data, TRUE);
-        }
         $filename = 'orders_report_' . $daterange . ".xls";
         ob_clean();
         header("Content-Disposition: attachment;

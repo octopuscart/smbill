@@ -3,81 +3,7 @@ $this->load->view('layout/header');
 $this->load->view('layout/topmenu');
 ?>
 
-<style>
-    .color0{
-        background:red!important;
-    }
-    .color1{
-        background:orange!important;
-    }
-    .color2{
-        background:purple!important;
-    }
-    .color3{
-        background:blue!important;
-    }
-    .color4{
-        background:greenyellow!important;
-    }
-    .color5{
-        background:yellow!important;
-    }.color6{
-        background:deeppink!important;
-    }
-
-    .theaterblockseat{
-        padding: 5px!important;
-        padding-left: 3px!important;
-        padding-right: 3px!important;
-        padding-top: 14px!important;
-    }
-    .seaticon{
-        height: 25px;
-        width: 23px!important;
-        background-size: 30px;
-        background-repeat: no-repeat;
-        background-position: center;
-        padding: 7px 0px;
-        background: #4c32e9;
-        color: white;
-    }
-    .seaticon:hover{
-        background: #fb8c00;
-        color:white;
-    }
-
-
-    .theaterblockseat.sitable{
-
-    }
-
-    .theaterblock tbody{
-        margin: 5px;
-    }
-
-    .theaterblockblank{
-        height: 50px;
-    }
-    .theaterblockprice{
-
-        transform: rotate(90deg);
-    }
-
-    h5.theaterblocktext {
-        font-size: 9px;
-        letter-spacing: 0px
-    }
-    .classtitle{
-        text-transform: uppercase;
-        font-weight: bold;
-    }
-    .seaticon.active {
-        background: #cecece;
-        color: white;
-    }
-
-</style>
-<div class="page-wrapper" ng-controller="updateEventController">
+<div class="page-wrapper" ng-controller="booknowEventController">
     <div class="container-fluid">
         <!-- ============================================================== -->
         <!-- Start Page Content -->
@@ -120,7 +46,11 @@ $this->load->view('layout/topmenu');
                                         <td><?php echo $tvalue["theater"]['title']; ?></td>
                                         <td><?php echo $tvalue["event_date"]; ?></td>
                                         <td ><?php echo $tvalue["event_time"]; ?></td>
-                                        <td ><a href="<?php echo site_url("MovieEvent/bookNow/".$tvalue["id"]);?>" class="btn waves-light btn-success">Book Now</a></td>
+                                        <td >
+
+                                            <a href="#" data-toggle="modal" ng-click="selectBookingSeats(<?php echo $tvalue["id"]; ?>)" data-target=".bs-example-modal-sm" class="btn waves-light btn-success">Book Now</a>
+
+                                        </td>
                                     </tr>
                                     <?php
                                 }
@@ -141,6 +71,29 @@ $this->load->view('layout/topmenu');
             </div>
             <!-- end #content -->
         </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="selectSeats" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="mySmallModalLabel">Book Now</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+
+                <div class="modal-body"> 
+                    <div class="form-group row">
+                        <label for="com1" class="col-sm-6  control-label col-form-label">No Of Seat(s)</label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" id="com1" placeholder="1" ng-model="booking.no_of_seats">
+                        </div>
+                    </div>
+                    <a href="<?php echo site_url("MovieEvent/bookNow/"); ?>{{booking.event_id}}/{{booking.no_of_seats}}" class="btn waves-light btn-success">Book Now</a>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
     </div>
 </div>
 

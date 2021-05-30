@@ -266,8 +266,8 @@
                     <td colspan="2" style='font-size: 11px;'>
                         <p><b>Important Notes:</b></p>
                         <p>Please collect your ticket from Maharaja Mart.</p>
-                        <p>Tickets once booked cannot be exchanged, cancelled or refunded.</p>
-                        <p>Unpaid reserved Tickets automatic cancelled within 24 hours.</p>
+                        <p>Tickets once booked cannot be either exchanged, cancelled or refunded.</p>
+                        <p>Unpaid reserved Tickets automatically cancelled 24 hours before the show starts.</p>
                     </td>
 
                 </tr>

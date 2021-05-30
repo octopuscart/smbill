@@ -84,6 +84,7 @@ class Api extends REST_Controller {
         $booked = array();
         $reserved = array();
         $classprice = [];
+        $paid = array();
         if ($configurable) {
             $booked = $this->getBookedSheats($this->get(), "Reserved");
             $paid = $this->getBookedSheats($this->get(), "Paid");
@@ -98,6 +99,7 @@ class Api extends REST_Controller {
     function getLayoutGrandOcean_get($configurable = 0) {
         $booked = array();
         $reserved = array();
+        $paid = array();
         $classprice = [];
         if ($configurable) {
             $booked = $this->getBookedSheats($this->get(), "Reserved");
@@ -113,6 +115,7 @@ class Api extends REST_Controller {
     function getLayout_GH_HSE4_get($configurable = 0) {
         $booked = array();
         $reserved = array();
+        $paid = array();
         $classprice = [];
         if ($configurable) {
             $booked = $this->getBookedSheats($this->get(), "Reserved");
@@ -128,6 +131,7 @@ class Api extends REST_Controller {
     function getLayout_GH_HSE3_get($configurable = 0) {
         $booked = array();
         $reserved = array();
+        $paid = array();
         $classprice = [];
         if ($configurable) {
             $booked = $this->getBookedSheats($this->get(), "Reserved");
@@ -143,6 +147,7 @@ class Api extends REST_Controller {
     function getLayout_GH_HSE1_get($configurable = 0) {
         $booked = array();
         $reserved = array();
+        $paid = array();
         $classprice = [];
         if ($configurable) {
             $booked = $this->getBookedSheats($this->get(), "Reserved");

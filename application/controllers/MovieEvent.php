@@ -373,12 +373,12 @@ class MovieEvent extends CI_Controller {
         $this->load->view('Movie/bookingList', $data);
     }
 
-    function bookNow($event_id) {
+    function bookNow($event_id, $no_of_seats) {
         $eventinfo = $this->Movie->eventInformation($event_id);
         $data["event_info"] = $eventinfo;
 
         $data['event_id'] = $event_id;
-        $data['total_seats'] = 5;
+        $data['total_seats'] = $no_of_seats;
 
         $data["theater_template_id"] = $eventinfo["theater_template_id"];
 
@@ -426,8 +426,8 @@ class MovieEvent extends CI_Controller {
                 "payment_attr" => "",
                 "payment_id" => "",
                 "booking_type" => "Reserved",
-                "booking_time" => Date('Y-m-d'),
-                "booking_date" => date('H:i:s'),
+                "booking_date" => Date('Y-m-d'),
+                "booking_time" => date('H:i:s'),
             );
 
             $this->db->insert('movie_ticket_booking', $bookingArray);
@@ -455,6 +455,167 @@ class MovieEvent extends CI_Controller {
         }
 
         $this->load->view('Movie/selectsit', $data);
+    }
+
+    function deshboard() {
+        $eventlist = $this->Movie->eventBookingList();
+        $totaldata = array("totalseats" => 0, "paid" => 0, "reserved" => 0, "pending" => 0);
+        foreach ($eventlist as $key => $value) {
+            $totaldata["totalseats"] += $value["theater"]['seat_count'];
+            $totaldata["paid"] += $value["paid"];
+            $totaldata["reserved"] += $value["reserved"];
+        }
+
+        $totaldata["pending"] = $totaldata["totalseats"] - ($totaldata["paid"] + $totaldata["reserved"]);
+        $data["eventlist"] = $eventlist;
+        $data["totaldata"] = $totaldata;
+        $this->load->view('Movie/bookingListReport', $data);
+    }
+
+    function eventReport($event_id) {
+
+        $this->db->where('id', $event_id);
+        $this->db->order_by("event_date");
+        $query = $this->db->get('movie_event');
+        $eventobj = $query->row_array();
+
+        $reserved = $this->Movie->getSelectedSeats($event_id, "Reserved");
+        $paid = $this->Movie->getSelectedSeats($event_id, "Paid");
+
+        $theater = $this->Movie->theaterInformation($eventobj["theater_id"]);
+        $movie = $this->Movie->movieInforamtion($eventobj["movie_id"]);
+
+        $eventobj["movie"] = $movie;
+        $eventobj["theater"] = $theater;
+
+        $data["eventobj"] = $eventobj;
+        $totaldata = array("totalseats" => $eventobj["theater"]["seat_count"], "paid" => count($paid), "reserved" => count($reserved), "pending" => 0);
+
+        $totaldata["pending"] = $totaldata["totalseats"] - ($totaldata["paid"] + $totaldata["reserved"]);
+
+        $data["totaldata"] = $totaldata;
+
+
+        $data['exportdata'] = 'yes';
+        $date1 = date('Y-m-') . "01";
+
+        $date2 = date('Y-m-t');
+        if (isset($_GET['daterange'])) {
+            $daterange = $this->input->get('daterange');
+            $datelist = explode(" to ", $datarange);
+            $date1 = $datelist[0];
+            $date2 = $datelist[1];
+        }
+        $daterange = $date1 . " to " . $date2;
+        $data['daterange'] = $daterange;
+        if ($this->user_type == 'Admin' || $this->user_type == 'Manager') {
+
+            $querystr = "SELECT mtb.*, ms.title as movie, mt.title as theater FROM movie_ticket_booking as mtb
+join movie_theater as mt on mt.id = mtb.theater_id
+join movie_show as ms on ms.id = mtb.movie_id
+where mtb.select_date between '$date1'  and '$date2' and mtb.event_id='$event_id' order by mtb.id desc";
+            $query = $this->db->query($querystr);
+            $orderlist = $query->result();
+
+            $orderslistr = [];
+            foreach ($orderlist as $key => $value) {
+                $this->db->order_by('id', 'desc');
+                $this->db->where('movie_ticket_booking_id', $value->id);
+                $query = $this->db->get('movie_ticket');
+                $tickets = $query->result();
+
+                $value->seats = $tickets;
+
+                array_push($orderslistr, $value);
+            }
+
+            $data['orderslist'] = $orderslistr;
+            $this->load->view('Movie/eventreport', $data);
+        }
+    }
+
+    function bookinglistxls($event_id, $daterange) {
+
+        $datelist = explode(" to ", urldecode($daterange));
+        $date1 = $datelist[0];
+        $date2 = $datelist[1];
+
+        $this->db->where('id', $event_id);
+        $this->db->order_by("event_date");
+        $query = $this->db->get('movie_event');
+        $eventobj = $query->row_array();
+        $theater = $this->Movie->theaterInformation($eventobj["theater_id"]);
+        $movie = $this->Movie->movieInforamtion($eventobj["movie_id"]);
+        
+        $filename = $movie["title"]. "-".$theater["title"]."-".$eventobj["event_date"]."-".$eventobj["event_date"].".csv";
+
+        $fields = array(
+            "S. No.",
+            "Name",
+            "Contact No.",
+            "Email",
+            "No. Of Tickets",
+            "Ticket(s) Price",
+            "Seat(s) Alloted",
+            "Total Amount",
+            "Payment Status",
+            "Payment Type",
+         
+            "Booking Date/Time");
+        $delimiter = ",";
+     
+        $f = fopen('php://memory', 'w');
+        fputcsv($f, $fields, $delimiter);
+        $orderslistr = [];
+        $querystr = "SELECT mtb.*, ms.title as movie, mt.title as theater FROM movie_ticket_booking as mtb
+join movie_theater as mt on mt.id = mtb.theater_id
+join movie_show as ms on ms.id = mtb.movie_id
+where mtb.select_date between '$date1'  and '$date2' and mtb.event_id='$event_id' order by mtb.id desc";
+        $query = $this->db->query($querystr);
+        $orderlist = $query->result();
+
+        $orderslistr = [];
+        foreach ($orderlist as $key => $value) {
+            $this->db->order_by('id', 'desc');
+            $this->db->where('movie_ticket_booking_id', $value->id);
+            $query = $this->db->get('movie_ticket');
+            $tickets = $query->result();
+            $seatsarray = [];
+            $seatpricearray = [];
+            foreach ($tickets as $tkey => $tvalue) {
+                array_push($seatsarray, $tvalue->seat);
+                array_push($seatpricearray, $tvalue->seat_price);
+            }
+            $seatpricearray2 = array_unique($seatpricearray);
+            $value->seats_str = implode(", ", $seatsarray);
+            $value->seats_price_str = implode(", ", $seatpricearray2);
+
+            $value->seats = $tickets;
+
+            array_push($orderslistr, $value);
+        }
+
+        foreach ($orderslistr as $key => $value) {
+            $lineData = array($key + 1,
+                $value->name,
+                $value->contact_no,
+                $value->email,
+                count($value->seats),
+                $value->seats_price_str,
+                $value->seats_str,
+                $value->total_price,
+                $value->payment_attr,
+                $value->payment_type,
+                 $value->booking_date. " ". $value->booking_time,
+            );
+            fputcsv($f, $lineData, $delimiter);
+        }
+        fseek($f, 0);
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="' . $filename . '";');
+        //output all remaining data on a file pointer
+        fpassthru($f);
+        exit;
     }
 
 }

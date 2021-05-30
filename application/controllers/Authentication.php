@@ -14,7 +14,7 @@ class Authentication extends CI_Controller {
         $data['login_user'] = $this->session->userdata('logged_in');
         $userdata = $this->userdata;
         if ($userdata) {
-              redirect('Order/orderslist');
+             redirect('MovieEvent/deshboard');
         } else {
             //        redirect("Authentication/index");
         }
@@ -63,7 +63,7 @@ class Authentication extends CI_Controller {
                         'icon' => 'happy.png'
                     );
                     $this->session->set_flashdata("checklogin", $message);
-                    redirect('Order/orderslist');
+                    redirect('MovieEvent/deshboard');
                 }
             } else {
                 $message = array(

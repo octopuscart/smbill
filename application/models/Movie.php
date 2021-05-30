@@ -100,8 +100,7 @@ class Movie extends CI_Model {
         }
         return $theater_array_adata;
     }
-    
-    
+
     function theaterTemplateSingle($template_id) {
         $this->db->where('id', $template_id);
         $query = $this->db->get('movie_theater_template');
@@ -117,7 +116,7 @@ class Movie extends CI_Model {
             $reserveseats[$value] = "";
         }
         $theater_array["reserve_seats"] = $reserveseats;
-        
+
         return $theater_array;
     }
 
@@ -154,10 +153,10 @@ class Movie extends CI_Model {
         $this->db->select("*");
         $this->db->where('event_id', $event_id);
         $this->db->where("booking_type", $booking_type);
-     
+
         $query = $this->db->get('movie_ticket_booking');
         $moviebooking = $query->result_array();
-    
+
         $seats = [];
         foreach ($moviebooking as $mbkey => $mbvalue) {
             $bookingid = $mbvalue['id'];
@@ -168,8 +167,7 @@ class Movie extends CI_Model {
         }
         return $seats;
     }
-    
-    
+
     function getSelectedSeatsEventId($event_id) {
         $this->db->select("*");
         $this->db->where('event_id', $event_id);
@@ -324,7 +322,7 @@ class Movie extends CI_Model {
             if (isset($reserve[$trow])) {
                 $temprow[$trow] = "R";
             }
-            
+
             if (isset($paid[$trow])) {
                 $temprow[$trow] = "P";
             }
@@ -372,7 +370,7 @@ class Movie extends CI_Model {
         return $layout;
     }
 
-    function getLayoutGrandOcean($booked, $reserved, $paid,  $classprice) {
+    function getLayoutGrandOcean($booked, $reserved, $paid, $classprice) {
 
         $gaps = array("7" => "", "25" => "");
         $layout = array(
@@ -421,7 +419,7 @@ class Movie extends CI_Model {
         return $layout;
     }
 
-    function getLayout_GH_HSE4($booked, $reserved, $paid,  $classprice) {
+    function getLayout_GH_HSE4($booked, $reserved, $paid, $classprice) {
         $gaps = array("4" => "", "19" => "");
         $layout = array(
             "totalinrow" => 25,
@@ -467,7 +465,7 @@ class Movie extends CI_Model {
         return $layout;
     }
 
-    function getLayout_GH_HSE3($booked, $reserved, $paid,  $classprice) {
+    function getLayout_GH_HSE3($booked, $reserved, $paid, $classprice) {
         $gaps = array("4" => "", "19" => "");
         $layout = array(
             "totalinrow" => 24,
@@ -514,7 +512,7 @@ class Movie extends CI_Model {
         return $layout;
     }
 
-    function getLayout_GH_HSE1($booked, $reserved, $paid,  $classprice) {
+    function getLayout_GH_HSE1($booked, $reserved, $paid, $classprice) {
         $gaps = array("4" => "", "19" => "");
         $layout = array(
             "totalinrow" => 26,
@@ -556,6 +554,21 @@ class Movie extends CI_Model {
             )
         );
         return $layout;
+    }
+
+    function eventBookingList() {
+        $eventlist = $this->movieevent();
+        $eventdatalist = [];
+        foreach ($eventlist as $mk => $mv) {
+            $event_id = $mv["id"];
+            $reserved = $this->getSelectedSeats($event_id, "Reserved");
+            $paid = $this->getSelectedSeats($event_id, "Paid");
+            $mv["paid"] = count($paid);
+            $mv["reserved"] = count($reserved);
+            array_push($eventdatalist, $mv);
+        }
+      
+        return $eventdatalist;
     }
 
 }
