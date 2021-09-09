@@ -207,14 +207,14 @@ class Movie extends CI_Model {
         if ($cdate == "") {
             $cdate = date("Y-m-d");
         }
-       
+
         $this->db->where('event_date>=', $cdate);
-         $this->db->group_by("movie_id");
-         $this->db->group_by("theater_id");
-         $this->db->group_by("id");
+        $this->db->group_by("movie_id");
+        $this->db->group_by("theater_id");
+        $this->db->group_by("id");
         $query = $this->db->get('movie_event');
         $event_list = $query->result_array();
-     
+
         $eventlistarray = array();
         foreach ($event_list as $ekey => $evalue) {
             $temparray = array();
@@ -516,6 +516,53 @@ class Movie extends CI_Model {
         return $layout;
     }
 
+    function getLayout_GH_HSE3B($booked, $reserved, $paid, $classprice) {
+        $gaps = array("4" => "", "19" => "");
+        $layout = array(
+            "totalinrow" => 24,
+            "sitclass" => array(
+                "class1" => array(
+                    "price" => count($classprice) ? $classprice[0]["class_price"] : 0,
+                    "rowcount" => "2",
+                    "color" => "#fff",
+                    "row" => array(
+                        "B" => $this->createRange(1, 21, 21, [19], "B", $booked, $reserved, $paid, $gaps),
+                        "C" => $this->createRange(1, 21, 21, [], "C", $booked, $reserved, $paid, $gaps),
+                        "D" => $this->createRange(1, 21, 21, [19], "D", $booked, $reserved, $paid, $gaps),
+                    )
+                ),
+                "class2" => array(
+                    "price" => count($classprice) ? $classprice[1]["class_price"] : 0,
+                    "rowcount" => "6",
+                    "color" => "#fff",
+                    "row" => array(
+                        "E" => $this->createRange(1, 21, 21, [], "E", $booked, $reserved, $paid, $gaps),
+                        "F" => $this->createRange(1, 21, 21, [19], "F", $booked, $reserved, $paid, $gaps),
+                        "G" => $this->createRange(1, 21, 21, [], "G", $booked, $reserved, $paid, $gaps),
+                        "H" => $this->createRange(1, 21, 21, [19], "H", $booked, $reserved, $paid, $gaps),
+                        "I" => $this->createRange(1, 21, 21, [], "I", $booked, $reserved, $paid, $gaps),
+                    )
+                ),
+                "class3" => array(
+                    "price" => count($classprice) ? $classprice[2]["class_price"] : 0,
+                    "rowcount" => "5",
+                    "color" => "#fff",
+                    "row" => array(
+                        "J" => $this->createRange(1, 21, 21, [19], "J", $booked, $reserved, $paid, $gaps),
+                        "K" => $this->createRange(1, 21, 21, [], "K", $booked, $reserved, $paid, $gaps),
+                        "L" => $this->createRange(1, 21, 21, [19], "L", $booked, $reserved, $paid, $gaps),
+                        "M" => $this->createRange(1, 21, 21, [], "M", $booked, $reserved, $paid, $gaps),
+                        "N" => $this->createRange(1, 21, 21, [19], "N", $booked, $reserved, $paid, $gaps),
+                        "O" => $this->createRange(1, 21, 21, [], "O", $booked, $reserved, $paid, $gaps),
+                        "P" => $this->createRange(1, 21, 21, [19], "P", $booked, $reserved, $paid, $gaps),
+                        "Q" => $this->createRange(1, 21, 21, [20, 21, 3], "Q", $booked, $reserved, $paid, $gaps),
+                    )
+                ),
+            )
+        );
+        return $layout;
+    }
+
     function getLayout_GH_HSE1($booked, $reserved, $paid, $classprice) {
         $gaps = array("4" => "", "19" => "");
         $layout = array(
@@ -571,7 +618,7 @@ class Movie extends CI_Model {
             $mv["reserved"] = count($reserved);
             array_push($eventdatalist, $mv);
         }
-      
+
         return $eventdatalist;
     }
 
