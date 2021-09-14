@@ -242,6 +242,14 @@ class MovieEvent extends CI_Controller {
         $movies = $this->Movie->movieInforamtion($bookingobj['movie_id']);
         $data['movieobj'] = $movies;
 
+        if (isset($_POST['proceed'])) {
+            $remark = $this->input->post('remark');
+            $this->db->set('remark', $remark);
+            $this->db->where('booking_id', $bookingid);
+            $this->db->update('movie_ticket_booking');
+            redirect(site_url("MovieEvent/yourTicket/$bookingid"));
+        }
+
 
         $theaters = $movies = $this->Movie->theaterInformation($bookingobj['theater_id']);
         $data['theater'] = $theaters;
@@ -410,10 +418,12 @@ class MovieEvent extends CI_Controller {
             }
             $name = $this->input->post('name');
             $email = $this->input->post('email');
+            $remark = $this->input->post('remark');
             $contact_no = $this->input->post('contact_no');
 
             $bookingArray = array(
                 "name" => $name,
+                "remark" => $remark,
                 "email" => $email,
                 "contact_no" => $contact_no,
                 "select_date" => $eventinfo['event_date'],
@@ -533,12 +543,12 @@ where mtb.select_date between '$date1'  and '$date2' and mtb.event_id='$event_id
             $this->load->view('Movie/eventreport', $data);
         }
     }
-    
-     function eventReportAll() {
 
-      
+    function eventReportAll() {
 
-      
+
+
+
 
 
         $data['exportdata'] = 'no';
@@ -605,6 +615,7 @@ where mtb.select_date between '$date1'  and '$date2'  order by mtb.id desc";
             "Total Amount",
             "Payment Status",
             "Payment Type",
+            "Remark",
             "Booking Date/Time");
         $delimiter = ",";
 
@@ -650,6 +661,7 @@ where mtb.select_date between '$date1'  and '$date2' and mtb.event_id='$event_id
                 $value->total_price,
                 $value->payment_attr,
                 $value->payment_type,
+                $value->remark,
                 $value->booking_date . " " . $value->booking_time,
             );
             fputcsv($f, $lineData, $delimiter);
@@ -724,7 +736,7 @@ where mtb.select_date between '$date1'  and '$date2' and mtb.event_id='$event_id
 
     function widgetCreateEvent($theater_id, $movie_id, $template_id) {
 
-     
+
 
         $data["theaterobj"] = $this->Movie->theaterInformation($theater_id);
         $data["movie"] = $this->Movie->movieInforamtion($movie_id);

@@ -244,6 +244,11 @@ $this->load->view('layout/topmenu');
                                                         <?php
                                                         echo $value->payment_type;
                                                         ?>
+                                                        <br/>
+                                                       <p style="font-size: 10px"> <?php
+                                                        echo $value->remark ?"<b>Remark</b>:  ". $value->remark:"";
+                                                        ?>
+                                                       </p>
                                                     </td>
                                                     <td>
                                                          

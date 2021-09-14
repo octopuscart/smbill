@@ -398,6 +398,12 @@ $this->load->view('layout/topmenu');
                                                     <input type="tel" class="form-control" name='contact_no' placeholder="Contact No." aria-describedby="sizing-addon2" required="">
                                                 </div>
                                             </div>
+                                            <div class=" col-md-9">    
+                                                <div class="form-group">
+                                                    <span class="input-group-addon " id="sizing-addon2">Remark</span>
+                                                    <textarea class="form-control" name='remark' placeholder="Write Remark Here" aria-describedby="sizing-addon2" ></textarea>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class='ticketblock' style="margin: 10px 0px 10px 0px;" >
