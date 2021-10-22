@@ -556,11 +556,6 @@ where 1 $daterangequery and mtb.event_id='$event_id' order by mtb.id desc";
 
     function eventReportAll() {
 
-
-
-
-
-
         $data['exportdata'] = 'no';
         $date1 = date('Y-m-') . "01";
 
