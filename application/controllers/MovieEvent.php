@@ -499,7 +499,10 @@ class MovieEvent extends CI_Controller {
         $eventobj["theater"] = $theater;
 
         $data["eventobj"] = $eventobj;
-        $totaldata = array("totalseats" => $eventobj["theater"]["seat_count"], "paid" => count($paid), "reserved" => count($reserved), "pending" => 0);
+        $totaldata = array(
+            "totalseats" => $eventobj["theater"]["seat_count"],
+            "paid" => count($paid),
+            "reserved" => count($reserved), "pending" => 0);
 
         $totaldata["pending"] = $totaldata["totalseats"] - ($totaldata["paid"] + $totaldata["reserved"]);
 
@@ -521,7 +524,7 @@ class MovieEvent extends CI_Controller {
         $daterangequery = "";
 
         if (isset($_GET["daterange"])) {
-            $daterangequery = " mtb.select_date between '$date1'  and '$date2'";
+            $daterangequery = " and  mtb.select_date between '$date1'  and '$date2'";
         }
 
 
@@ -574,7 +577,7 @@ where 1 $daterangequery and mtb.event_id='$event_id' order by mtb.id desc";
         $daterangequery = "";
 
         if (isset($_GET["daterange"])) {
-            $daterangequery = " mtb.select_date between '$date1'  and '$date2'";
+            $daterangequery = " and mtb.select_date between '$date1'  and '$date2'";
         }
         
         if ($this->user_type == 'Admin' || $this->user_type == 'Manager') {
