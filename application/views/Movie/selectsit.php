@@ -378,7 +378,7 @@ $this->load->view('layout/topmenu');
                                     </div>
                                 </div>
                                 <div class="col-sm-12" style='padding: 0px;margin-top:20px;'>
-                                    <form action='#' method="post">
+                                    <form action='#' method="post" id="bookingform">
                                         <div class="row">
                                             <div class=" col-md-3">
                                                 <div class="form-group">
@@ -431,7 +431,7 @@ $this->load->view('layout/topmenu');
                                             <div class="col-md-6">
                                                 <div class='checkoutbutton' style='text-align: left;' ng-if="seatSelection.total > 0">
 
-                                                    <button class='btn btn-default' style='background: #d92229;height: 48px;
+                                                    <button class='btn btn-default' id="bookingbutton" style='background: #d92229;height: 48px;
                                                             float: right;
                                                             color: white;' type='submit' name='proceed'>Proceed Checkout/Reserve  <span aria-hidden="true">&rarr;</span></button>
                                                 </div>
@@ -513,7 +513,14 @@ $this->load->view('layout/topmenu');
     var layoutgbl = '<?php echo $theater['layout']; ?>';
     var event_id = '<?php echo $event_id; ?>';
     var seatsgbl = '<?php echo $total_seats; ?>';
-    var template_id = "<?php echo $theater_template_id; ?>"
+    var template_id = "<?php echo $theater_template_id; ?>";
+
+    $(document).on('submit', "#bookingform", function () {
+        $("#bookingbutton").hide();
+    });
+
+
+
 
 </script>
 <script src="<?php echo base_url(); ?>assets/angular/ng-movies.js"></script>
