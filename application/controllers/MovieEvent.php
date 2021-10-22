@@ -520,7 +520,7 @@ class MovieEvent extends CI_Controller {
         $data['daterange'] = $daterange;
         $daterangequery = "";
 
-        if ($isset($_GET["daterange"])) {
+        if (isset($_GET["daterange"])) {
             $daterangequery = " mtb.select_date between '$date1'  and '$date2'";
         }
 
@@ -573,7 +573,7 @@ where 1 $daterangequery and mtb.event_id='$event_id' order by mtb.id desc";
         
         $daterangequery = "";
 
-        if ($isset($_GET["daterange"])) {
+        if (isset($_GET["daterange"])) {
             $daterangequery = " mtb.select_date between '$date1'  and '$date2'";
         }
         
