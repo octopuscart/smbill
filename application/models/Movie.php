@@ -92,6 +92,7 @@ class Movie extends CI_Model {
         $theater_array_adata = array();
         foreach ($theater_array as $thkey => $thvalue) {
             $temparray = $thvalue;
+
             $this->db->where('template_id', $thvalue["id"]);
             $query = $this->db->get('movie_theater_template_class');
             $theater_array_class = $query->result_array();
@@ -607,13 +608,29 @@ class Movie extends CI_Model {
         return $layout;
     }
 
+    function getHoldSeats($template_id) {
+        $this->db->where('id', $template_id);
+        $query = $this->db->get('movie_theater_template');
+        $template_array = $query->row_array();
+        if ($template_array) {
+            
+            return  substr_count($template_array["reserve_seats"], ", ");
+        } else {
+            return 0;
+        }
+    }
+
     function eventBookingList() {
         $eventlist = $this->movieevent();
         $eventdatalist = [];
         foreach ($eventlist as $mk => $mv) {
+
             $event_id = $mv["id"];
             $reserved = $this->getSelectedSeats($event_id, "Reserved");
             $paid = $this->getSelectedSeats($event_id, "Paid");
+            $theaterobjcount = $this->getHoldSeats($mv["theater_template_id"]);
+            $mv["hold"] = $theaterobjcount;
+            $mv["totalavailable"] = $mv["theater"]['seat_count'] - $theaterobjcount;
             $mv["paid"] = count($paid);
             $mv["reserved"] = count($reserved);
             array_push($eventdatalist, $mv);

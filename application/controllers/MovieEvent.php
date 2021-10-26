@@ -469,14 +469,17 @@ class MovieEvent extends CI_Controller {
 
     function deshboard() {
         $eventlist = $this->Movie->eventBookingList();
-        $totaldata = array("totalseats" => 0, "paid" => 0, "reserved" => 0, "pending" => 0);
+        $totaldata = array("totalseats" => 0, "hold" => 0, "paid" => 0, "reserved" => 0, "pending" => 0, "totalavailable" => 0);
+
         foreach ($eventlist as $key => $value) {
             $totaldata["totalseats"] += $value["theater"]['seat_count'];
             $totaldata["paid"] += $value["paid"];
+            $totaldata["hold"] += $value["hold"];
+            $totaldata["totalavailable"] += ($value["totalavailable"]);
             $totaldata["reserved"] += $value["reserved"];
         }
 
-        $totaldata["pending"] = $totaldata["totalseats"] - ($totaldata["paid"] + $totaldata["reserved"]);
+        $totaldata["pending"] = $totaldata["totalseats"] - ($totaldata["paid"] + $totaldata["reserved"] + $totaldata["hold"]);
         $data["eventlist"] = $eventlist;
         $data["totaldata"] = $totaldata;
         $this->load->view('Movie/bookingListReport', $data);
@@ -494,6 +497,8 @@ class MovieEvent extends CI_Controller {
 
         $theater = $this->Movie->theaterInformation($eventobj["theater_id"]);
         $movie = $this->Movie->movieInforamtion($eventobj["movie_id"]);
+        
+        $totalhold = $this->Movie->getHoldSeats($eventobj["theater_template_id"]);
 
         $eventobj["movie"] = $movie;
         $eventobj["theater"] = $theater;
@@ -502,9 +507,10 @@ class MovieEvent extends CI_Controller {
         $totaldata = array(
             "totalseats" => $eventobj["theater"]["seat_count"],
             "paid" => count($paid),
+            "totalavailable" => ($eventobj["theater"]["seat_count"] - $totalhold),
             "reserved" => count($reserved), "pending" => 0);
 
-        $totaldata["pending"] = $totaldata["totalseats"] - ($totaldata["paid"] + $totaldata["reserved"]);
+        $totaldata["pending"] = $totaldata["totalavailable"] - ($totaldata["paid"] + $totaldata["reserved"]);
 
         $data["totaldata"] = $totaldata;
 
@@ -568,13 +574,13 @@ where 1 $daterangequery and mtb.event_id='$event_id' order by mtb.id desc";
         }
         $daterange = $date1 . " to " . $date2;
         $data['daterange'] = $daterange;
-        
+
         $daterangequery = "";
 
         if (isset($_GET["daterange"])) {
             $daterangequery = " and mtb.select_date between '$date1'  and '$date2'";
         }
-        
+
         if ($this->user_type == 'Admin' || $this->user_type == 'Manager') {
 
             $querystr = "SELECT mtb.*, ms.title as movie, mt.title as theater FROM movie_ticket_booking as mtb

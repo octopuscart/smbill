@@ -26,7 +26,7 @@ $this->load->view('layout/topmenu');
                             <div class="card card-hover">
                                 <div class="box bg-info text-center">
                                     <h1 class="font-light text-white">
-                                        <?php echo $totaldata["totalseats"] ?>
+                                        <?php echo $totaldata["totalavailable"] ?>
                                     </h1>
                                     <h6 class="text-white">Total Seats</h6>
                                 </div>
@@ -101,7 +101,7 @@ $this->load->view('layout/topmenu');
                                         <td><?php echo $tvalue["theater"]['title']; ?></td>
                                         <td><?php echo $tvalue["event_date"]; ?></td>
                                         <td ><?php echo $tvalue["event_time"]; ?></td>
-                                        <td><?php echo $tvalue["theater"]['seat_count']; ?></td>
+                                        <td><?php echo $tvalue["totalavailable"]; ?></td>
                                         <td><b><?php echo $tvalue["paid"]; ?></b></td>
                                         <td><b><?php echo $tvalue["reserved"]; ?></b></td>
                                         <td ><a href="<?php echo site_url("MovieEvent/eventReport/" . $tvalue["id"]); ?>" class="btn waves-light btn-success">Report</a></td>
