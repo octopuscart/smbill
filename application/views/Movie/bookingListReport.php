@@ -4,9 +4,17 @@ $this->load->view('layout/topmenu');
 ?>
 
 <style>
+    .minitable td{
+        padding:0px 7px;
 
+
+    }
+    .minitable th{
+        padding:0px 7px;
+
+    }
 </style>
-<div class="page-wrapper" ng-controller="updateEventController">
+<div class="page-wrapper" >
     <div class="container-fluid">
         <!-- ============================================================== -->
         <!-- Start Page Content -->
@@ -18,8 +26,9 @@ $this->load->view('layout/topmenu');
             <!-- begin #content -->
             <div id="content" class="content content-full-width">
                 <div class="feed-widget scrollable ps-container ps-theme-default "  >
-                    
-                    
+
+              
+                    <h3>Seats Collection</h3>
                     <div class="row m-t-40">
                         <!-- Column -->
                         <div class="col-md-6 col-lg-3 col-xlg-3">
@@ -66,18 +75,48 @@ $this->load->view('layout/topmenu');
                             </div>
                         </div>
                         <!-- Column -->
+
+
                     </div>
+                    <hr/>
+                    <h3 class="font-light text-dark">Payment Collection: <b>{{<?php echo $totaldata["totalpayments"];?>|currency}}</b></h3>
+
+                    <div class="row m-t-40">
+
+                        <?php
+                        foreach ($totalpaymentsdata as $ptkey => $ptvalue) {
+                            ?>
+                            <div class="col-md-6 col-lg-3 col-xlg-3">
+                                <div class="card card-hover">
+                                    <div class="box bg-grey text-center">
+                                        <h3 class="font-light text-dark">
+                                            {{<?php echo $ptvalue["total_payment"] ?>|currency}}
+                                        </h3>
+                                        <h6 class="text-dark"><?php
+                                            echo $ptkey;
+                                            ?>
+                                        </h6>
+                                        <br/>
+                                        <b>Total Seats: <?php echo $ptvalue["total_seats"] ?></b>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                        ?>
+                    </div>
+                    <hr/>
                     <div class="table-responsive">
-                        <table class="table v-middle">
+                        <table class="table v-middle table-bordered">
                             <thead>
                                 <tr>
                                     <th class="border-top-0">Show Title</th>
-                                    <th class="border-top-0">Location</th>
-                                    <th class="border-top-0">Date</th>
-                                    <th class="border-top-0">Time</th>
-                                     <th class="border-top-0">Total Seat(s)</th>
-                                      <th class="border-top-0">Paid</th>
-                                       <th class="border-top-0">Reserved</th>
+                                    <th class="border-top-0" style="    width: 250px;">Location / Date Time</th>
+
+                                    <th class="border-top-0">Total Seat(s)</th>
+                                    <th class="border-top-0">Paid</th>
+                                    <th class="border-top-0">Reserved</th>
+                                    <th>Payment Data</th>
                                     <th class="border-top-0">Action</th>
                                 </tr>
                             </thead>
@@ -98,12 +137,59 @@ $this->load->view('layout/topmenu');
                                                 </div>
                                             </div>
                                         </td>
-                                        <td><?php echo $tvalue["theater"]['title']; ?></td>
-                                        <td><?php echo $tvalue["event_date"]; ?></td>
-                                        <td ><?php echo $tvalue["event_time"]; ?></td>
+                                        <td><?php echo $tvalue["theater"]['title']; ?>
+                                            <br/><?php echo $tvalue["event_date"]; ?> / <?php echo $tvalue["event_time"]; ?>
+                                        </td>
                                         <td><?php echo $tvalue["totalavailable"]; ?></td>
                                         <td><b><?php echo $tvalue["paid"]; ?></b></td>
                                         <td><b><?php echo $tvalue["reserved"]; ?></b></td>
+                                        <td>
+                                            <table class="minitable">
+                                                <tr>
+                                                    <th  style="width:200px">Type</th>
+                                                    <th>Amount</th>
+                                                    <th>Seats</th>
+                                                </tr>
+                                                <?php
+                                                $temppayment = $tvalue["paymentdata"];
+                                                $totalamount = 0;
+                                                $totalseats = 0;
+                                                foreach ($temppayment as $pkey => $pvalue) {
+                                                    ?>
+                                                    <tr>
+                                                        <td>
+                                                            <?php
+                                                            echo $pvalue["payment_type"];
+                                                            ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php
+                                                            echo $pvalue["total_price"];
+                                                            $totalamount += $pvalue["total_price"];
+                                                            ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php
+                                                            echo $pvalue["total_seats"];
+                                                            $totalseats += $pvalue["total_seats"];
+                                                            ?>
+                                                        </td>
+                                                    </tr>
+                                                    <?php
+                                                }
+                                                ?>
+                                                <tr>
+                                                    <th>Total</th>
+                                                    <th><?php
+                                                        echo $totalamount;
+                                                        ?></th>
+                                                    <th><?php
+                                                        echo $totalseats;
+                                                        ?></th>
+                                                </tr>
+                                            </table>
+
+                                        </td>
                                         <td ><a href="<?php echo site_url("MovieEvent/eventReport/" . $tvalue["id"]); ?>" class="btn waves-light btn-success">Report</a></td>
                                     </tr>
                                     <?php

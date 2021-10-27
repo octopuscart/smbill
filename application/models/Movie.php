@@ -608,13 +608,23 @@ class Movie extends CI_Model {
         return $layout;
     }
 
+    function paymentGroups($event_id) {
+        $querystr = "select sum(total_price) as total_price, payment_type, sum(total_seats) as total_seats from "
+                . "(SELECT mtb.id, mtb.payment_type, mtb.booking_type, mtb.total_price, (select count(id)"
+                . " from movie_ticket where movie_ticket_booking_id=mtb.id) as total_seats "
+                . "FROM `movie_ticket_booking` as mtb where mtb.event_id=$event_id and mtb.booking_type='Paid') "
+                . "as atable group by payment_type;";
+        $query = $this->db->query($querystr);
+        return $query->result_array();
+    }
+
     function getHoldSeats($template_id) {
         $this->db->where('id', $template_id);
         $query = $this->db->get('movie_theater_template');
         $template_array = $query->row_array();
         if ($template_array) {
-            
-            return  substr_count($template_array["reserve_seats"], ", ");
+
+            return substr_count($template_array["reserve_seats"], ", ");
         } else {
             return 0;
         }
@@ -624,8 +634,9 @@ class Movie extends CI_Model {
         $eventlist = $this->movieevent();
         $eventdatalist = [];
         foreach ($eventlist as $mk => $mv) {
-
-            $event_id = $mv["id"];
+             $event_id = $mv["id"];
+            $mv["paymentdata"] = $this->paymentGroups($event_id);
+           
             $reserved = $this->getSelectedSeats($event_id, "Reserved");
             $paid = $this->getSelectedSeats($event_id, "Paid");
             $theaterobjcount = $this->getHoldSeats($mv["theater_template_id"]);
@@ -633,6 +644,7 @@ class Movie extends CI_Model {
             $mv["totalavailable"] = $mv["theater"]['seat_count'] - $theaterobjcount;
             $mv["paid"] = count($paid);
             $mv["reserved"] = count($reserved);
+
             array_push($eventdatalist, $mv);
         }
 
