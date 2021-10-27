@@ -18,7 +18,7 @@
                 $selectdaterange = $daterange;
             }
             ?>
-            <a class="btn btn-warning" href="<?php echo site_url("MovieEvent/bookinglistxls/$event_id/$selectdaterange/all"); ?>">Export All</a>
+            <a class="btn btn-warning" href="<?php echo site_url("MovieEvent/bookinglistxls/$event_id/$selectdaterange/0"); ?>">Export All</a>
             <a class="btn btn-primary" href="<?php echo site_url("MovieEvent/bookinglistxls/$event_id/$selectdaterange/Paid"); ?>">Export Paid Only</a>
             <?php
         }
