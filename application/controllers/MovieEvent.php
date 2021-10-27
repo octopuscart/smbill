@@ -554,10 +554,11 @@ class MovieEvent extends CI_Controller {
             }
         }
         $data["totaldata"] = $totaldata;
-         $data["totalpaymentsdata"] = $paymentdatatotal;
+        $data["totalpaymentsdata"] = $paymentdatatotal;
 
         $data['exportdata'] = 'yes';
         $date1 = date('Y-m-') . "01";
+        $data['dateselected'] = 'no';
 
         $date2 = date('Y-m-t');
         if (isset($_GET['daterange'])) {
@@ -565,6 +566,7 @@ class MovieEvent extends CI_Controller {
             $datelist = explode(" to ", $daterange);
             $date1 = $datelist[0];
             $date2 = $datelist[1];
+            $data['dateselected'] = 'yes';
         }
         $daterange = $date1 . " to " . $date2;
         $data['daterange'] = $daterange;
@@ -604,14 +606,18 @@ where 1 $daterangequery and mtb.event_id='$event_id' order by mtb.id desc";
     function eventReportAll() {
 
         $data['exportdata'] = 'no';
+        $data['dateselected'] = 'no';
         $date1 = date('Y-m-') . "01";
 
         $date2 = date('Y-m-t');
+
+
         if (isset($_GET['daterange'])) {
             $daterange = $this->input->get('daterange');
             $datelist = explode(" to ", $daterange);
             $date1 = $datelist[0];
             $date2 = $datelist[1];
+            $data['dateselected'] = 'yes';
         }
         $daterange = $date1 . " to " . $date2;
         $data['daterange'] = $daterange;
@@ -648,11 +654,19 @@ where 1 $daterangequery  order by mtb.id desc";
         }
     }
 
-    function bookinglistxls($event_id, $daterange) {
+    function bookinglistxls($event_id, $daterange = "", $booking_type = "") {
 
-        $datelist = explode(" to ", urldecode($daterange));
-        $date1 = $datelist[0];
-        $date2 = $datelist[1];
+        $datequery = "";
+        if ($daterange) {
+            $datelist = explode(" to ", urldecode($daterange));
+            $date1 = $datelist[0];
+            $date2 = $datelist[1];
+            $datequery = " and (mtb.select_date between '$date1'  and '$date2')";
+        }
+        $booking_type_query = "";
+        if($booking_type){
+            $booking_type_query = " and booking_type='$booking_type' ";
+        }
 
         $this->db->where('id', $event_id);
         $this->db->order_by("event_date");
@@ -674,6 +688,7 @@ where 1 $daterangequery  order by mtb.id desc";
             "Total Amount",
             "Payment Status",
             "Payment Type",
+            " Type",
             "Remark",
             "Booking Date/Time");
         $delimiter = ",";
@@ -684,7 +699,7 @@ where 1 $daterangequery  order by mtb.id desc";
         $querystr = "SELECT mtb.*, ms.title as movie, mt.title as theater FROM movie_ticket_booking as mtb
 join movie_theater as mt on mt.id = mtb.theater_id
 join movie_show as ms on ms.id = mtb.movie_id
-where mtb.select_date between '$date1'  and '$date2' and mtb.event_id='$event_id' order by mtb.id desc";
+where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb.id desc";
         $query = $this->db->query($querystr);
         $orderlist = $query->result();
 
@@ -720,6 +735,7 @@ where mtb.select_date between '$date1'  and '$date2' and mtb.event_id='$event_id
                 $value->total_price,
                 $value->payment_attr,
                 $value->payment_type,
+                 $value->booking_type,
                 $value->remark,
                 $value->booking_date . " " . $value->booking_time,
             );

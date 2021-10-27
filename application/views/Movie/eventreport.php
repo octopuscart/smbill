@@ -103,7 +103,7 @@ $this->load->view('layout/topmenu');
                             </table>
                             <div class="panel-heading with-border">
                                 <?php
-                                $this->load->view('Movie/eventdates', array("event_id" => $eventobj["id"]));
+                                $this->load->view('Movie/eventdates', array("event_id" => $eventobj["id"], "dateselected" => $dateselected));
                                 ?>
                                 <div  style="clear:both"></div>
                             </div>
@@ -157,34 +157,34 @@ $this->load->view('layout/topmenu');
                                     </div>
                                     <!-- Column -->
                                 </div>
-                                 <hr/>
-                    <h3 class="font-light text-dark">Payment Collection: <b>{{<?php echo $totaldata["totalpayments"];?>|currency}}</b></h3>
+                                <hr/>
+                                <h3 class="font-light text-dark">Payment Collection: <b>{{<?php echo $totaldata["totalpayments"]; ?>|currency}}</b></h3>
 
-                    <div class="row m-t-40">
+                                <div class="row m-t-40">
 
-                        <?php
-                        foreach ($totalpaymentsdata as $ptkey => $ptvalue) {
-                            ?>
-                            <div class="col-md-6 col-lg-3 col-xlg-3">
-                                <div class="card card-hover">
-                                    <div class="box bg-grey text-center">
-                                        <h3 class="font-light text-dark">
-                                            {{<?php echo $ptvalue["total_payment"] ?>|currency}}
-                                        </h3>
-                                        <h6 class="text-dark"><?php
-                                            echo $ptkey;
-                                            ?>
-                                        </h6>
-                                        <br/>
-                                        <b>Total Seats: <?php echo $ptvalue["total_seats"] ?></b>
-                                    </div>
+                                    <?php
+                                    foreach ($totalpaymentsdata as $ptkey => $ptvalue) {
+                                        ?>
+                                        <div class="col-md-6 col-lg-3 col-xlg-3">
+                                            <div class="card card-hover">
+                                                <div class="box bg-grey text-center">
+                                                    <h3 class="font-light text-dark">
+                                                        {{<?php echo $ptvalue["total_payment"] ?>|currency}}
+                                                    </h3>
+                                                    <h6 class="text-dark"><?php
+                                                        echo $ptkey;
+                                                        ?>
+                                                    </h6>
+                                                    <br/>
+                                                    <b>Total Seats: <?php echo $ptvalue["total_seats"] ?></b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <?php
+                                    }
+                                    ?>
                                 </div>
-                            </div>
-                            <?php
-                        }
-                        ?>
-                    </div>
-                    <hr/>
+                                <hr/>
                                 <table id="tableDataOrder" class="table table-bordered   tableDataOrder" >
                                     <thead>
                                         <tr>

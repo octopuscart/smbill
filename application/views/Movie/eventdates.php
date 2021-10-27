@@ -2,8 +2,8 @@
 <form action="#" method="get" class="form-inline">
     <div class="col-md-7">
         <div class="input-group" id="daterangepicker" style="    width: 254px;
-    float: left;
-    margin-right: 6px;">
+             float: left;
+             margin-right: 6px;">
             <input type="text" name="daterange" class="form-control dateFormat"  placeholder="click to select the date range" readonly="" style="    background: #FFFFFF;
                    opacity: 1;width:200px;" value="<?php echo $daterange; ?>">
             <span class="input-group-btn">
@@ -13,8 +13,13 @@
         <button class="btn btn-success" type="submit" name="submit" value="searchdata"><i class="fa fa-send"></i> Submit</button>
         <?php
         if ($exportdata == 'yes') {
+            $selectdaterange = "0";
+            if ($dateselected == "yes") {
+                $selectdaterange = $daterange;
+            }
             ?>
-            <a class="btn btn-warning" href="<?php echo site_url("MovieEvent/bookinglistxls/$event_id/$daterange"); ?>">Export</a>
+            <a class="btn btn-warning" href="<?php echo site_url("MovieEvent/bookinglistxls/$event_id/$selectdaterange/all"); ?>">Export All</a>
+            <a class="btn btn-primary" href="<?php echo site_url("MovieEvent/bookinglistxls/$event_id/$selectdaterange/Paid"); ?>">Export Paid Only</a>
             <?php
         }
         ?>
@@ -25,5 +30,5 @@
 
 </form>
 
-    <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-daterangepicker/moment.js"></script>
-    <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/bootstrap-daterangepicker/moment.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
