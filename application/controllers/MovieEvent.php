@@ -469,14 +469,14 @@ class MovieEvent extends CI_Controller {
 
     function deshboard() {
         $eventlist = $this->Movie->eventBookingList();
-        $totaldata = array("totalseats" => 0, 
+        $totaldata = array("totalseats" => 0,
             "hold" => 0,
-            "paid" => 0, 
+            "paid" => 0,
             "reserved" => 0,
             "pending" => 0,
-            "totalavailable" => 0,"totalpayments"=>0);
+            "totalavailable" => 0, "totalpayments" => 0);
         $paymentdatatotal = array();
-        
+
         foreach ($eventlist as $key => $value) {
             $totaldata["totalseats"] += $value["theater"]['seat_count'];
             $totaldata["paid"] += $value["paid"];
@@ -484,7 +484,7 @@ class MovieEvent extends CI_Controller {
             $totaldata["totalavailable"] += ($value["totalavailable"]);
             $totaldata["reserved"] += $value["reserved"];
             foreach ($value["paymentdata"] as $pkey => $pvalue) {
-                 $totaldata["totalpayments"] += $pvalue["total_price"];
+                $totaldata["totalpayments"] += $pvalue["total_price"];
                 if (isset($paymentdatatotal[$pvalue["payment_type"]])) {
                     $paymentdatatotal[$pvalue["payment_type"]]["total_payment"] += $pvalue["total_price"];
                     $paymentdatatotal[$pvalue["payment_type"]]["total_seats"] += $pvalue["total_seats"];
@@ -519,6 +519,8 @@ class MovieEvent extends CI_Controller {
 
         $totalhold = $this->Movie->getHoldSeats($eventobj["theater_template_id"]);
 
+
+
         $eventobj["movie"] = $movie;
         $eventobj["theater"] = $theater;
 
@@ -527,13 +529,32 @@ class MovieEvent extends CI_Controller {
         $totaldata = array(
             "totalseats" => $eventobj["theater"]["seat_count"],
             "paid" => count($paid),
+            "totalpayments" => 0,
             "totalavailable" => ($eventobj["theater"]["seat_count"] - $totalhold),
             "reserved" => count($reserved), "pending" => 0);
 
         $totaldata["pending"] = $totaldata["totalavailable"] - ($totaldata["paid"] + $totaldata["reserved"]);
 
-        $data["totaldata"] = $totaldata;
 
+
+        $paymentdata = $this->Movie->paymentGroups($event_id);
+        $paymentdatatotal = array();
+        $totalpaymentdata = 0;
+
+        foreach ($paymentdata as $pkey => $pvalue) {
+            $totaldata["totalpayments"] += $pvalue["total_price"];
+            if (isset($paymentdatatotal[$pvalue["payment_type"]])) {
+                $paymentdatatotal[$pvalue["payment_type"]]["total_payment"] += $pvalue["total_price"];
+                $paymentdatatotal[$pvalue["payment_type"]]["total_seats"] += $pvalue["total_seats"];
+            } else {
+                $paymentdatatotal[$pvalue["payment_type"]] = array(
+                    "total_payment" => $pvalue["total_price"],
+                    "total_seats" => $pvalue["total_seats"],
+                );
+            }
+        }
+        $data["totaldata"] = $totaldata;
+         $data["totalpaymentsdata"] = $paymentdatatotal;
 
         $data['exportdata'] = 'yes';
         $date1 = date('Y-m-') . "01";
