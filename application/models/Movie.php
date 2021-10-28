@@ -471,7 +471,7 @@ class Movie extends CI_Model {
     }
 
     function getLayout_GH_HSE4B($booked, $reserved, $paid, $classprice) {
-        $gaps = array("4" => "", "19" => "");
+        $gaps = array("4" => "", "16" => "");
         $layout = array(
             "totalinrow" => 25,
             "sitclass" => array(
