@@ -127,6 +127,22 @@ class Api extends REST_Controller {
         $layout = $this->Movie->getLayout_GH_HSE4($booked, $reserved, $paid, $classprice);
         $this->response($layout);
     }
+    
+    function getLayout_GH_HSE4B_get($configurable = 0) {
+        $booked = array();
+        $reserved = array();
+        $paid = array();
+        $classprice = [];
+        if ($configurable) {
+            $booked = $this->getBookedSheats($this->get(), "Reserved");
+            $paid = $this->getBookedSheats($this->get(), "Paid");
+            $templateobj = $this->Movie->theaterTemplateSingle($this->get("template_id"));
+            $classprice = $templateobj["class_price"];
+            $reserved = $templateobj["reserve_seats"];
+        }
+        $layout = $this->Movie->getLayout_GH_HSE4B($booked, $reserved, $paid, $classprice);
+        $this->response($layout);
+    }
 
     function getLayout_GH_HSE3_get($configurable = 0) {
         $booked = array();
