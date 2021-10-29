@@ -61,7 +61,7 @@ $paymenttype = $statusarray[$bktype]["payment"];
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="#">Home</a>
+                                <a href="<?php echo site_url("MovieEvent/eventReport/".$booking['event_id'])?>" class="btn waves-effect waves-light btn-dark"><i class="fa fa-arrow-left"></i> Back</a>
                             </li>
                         </ol>
                     </nav>
