@@ -242,6 +242,9 @@ class MovieEvent extends CI_Controller {
         $movies = $this->Movie->movieInforamtion($bookingobj['movie_id']);
         $data['movieobj'] = $movies;
 
+        $data["payment_date"] = $bookingobj["payment_date"] != " " ? $bookingobj["payment_date"] : date("Y-m-d");
+        $data["payment_time"] = $bookingobj["payment_time"] != " " ? $bookingobj["payment_time"] : date("h:m:s");
+
         if (isset($_POST['proceed'])) {
             $remark = $this->input->post('remark');
             $this->db->set('remark', $remark);
@@ -250,13 +253,40 @@ class MovieEvent extends CI_Controller {
             redirect(site_url("MovieEvent/yourTicket/$bookingid"));
         }
 
+        if (isset($_POST["paid"])) {
+            $paymentstatus = $this->input->post('payment_type');
+            $payment_date = $this->input->post('payment_date');
+            $payment_time = $this->input->post('payment_time');
+            $bookingArray = array(
+                "payment_type" => $paymentstatus,
+                "payment_attr" => "Payment Received",
+                "booking_type" => "Paid",
+                "payment_date" => $payment_date,
+                "payment_time" => $payment_time,
+            );
+            $bid = $bookingobj["id"];
+
+            $this->db->set($bookingArray);
+            $this->db->where('id', $bid);  //set column_name and value in which row need to update
+            $this->db->update('movie_ticket_booking');
+
+            $this->db->set("status", "1");
+            $this->db->where('movie_ticket_booking_id', $bid); //set column_name and value in which row need to update
+            $this->db->update('movie_ticket');
+            redirect(site_url("MovieEvent/paidBookingv2/$bookingid/$paymentstatus"));
+        }
+
 
         $theaters = $movies = $this->Movie->theaterInformation($bookingobj['theater_id']);
         $data['theater'] = $theaters;
 
         $data['booking'] = $bookingobj;
         $data['seats'] = $this->Movie->bookedSeatById($bookingobj['id']);
-        $this->load->view('Movie/ticketview', $data);
+        $this->load->view('Movie/ticketviewv2', $data);
+    }
+
+    function paidBookingv2($bookid, $paymentstatus) {
+        redirect("MovieEvent/yourTicketMail/$bookid");
     }
 
     function paidBooking($bookid, $paymentstatus) {
@@ -376,7 +406,7 @@ class MovieEvent extends CI_Controller {
     }
 
     function bookingList() {
-        $eventlist = $this->Movie->movieevent();
+        $eventlist = $this->Movie->movieevent("off");
         $data["eventlist"] = $eventlist;
         $this->load->view('Movie/bookingList', $data);
     }
@@ -664,7 +694,7 @@ where 1 $daterangequery  order by mtb.id desc";
             $datequery = " and (mtb.select_date between '$date1'  and '$date2')";
         }
         $booking_type_query = "";
-        if($booking_type){
+        if ($booking_type) {
             $booking_type_query = " and booking_type='$booking_type' ";
         }
 
@@ -735,7 +765,7 @@ where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb
                 $value->total_price,
                 $value->payment_attr,
                 $value->payment_type,
-                 $value->booking_type,
+                $value->booking_type,
                 $value->remark,
                 $value->booking_date . " " . $value->booking_time,
             );
@@ -810,16 +840,11 @@ where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb
     }
 
     function widgetCreateEvent($theater_id, $movie_id, $template_id) {
-
-
-
         $data["theaterobj"] = $this->Movie->theaterInformation($theater_id);
         $data["movie"] = $this->Movie->movieInforamtion($movie_id);
         $data["theater_id"] = $theater_id;
         $data["movie_id"] = $movie_id;
         $data["templateobj"] = $this->Movie->theaterTemplateSingle($template_id);
-
-
         if (isset($_POST["submit_data"])) {
             $inputdata = $this->input->post();
 
@@ -839,9 +864,36 @@ where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb
             }
             redirect("MovieEvent/evenMovietList");
         }
-
-
         $this->load->view('MovieWidget/updateevent', $data);
+    }
+
+    function test() {
+        echo "<pre>";
+        $tdate = date("Y-m-d");
+        $time30 = $tdate." "."21:10:00";
+        $this->db->select("*");
+        $this->db->where('event_date>', date("Y-m-d"));
+        $this->db->order_by("event_date desc");
+        $query = $this->db->get('movie_event');
+        $movieevents1 = $query->result_array();
+
+        $this->db->select("*");
+        $this->db->where('event_time<', $time30);
+        $this->db->where('event_date=', date("Y-m-d"));
+        $this->db->order_by("event_date desc");
+        $query = $this->db->get('movie_event');
+        $movieevents2 = $query->result_array();
+
+        $movieevents = array_merge($movieevents1, $movieevents2);
+        print_r($movieevents);
+
+        $time = strtotime($time30);
+      
+
+        
+        $diffr = strtotime("+15 minutes", $time);
+ 
+        echo $p_date = "April - " . date("h:m", $diffr);
     }
 
 }

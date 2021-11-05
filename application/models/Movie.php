@@ -29,8 +29,12 @@ class Movie extends CI_Model {
         return $movies;
     }
 
-    function movieevent() {
+    function movieevent($status = "") {
+        $time30 = "";
         $this->db->select("*");
+        if ($status) {
+            $this->db->where('status!=', $status);
+        }
         $this->db->where('event_date>=', date("Y-m-d"));
         $this->db->order_by("event_date desc");
         $query = $this->db->get('movie_event');
@@ -80,8 +84,6 @@ class Movie extends CI_Model {
                 "active" => 1,
             );
         }
-
-
         return $listoftheaters;
     }
 
@@ -504,7 +506,6 @@ class Movie extends CI_Model {
                     "rowcount" => "5",
                     "color" => "#fff",
                     "row" => array(
-                        
                         "L" => $this->createRange(1, 22, 22, [16], "L", $booked, $reserved, $paid, $gaps),
                         "M" => $this->createRange(1, 22, 22, [], "M", $booked, $reserved, $paid, $gaps),
                         "N" => $this->createRange(1, 22, 22, [16], "N", $booked, $reserved, $paid, $gaps),
