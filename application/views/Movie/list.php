@@ -2,6 +2,11 @@
 $this->load->view('layout/header');
 $this->load->view('layout/topmenu');
 ?>
+<style>
+    .card.disable {
+        opacity: 0.2;
+    }
+</style>
 <!-- ================== BEGIN PAGE CSS STYLE ================== -->
 <link href="<?php echo base_url(); ?>assets/plugins/jquery-tag-it/css/jquery.tagit.css" rel="stylesheet" />
 <script src="<?php echo base_url(); ?>assets/plugins/jquery-tag-it/js/tag-it.min.js"></script>
@@ -28,7 +33,7 @@ $this->load->view('layout/topmenu');
                     foreach ($eventlist as $key => $value) {
                         ?>
                         <div class="col-lg-3 col-md-6">
-                            <div class="card">
+                            <div class="card <?php echo $value["status"]; ?>">
                                 <div class="el-card-item">
                                     <div class="el-card-avatar el-overlay-1"> <img src="<?php echo base_url(); ?>assets/movies/default.png" alt="user" style="background: url(<?php echo base_url(); ?>assets/movies/<?php echo $value['image']; ?>);background-size:cover;" />
                                         <div class="el-overlay">
@@ -37,8 +42,11 @@ $this->load->view('layout/topmenu');
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="el-card-content">
+                                    <div class="el-card-content" style="height:70px">
                                         <h4 class="m-b-0"><?php echo $value['title']; ?></h4> <span class="text-muted"><?php echo $value['attr']; ?></span>
+                                    </div>
+                                    <div class="el-card-item" style="padding: 10px">
+                                        <a class="btn btn-md btn-danger text-light" href="<?php echo site_url("MovieEvent/eventList?disable=1&movie_id=" . $value["id"]); ?>">Set Disable</a>
                                     </div>
                                 </div>
                             </div>

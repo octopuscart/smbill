@@ -124,6 +124,14 @@ class MovieEvent extends CI_Controller {
         $query = $this->db->get('movie_show');
         $image_list = $query->result_array();
         $data['eventlist'] = $image_list;
+
+        if (isset($_GET["disable"])) {
+            $event_id = $this->input->get("movie_id");
+            $this->db->where("id", $event_id);
+            $this->db->set(array("status" => "disable"));
+            $this->db->update("movie_show");
+            redirect(site_url("MovieEvent/eventList"));
+        }
         $this->load->view('Movie/list', $data);
     }
 
@@ -870,7 +878,7 @@ where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb
     function test() {
         echo "<pre>";
         $tdate = date("Y-m-d");
-        $time30 = $tdate." "."21:10:00";
+        $time30 = $tdate . " " . "21:10:00";
         $this->db->select("*");
         $this->db->where('event_date>', date("Y-m-d"));
         $this->db->order_by("event_date desc");
@@ -888,11 +896,11 @@ where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb
         print_r($movieevents);
 
         $time = strtotime($time30);
-      
 
-        
+
+
         $diffr = strtotime("+15 minutes", $time);
- 
+
         echo $p_date = "April - " . date("h:m", $diffr);
     }
 
