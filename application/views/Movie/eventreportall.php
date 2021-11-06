@@ -163,7 +163,27 @@ $this->load->view('layout/topmenu');
                                                             ?>
                                                         </div>
 
-
+ <hr/>
+                                                        <table class="small_table">
+                                                            <tr>
+                                                                <th>Price Type</th>
+                                                                <th>Count</th>
+                                                                <th>Price</th>
+                                                             
+                                                                
+                                                            </tr>
+                                                            <?php
+                                                            foreach ($value->seatsarray as $skey => $svalue) {
+                                                                ?>
+                                                                <tr>
+                                                                    <td><?php echo $skey; ?></td>
+                                                                    <td><?php echo $svalue["count"]; ?></td>
+                                                                    <td><?php echo $svalue["price"]; ?></td>
+                                                                </tr>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </table>
 
                                                     </td>
 

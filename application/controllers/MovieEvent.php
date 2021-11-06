@@ -557,7 +557,7 @@ class MovieEvent extends CI_Controller {
 
         $totalhold = $this->Movie->getHoldSeats($eventobj["theater_template_id"]);
 
-
+        $seatscount = array();
 
         $eventobj["movie"] = $movie;
         $eventobj["theater"] = $theater;
@@ -630,12 +630,31 @@ where 1 $daterangequery and mtb.event_id='$event_id' order by mtb.id desc";
                 $this->db->where('movie_ticket_booking_id', $value->id);
                 $query = $this->db->get('movie_ticket');
                 $tickets = $query->result();
+                $ticketprice = array();
+
+                foreach ($tickets as $tkey => $tvalue) {
+                    if (isset($seatscount[$tvalue->seat_price])) {
+                        $seatscount[$tvalue->seat_price]["count"] += 1;
+                        $seatscount[$tvalue->seat_price]["price"] += $tvalue->seat_price;
+                    } else {
+                        $seatscount[$tvalue->seat_price] = array("count" => 1, "price" => $tvalue->seat_price);
+                    }
+                    if (isset($ticketprice[$tvalue->seat_price])) {
+                        $ticketprice[$tvalue->seat_price]["count"] += 1;
+                        $ticketprice[$tvalue->seat_price]["price"] += $tvalue->seat_price;
+                    } else {
+                        $ticketprice[$tvalue->seat_price] = array("count" => 1, "price" => $tvalue->seat_price);
+                    }
+                }
 
                 $value->seats = $tickets;
+                $value->seatsarray = $ticketprice;
 
                 array_push($orderslistr, $value);
             }
 
+
+            $data['seatcount'] = $seatscount;
             $data['orderslist'] = $orderslistr;
             $this->load->view('Movie/eventreport', $data);
         }
@@ -648,7 +667,7 @@ where 1 $daterangequery and mtb.event_id='$event_id' order by mtb.id desc";
         $date1 = date('Y-m-') . "01";
 
         $date2 = date('Y-m-t');
-
+        $seatscount = array();
 
         if (isset($_GET['daterange'])) {
             $daterange = $this->input->get('daterange');
@@ -683,10 +702,29 @@ where 1 $daterangequery  order by mtb.id desc";
                 $tickets = $query->result();
 
                 $value->seats = $tickets;
+                $ticketprice = array();
+
+                foreach ($tickets as $tkey => $tvalue) {
+                    if (isset($seatscount[$tvalue->seat_price])) {
+                        $seatscount[$tvalue->seat_price]["count"] += 1;
+                        $seatscount[$tvalue->seat_price]["price"] += $tvalue->seat_price;
+                    } else {
+                        $seatscount[$tvalue->seat_price] = array("count" => 1, "price" => $tvalue->seat_price);
+                    }
+                    if (isset($ticketprice[$tvalue->seat_price])) {
+                        $ticketprice[$tvalue->seat_price]["count"] += 1;
+                        $ticketprice[$tvalue->seat_price]["price"] += $tvalue->seat_price;
+                    } else {
+                        $ticketprice[$tvalue->seat_price] = array("count" => 1, "price" => $tvalue->seat_price);
+                    }
+                }
+
+
+                $value->seatsarray = $ticketprice;
 
                 array_push($orderslistr, $value);
             }
-
+            $data['seatcount'] = $seatscount;
             $data['orderslist'] = $orderslistr;
             $this->load->view('Movie/eventreportall', $data);
         }
@@ -721,6 +759,7 @@ where 1 $daterangequery  order by mtb.id desc";
             "Contact No.",
             "Email",
             "No. Of Tickets",
+            "Seat(s) Collection",
             "Ticket(s) Price",
             "Seat(s) Alloted",
             "Total Amount",
@@ -743,6 +782,7 @@ where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb
         $orderlist = $query->result();
 
         $orderslistr = [];
+
         foreach ($orderlist as $key => $value) {
             $this->db->order_by('id', 'desc');
             $this->db->where('movie_ticket_booking_id', $value->id);
@@ -750,15 +790,31 @@ where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb
             $tickets = $query->result();
             $seatsarray = [];
             $seatpricearray = [];
+            $ticketprice = array();
             foreach ($tickets as $tkey => $tvalue) {
                 array_push($seatsarray, $tvalue->seat);
                 array_push($seatpricearray, $tvalue->seat_price);
+
+                if (isset($ticketprice[$tvalue->seat_price])) {
+                    $ticketprice[$tvalue->seat_price]["count"] += 1;
+                    $ticketprice[$tvalue->seat_price]["price"] += $tvalue->seat_price;
+                } else {
+                    $ticketprice[$tvalue->seat_price] = array("count" => 1, "price" => $tvalue->seat_price);
+                }
             }
             $seatpricearray2 = array_unique($seatpricearray);
             $value->seats_str = implode(", ", $seatsarray);
             $value->seats_price_str = implode(", ", $seatpricearray2);
 
+
+            $seatcountstring = [];
+            foreach ($ticketprice as $sckey => $scvalue) {
+                $seatcountstringtemp = "$sckey: (" . $scvalue["count"] . " | " . $scvalue["price"] . ")";
+                array_push($seatcountstring, $seatcountstringtemp);
+            }
+
             $value->seats = $tickets;
+            $value->seatscount = implode(", ", $seatcountstring);
 
             array_push($orderslistr, $value);
         }
@@ -769,12 +825,13 @@ where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb
                 $value->contact_no,
                 $value->email,
                 count($value->seats),
+                $value->seatscount,
                 $value->seats_price_str,
                 $value->seats_str,
                 $value->total_price,
                 $value->payment_attr,
                 $value->payment_type,
-                 $value->payment_date."/". $value->payment_time,
+                $value->payment_date . "/" . $value->payment_time,
                 $value->booking_type,
                 $value->remark,
                 $value->booking_date . " " . $value->booking_time,

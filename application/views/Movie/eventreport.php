@@ -175,7 +175,7 @@ $this->load->view('layout/topmenu');
                                                         echo $ptkey;
                                                         ?>
                                                     </h6>
-                                                    <br/>
+                                                  
                                                     <b>Total Seats: <?php echo $ptvalue["total_seats"] ?></b>
                                                 </div>
                                             </div>
@@ -184,6 +184,38 @@ $this->load->view('layout/topmenu');
                                     }
                                     ?>
                                 </div>
+
+                                <hr/>
+                                <h3 class="font-light text-dark">Seats Collection</h3>
+
+                                <div class="row m-t-40">
+                                    <?php
+                                    foreach ($seatcount as $tskey => $stvalue) {
+                                        ?>
+
+                                        <div class="col-md-6 col-lg-3 col-xlg-3">
+                                            <div class="card card-hover">
+                                                <div class="box bg-grey text-center">
+                                                    <h3 class="font-light text-dark">
+                                                        <?php echo $tskey; ?>
+                                                    </h3>
+                                                    <h6 class="text-dark">
+                                                        Total Seats: <?php echo $stvalue["count"]; ?>
+                                                    </h6>
+                                                    
+                                                    <b>Total Price: {{<?php echo $stvalue["price"]; ?>|currency}}</b>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <?php
+                                    }
+                                    ?>
+                                </div>
+
+
+
+
                                 <hr/>
                                 <table id="tableDataOrder" class="table table-bordered   tableDataOrder" >
                                     <thead>
@@ -258,6 +290,27 @@ $this->load->view('layout/topmenu');
                                                             }
                                                             ?>
                                                         </div>
+                                                        <hr/>
+                                                        <table class="small_table">
+                                                            <tr>
+                                                                <th>Price Type</th>
+                                                                <th>Count</th>
+                                                                <th>Price</th>
+
+
+                                                            </tr>
+                                                            <?php
+                                                            foreach ($value->seatsarray as $skey => $svalue) {
+                                                                ?>
+                                                                <tr>
+                                                                    <td><?php echo $skey; ?></td>
+                                                                    <td><?php echo $svalue["count"]; ?></td>
+                                                                    <td><?php echo $svalue["price"]; ?></td>
+                                                                </tr>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </table>
 
 
 
