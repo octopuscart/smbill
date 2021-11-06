@@ -274,6 +274,13 @@ $this->load->view('layout/topmenu');
                                                         echo $value->payment_type;
                                                         ?>
                                                         <br/>
+                                                        <span style="font-size:12px;">
+                                                            <b>Payment Date:</b><br/>
+                                                            <?php
+                                                            echo $value->payment_date . " " . $value->payment_time;
+                                                            ?>
+                                                        </span>
+                                                        <br/>
                                                         <p style="font-size: 10px"> <?php
                                                             echo $value->remark ? "<b>Remark</b>:  " . $value->remark : "";
                                                             ?>

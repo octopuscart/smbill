@@ -186,6 +186,13 @@ $this->load->view('layout/topmenu');
                                                         <?php
                                                         echo $value->payment_type;
                                                         ?>
+                                                         <br/>
+                                                        <span style="font-size:12px;">
+                                                            <b>Payment Date:</b><br/>
+                                                            <?php
+                                                            echo $value->payment_date . " " . $value->payment_time;
+                                                            ?>
+                                                        </span>
                                                     </td>
                                                     <td>
 
