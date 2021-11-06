@@ -29,13 +29,35 @@ class Movie extends CI_Model {
         return $movies;
     }
 
+    function movieevent_active() {
+        $time30 = "";
+        $this->db->select("*");
+    
+        $this->db->order_by("event_date desc");
+        $query = $this->db->get('movie_event');
+        $movieevents = $query->result_array();
+        $returndata = [];
+        foreach ($movieevents as $key => $value) {
+            $theater = $this->theaterInformation($value["theater_id"]);
+            $movie = $this->movieInforamtion($value["movie_id"]);
+            if ($movie) {
+                $value["movie"] = $movie;
+                $value["theater"] = $theater;
+                array_push($returndata, $value);
+            }
+        }
+        return $returndata;
+    }
+
     function movieevent($status = "") {
         $time30 = "";
         $this->db->select("*");
         if ($status) {
             $this->db->where('status!=', $status);
         }
+
         $this->db->where('event_date>=', date("Y-m-d"));
+
         $this->db->order_by("event_date desc");
         $query = $this->db->get('movie_event');
         $movieevents = $query->result_array();
@@ -193,10 +215,17 @@ class Movie extends CI_Model {
     function movieInforamtion($movie_id) {
         $this->db->select("*, description as about");
         $this->db->where('id', $movie_id);
+
+        $this->db->where('status', "active");
+
         $query = $this->db->get('movie_show');
         $movieobj = $query->row_array();
-        $movieobj["image"] = MOVIEPOSTER . $movieobj["image"];
-        return $movieobj;
+        if ($movieobj) {
+            $movieobj["image"] = MOVIEPOSTER . $movieobj["image"];
+            return $movieobj;
+        } else {
+            return false;
+        }
     }
 
     function theaterInformation($theater_id) {
@@ -679,7 +708,7 @@ class Movie extends CI_Model {
     }
 
     function eventBookingList() {
-        $eventlist = $this->movieevent();
+        $eventlist = $this->movieevent_active();
         $eventdatalist = [];
         foreach ($eventlist as $mk => $mv) {
             $event_id = $mv["id"];
