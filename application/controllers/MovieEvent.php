@@ -726,6 +726,7 @@ where 1 $daterangequery  order by mtb.id desc";
             "Total Amount",
             "Payment Status",
             "Payment Type",
+            "Payment Date/Time",
             " Type",
             "Remark",
             "Booking Date/Time");
@@ -773,6 +774,7 @@ where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb
                 $value->total_price,
                 $value->payment_attr,
                 $value->payment_type,
+                 $value->payment_date."/". $value->payment_time,
                 $value->booking_type,
                 $value->remark,
                 $value->booking_date . " " . $value->booking_time,
