@@ -414,7 +414,7 @@ class MovieEvent extends CI_Controller {
     }
 
     function bookingList() {
-        $eventlist = $this->Movie->movieevent("off");
+        $eventlist = $this->Movie->movieevent_active();
         $data["eventlist"] = $eventlist;
         $this->load->view('Movie/bookingList', $data);
     }
