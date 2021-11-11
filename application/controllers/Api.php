@@ -164,14 +164,18 @@ class Api extends REST_Controller {
         $reserved = array();
         $paid = array();
         $classprice = [];
+        $wheelchair = "";
         if ($configurable) {
             $booked = $this->getBookedSheats($this->get(), "Reserved");
             $paid = $this->getBookedSheats($this->get(), "Paid");
             $templateobj = $this->Movie->theaterTemplateSingle($this->get("template_id"));
             $classprice = $templateobj["class_price"];
             $reserved = $templateobj["reserve_seats"];
+            $wheelchair = $templateobj["wheelchair"];
         }
         $layout = $this->Movie->getLayout_GH_HSE3B($booked, $reserved, $paid, $classprice);
+        $layout["wheelchair"] = $this->Movie->wheelchair($wheelchair);
+      
         $this->response($layout);
     }
 

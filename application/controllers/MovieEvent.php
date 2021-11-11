@@ -935,9 +935,13 @@ where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb
     }
 
     function test() {
-        echo "<pre>";
-        $tdate = date("Y-m-d");
-        $time30 = $tdate . " " . "21:10:00";
+
+        
+        $tdate = date("H:i");
+        $endTimetemp = strtotime("-25 minutes ". strtotime("22:35"));
+        $endTime = date("H:i", $endTimetemp);
+
+
         $this->db->select("*");
         $this->db->where('event_date>', date("Y-m-d"));
         $this->db->order_by("event_date desc");
@@ -945,22 +949,27 @@ where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb
         $movieevents1 = $query->result_array();
 
         $this->db->select("*");
-        $this->db->where('event_time<', $time30);
+        $this->db->where('event_time>', $endTime);
         $this->db->where('event_date=', date("Y-m-d"));
         $this->db->order_by("event_date desc");
         $query = $this->db->get('movie_event');
         $movieevents2 = $query->result_array();
 
         $movieevents = array_merge($movieevents1, $movieevents2);
-        print_r($movieevents);
 
-        $time = strtotime($time30);
-
-
-
-        $diffr = strtotime("+15 minutes", $time);
-
-        echo $p_date = "April - " . date("h:m", $diffr);
+     
     }
 
+    function test2(){
+        echo "<pre>";
+          $this->db->select("*");
+        $this->db->where('status!=', "off");
+        $this->db->where('event_date>=', date("Y-m-d"));
+        $this->db->where("movie_id", 7);
+        $this->db->group_by("event_date");
+        $query = $this->db->get('movie_event');
+        $movieevents = $query->result_array();
+        print_r($movieevents);
+    }
+    
 }
