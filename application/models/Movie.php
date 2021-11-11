@@ -32,7 +32,7 @@ class Movie extends CI_Model {
     function movieevent_active() {
         $time30 = "";
         $this->db->select("*");
-    
+
         $this->db->order_by("event_date desc");
         $query = $this->db->get('movie_event');
         $movieevents = $query->result_array();
@@ -124,6 +124,18 @@ class Movie extends CI_Model {
             $theater_array_adata[$thvalue["id"]] = $temparray;
         }
         return $theater_array_adata;
+    }
+
+    function wheelchair($inputchair) {
+        $wheelchairt_temp = (explode(", ", $inputchair));
+        $wheelchair = array();
+        if ($inputchair) {
+            foreach ($wheelchairt_temp as $key => $value) {
+                $wheelchair[$value] = "";
+            }
+        }
+
+        return $wheelchair;
     }
 
     function theaterTemplateSingle($template_id) {
@@ -633,7 +645,7 @@ class Movie extends CI_Model {
                         "N" => $this->createRange(1, 21, 21, [19], "N", $booked, $reserved, $paid, $gaps),
                         "O" => $this->createRange(1, 21, 21, [], "O", $booked, $reserved, $paid, $gaps),
                         "P" => $this->createRange(1, 21, 21, [19], "P", $booked, $reserved, $paid, $gaps),
-                        "Q" => $this->createRange(1, 21, 21, [20, 21, 3], "Q", $booked, $reserved, $paid, $gaps),
+                        "Q" => $this->createRange(1, 21, 21, [20, 21, 3, 7], "Q", $booked, $reserved, $paid, $gaps),
                     )
                 ),
             )

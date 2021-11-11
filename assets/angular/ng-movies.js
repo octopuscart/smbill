@@ -1,10 +1,17 @@
 
 Admin.controller('theaterController', function ($scope, $http, $timeout, $interval, $filter) {
-    $scope.theaterLayout = {"layout": {}, "suggetion": []};
+    $scope.theaterLayout = {"layout": {}, "suggetion": [], "wheelchair": {}};
 
     var url = rootBaseUrl + "Api/" + layoutgbl;
     $http.get(url).then(function (rdata) {
         $scope.theaterLayout.layout = rdata.data;
+        $scope.theaterLayout.wheelchair = rdata.data.wheelchair;
+
+        $timeout(function () {
+            for (wc in $scope.theaterLayout.wheelchair) {
+                $("#" + wc).addClass("wheelchairseat");
+            }
+        }, 1000);
     }, function () {
     })
 
@@ -78,11 +85,18 @@ Admin.controller('updateEventController', function ($scope, $http, $timeout, $in
 
 
 Admin.controller('sitSelectContoller', function ($scope, $http, $timeout, $interval, $filter) {
-    $scope.theaterLayout = {"layout": {}, "seatscount": seatsgbl, "suggetion": []};
+    $scope.theaterLayout = {"layout": {}, "seatscount": seatsgbl, "suggetion": [], "wheelchair": {}};
 
     var url = rootBaseUrl + "Api/" + layoutgbl + "/1?event_id=" + event_id + "&template_id=" + template_id;
     $http.get(url).then(function (rdata) {
         $scope.theaterLayout.layout = rdata.data;
+         $scope.theaterLayout.wheelchair = rdata.data.wheelchair;
+        $timeout(function () {
+            for (wc in $scope.theaterLayout.wheelchair) {
+                console.log(("#" + wc));
+                $("#" + wc).addClass("wheelchairseat");
+            }
+        }, 1000);
     }, function () {
     })
 

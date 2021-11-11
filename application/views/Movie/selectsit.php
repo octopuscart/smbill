@@ -16,6 +16,14 @@ $this->load->view('layout/topmenu');
         background-position: center;
         padding: 0px;
     }
+     .wheelchairseat{
+        background-image: url(<?php echo base_url(); ?>assets/movies/wheelchair.png)!important;
+        background-size: 20px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color:white;
+        border-radius:5px;
+    }
     .ticketview{
         text-align: center;
         /* float: left; */
