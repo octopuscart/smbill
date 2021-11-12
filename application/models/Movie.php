@@ -675,8 +675,6 @@ class Movie extends CI_Model {
                         "E" => $this->createRange(1, 24, 24, [], "E", $booked, $reserved, $paid, $gaps),
                         "F" => $this->createRange(1, 24, 24, [19], "F", $booked, $reserved, $paid, $gaps),
                         "G" => $this->createRange(1, 24, 24, [], "G", $booked, $reserved, $paid, $gaps),
-                        "H" => $this->createRange(1, 24, 24, [19], "H", $booked, $reserved, $paid, $gaps),
-                        "I" => $this->createRange(1, 24, 24, [], "I", $booked, $reserved, $paid, $gaps),
                     )
                 ),
                 "class3" => array(
@@ -684,6 +682,8 @@ class Movie extends CI_Model {
                     "rowcount" => "5",
                     "color" => "#fff",
                     "row" => array(
+                        "H" => $this->createRange(1, 24, 24, [19], "H", $booked, $reserved, $paid, $gaps),
+                        "I" => $this->createRange(1, 24, 24, [], "I", $booked, $reserved, $paid, $gaps),
                         "J" => $this->createRange(1, 24, 24, [19], "J", $booked, $reserved, $paid, $gaps),
                         "K" => $this->createRange(1, 24, 24, [], "K", $booked, $reserved, $paid, $gaps),
                         "L" => $this->createRange(1, 24, 24, [19], "L", $booked, $reserved, $paid, $gaps),
@@ -696,9 +696,9 @@ class Movie extends CI_Model {
         );
         return $layout;
     }
-    
+
     function getLayout_GH_HSE1B($booked, $reserved, $paid, $classprice) {
-   
+
         $gaps = array("4" => "", "19" => "");
         $layout = array(
             "totalinrow" => 26,
@@ -720,7 +720,7 @@ class Movie extends CI_Model {
                         "E" => $this->createRange(1, 23, 23, [], "E", $booked, $reserved, $paid, $gaps),
                         "F" => $this->createRange(1, 23, 23, [19], "F", $booked, $reserved, $paid, $gaps),
                         "G" => $this->createRange(1, 23, 23, [], "G", $booked, $reserved, $paid, $gaps),
-                        "H" => $this->createRange(1, 23, 23, [19], "H", $booked, $reserved,$paid, $gaps),
+                        "H" => $this->createRange(1, 23, 23, [19], "H", $booked, $reserved, $paid, $gaps),
                         "I" => $this->createRange(1, 23, 23, [], "I", $booked, $reserved, $paid, $gaps),
                     )
                 ),
@@ -739,7 +739,7 @@ class Movie extends CI_Model {
                 ),
             )
         );
-         return $layout;
+        return $layout;
     }
 
     function paymentGroups($event_id) {
