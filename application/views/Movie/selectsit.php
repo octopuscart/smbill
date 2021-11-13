@@ -65,6 +65,7 @@ $this->load->view('layout/topmenu');
 
     .theaterblock{
         text-align: center;
+        width: max-content;
     }
     .theaterblock table{
         width: auto;
