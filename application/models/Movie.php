@@ -757,8 +757,7 @@ class Movie extends CI_Model {
         $query = $this->db->get('movie_theater_template');
         $template_array = $query->row_array();
         if ($template_array) {
-
-            return substr_count($template_array["reserve_seats"], ", ");
+            return substr_count($template_array["reserve_seats"], "-");
         } else {
             return 0;
         }

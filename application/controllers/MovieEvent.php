@@ -570,6 +570,8 @@ class MovieEvent extends CI_Controller {
             "totalpayments" => 0,
             "totalavailable" => ($eventobj["theater"]["seat_count"] - $totalhold),
             "reserved" => count($reserved), "pending" => 0);
+        
+     
 
         $totaldata["pending"] = $totaldata["totalavailable"] - ($totaldata["paid"] + $totaldata["reserved"]);
 
