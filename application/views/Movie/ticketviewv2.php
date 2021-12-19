@@ -2,13 +2,14 @@
 $this->load->view('layout/header');
 $this->load->view('layout/topmenu');
 
-$bktype = $booking['booking_type'];
+echo $bktype = $booking['booking_type'];
 $statusarray = array(
     "Refund" => array("status" => "Cancelled", "payment" => "Payment Refund"),
     "Paid" => array("status" => "Paid", "payment" => "Payment Confirmed"),
     "Purchased" => array("status" => "Confirmed (Payment Awaiting)", "payment" => "Awaiting Payment Confirmation"),
     "Reserved" => array("status" => "Reserved", "payment" => "Unpaid"),
     "Cancelled" => array("status" => "Cancelled", "payment" => "Cancelled"),
+    "Not Paid" => array("status" => "Not Paid", "payment" => "Unpaid"),
 );
 $bookingtype = $statusarray[$bktype]["status"];
 $paymenttype = $statusarray[$bktype]["payment"];
@@ -223,6 +224,7 @@ $paymenttype = $statusarray[$bktype]["payment"];
                                                                 <option value="Cash Payment">Cash Payment</option>
                                                                 <option value="PayMe">PayMe</option>
                                                                 <option value="Bank Transfer">Bank Transfer</option>
+                                                                <option value="Not Paid">Not Paid</option>
                                                             </select>
                                                         </div>
                                                         <div class="form-group">
@@ -433,6 +435,8 @@ $this->load->view('layout/footer');
             todayHighlight: true
         });
 
+
+      $("#inlineFormCustomSelect").val("<?php echo $booking["payment_type"]?>")
 
     })
 </script>

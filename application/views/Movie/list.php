@@ -32,7 +32,7 @@ $this->load->view('layout/topmenu');
                     <?php
                     foreach ($eventlist as $key => $value) {
                         ?>
-                        <div class="col-lg-3 col-md-6">
+                        <div class="col-lg-2 col-md-4">
                             <div class="card <?php echo $value["status"]; ?>">
                                 <div class="el-card-item">
                                     <div class="el-card-avatar el-overlay-1"> <img src="<?php echo base_url(); ?>assets/movies/default.png" alt="user" style="background: url(<?php echo base_url(); ?>assets/movies/<?php echo $value['image']; ?>);background-size:cover;" />
