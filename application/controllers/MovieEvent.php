@@ -250,6 +250,8 @@ class MovieEvent extends CI_Controller {
         $movies = $this->Movie->movieInforamtion($bookingobj['movie_id']);
         $data['movieobj'] = $movies;
 
+
+
         $data["payment_date"] = $bookingobj["payment_date"] != " " ? $bookingobj["payment_date"] : date("Y-m-d");
         $data["payment_time"] = $bookingobj["payment_time"] != " " ? $bookingobj["payment_time"] : date("h:m:s");
 
@@ -265,13 +267,23 @@ class MovieEvent extends CI_Controller {
             $paymentstatus = $this->input->post('payment_type');
             $payment_date = $this->input->post('payment_date');
             $payment_time = $this->input->post('payment_time');
-            $bookingArray = array(
-                "payment_type" => $paymentstatus,
-                "payment_attr" => "Payment Received",
-                "booking_type" => "Paid",
-                "payment_date" => $payment_date,
-                "payment_time" => $payment_time,
-            );
+            if ($paymentstatus == "Not Paid") {
+                $bookingArray = array(
+                    "payment_type" => $paymentstatus,
+                    "payment_attr" => "Payment Not Received",
+                    "booking_type" => "Not Paid",
+                    "payment_date" => $payment_date,
+                    "payment_time" => $payment_time,
+                );
+            } else {
+                $bookingArray = array(
+                    "payment_type" => $paymentstatus,
+                    "payment_attr" => "Payment Received",
+                    "booking_type" => "Paid",
+                    "payment_date" => $payment_date,
+                    "payment_time" => $payment_time,
+                );
+            }
             $bid = $bookingobj["id"];
 
             $this->db->set($bookingArray);
@@ -302,6 +314,7 @@ class MovieEvent extends CI_Controller {
         $query = $this->db->get('movie_ticket_booking');
         $bookingobj = $query->row_array();
         $bid = $bookingobj["id"];
+
         $bookingArray = array(
             "payment_type" => urldecode($paymentstatus),
             "payment_attr" => "Payment Received",
@@ -365,9 +378,10 @@ class MovieEvent extends CI_Controller {
     public function yourTicketMail($bookingid) {
         $this->db->where('booking_id', $bookingid);
         $query = $this->db->get('movie_ticket_booking');
-
         $bookingobj = $query->row_array();
+
         $movies = $this->Movie->movieInforamtion($bookingobj['movie_id']);
+
         $data['movieobj'] = $movies;
 
         $theaters = $this->Movie->theaterInformation($bookingobj['theater_id']);
@@ -390,23 +404,23 @@ class MovieEvent extends CI_Controller {
         $this->email->subject($subject);
 
 
-        $message = $this->load->view('Movie/ticketviewemail', $data, true);
+        echo $message = $this->load->view('Movie/ticketviewemail', $data, true);
         setlocale(LC_MONETARY, 'en_US');
         $checkcode = REPORT_MODE;
-//        $checkcode = 0;
-        if ($checkcode) {
-            $this->email->message($message);
-            $this->email->print_debugger();
-            $send = $this->email->send();
-            if ($send) {
-                redirect("MovieEvent/yourTicket/$bookingid");
-            } else {
-                $error = $this->email->print_debugger(array('headers'));
-                redirect("MovieEvent/yourTicket/$bookingid");
-            }
-        } else {
-            redirect("MovieEvent/yourTicket/$bookingid");
-        }
+////        $checkcode = 0;
+//        if ($checkcode) {
+//            $this->email->message($message);
+//            $this->email->print_debugger();
+//            $send = $this->email->send();
+//            if ($send) {
+//                redirect("MovieEvent/yourTicket/$bookingid");
+//            } else {
+//                $error = $this->email->print_debugger(array('headers'));
+//                redirect("MovieEvent/yourTicket/$bookingid");
+//            }
+//        } else {
+//            redirect("MovieEvent/yourTicket/$bookingid");
+//        }
     }
 
     function createEventV2() {
@@ -437,6 +451,8 @@ class MovieEvent extends CI_Controller {
         $data['theater'] = $theaters;
         $data['theater_id'] = $eventinfo["theater_id"];
 
+
+
         if (isset($_POST['proceed'])) {
             $ticket = $this->input->post('ticket');
             $price = $this->input->post('price');
@@ -458,6 +474,23 @@ class MovieEvent extends CI_Controller {
             $email = $this->input->post('email');
             $remark = $this->input->post('remark');
             $contact_no = $this->input->post('contact_no');
+
+            $ticketlist = $ticketarray["ticket"];
+
+            //check reserve ticket
+            $seatspreseats = $this->Movie->getSelectedSeatsByAttr($eventinfo['theater_id'], $eventinfo['movie_id'], $eventinfo['event_date'], $eventinfo['event_time']);
+
+            print_r($seatspreseats);
+            $resurve_pre = array();
+            foreach ($seatspreseats as $key => $value) {
+                $resurve_pre[$value['seat']] = "";
+                if (isset($ticketlist[$value["seat"]])) {
+                    redirect("MovieEvent/bookNow/$event_id/$no_of_seats");
+                }
+            }
+            //end of per check reserve
+
+
 
             $bookingArray = array(
                 "name" => $name,
@@ -487,7 +520,7 @@ class MovieEvent extends CI_Controller {
             $this->db->where('id', $last_id); //set column_name and value in which row need to update
             $this->db->update('movie_ticket_booking');
 
-            $ticketlist = $ticketarray["ticket"];
+
 
             foreach ($ticketlist as $vtk => $vtp) {
                 $seatArray = array(
@@ -498,8 +531,6 @@ class MovieEvent extends CI_Controller {
                 $this->db->insert('movie_ticket', $seatArray);
             }
             redirect("MovieEvent/yourTicket/" . $bookid_md5);
-
-            print_r($ticketarray);
         }
 
         $this->load->view('Movie/selectsit', $data);
@@ -570,8 +601,8 @@ class MovieEvent extends CI_Controller {
             "totalpayments" => 0,
             "totalavailable" => ($eventobj["theater"]["seat_count"] - $totalhold),
             "reserved" => count($reserved), "pending" => 0);
-        
-     
+
+
 
         $totaldata["pending"] = $totaldata["totalavailable"] - ($totaldata["paid"] + $totaldata["reserved"]);
 
@@ -938,9 +969,9 @@ where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb
 
     function test() {
 
-        
+
         $tdate = date("H:i");
-        $endTimetemp = strtotime("-25 minutes ". strtotime("22:35"));
+        $endTimetemp = strtotime("-25 minutes " . strtotime("22:35"));
         $endTime = date("H:i", $endTimetemp);
 
 
@@ -958,13 +989,11 @@ where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb
         $movieevents2 = $query->result_array();
 
         $movieevents = array_merge($movieevents1, $movieevents2);
-
-     
     }
 
-    function test2(){
+    function test2() {
         echo "<pre>";
-          $this->db->select("*");
+        $this->db->select("*");
         $this->db->where('status!=', "off");
         $this->db->where('event_date>=', date("Y-m-d"));
         $this->db->where("movie_id", 7);
@@ -973,5 +1002,5 @@ where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb
         $movieevents = $query->result_array();
         print_r($movieevents);
     }
-    
+
 }
