@@ -404,23 +404,23 @@ class MovieEvent extends CI_Controller {
         $this->email->subject($subject);
 
 
-        echo $message = $this->load->view('Movie/ticketviewemail', $data, true);
+         $message = $this->load->view('Movie/ticketviewemail', $data, true);
         setlocale(LC_MONETARY, 'en_US');
         $checkcode = REPORT_MODE;
-////        $checkcode = 0;
-//        if ($checkcode) {
-//            $this->email->message($message);
-//            $this->email->print_debugger();
-//            $send = $this->email->send();
-//            if ($send) {
-//                redirect("MovieEvent/yourTicket/$bookingid");
-//            } else {
-//                $error = $this->email->print_debugger(array('headers'));
-//                redirect("MovieEvent/yourTicket/$bookingid");
-//            }
-//        } else {
-//            redirect("MovieEvent/yourTicket/$bookingid");
-//        }
+//        $checkcode = 0;
+        if ($checkcode) {
+            $this->email->message($message);
+            $this->email->print_debugger();
+            $send = $this->email->send();
+            if ($send) {
+                redirect("MovieEvent/yourTicket/$bookingid");
+            } else {
+                $error = $this->email->print_debugger(array('headers'));
+                redirect("MovieEvent/yourTicket/$bookingid");
+            }
+        } else {
+            redirect("MovieEvent/yourTicket/$bookingid");
+        }
     }
 
     function createEventV2() {
