@@ -42,8 +42,9 @@ $this->load->view('layout/topmenu');
                                                         <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                                                     </div>
                                                     <br/>
-                                                    <p>Image size W:600px X H:800px</p>
+                                                
                                                 </div>
+                                                    <p>Image size W:600px X H:800px</p>
                                             </div>
                                         </div>
                                     </div>
