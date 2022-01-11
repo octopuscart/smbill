@@ -41,6 +41,7 @@ $this->load->view('layout/topmenu');
                                                         <input type="file" class="custom-file-input" name='picture' id="inputGroupFile01" file-model="filename" required="">
                                                         <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                                                     </div>
+                                                    <br/>
                                                     <p>Image size W:600px & H:800px</p>
                                                 </div>
                                             </div>
