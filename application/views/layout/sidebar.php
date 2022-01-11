@@ -33,12 +33,12 @@ array_push($menu_control, $client_menu);
 
 
 $lookbook_menu = array(
-    "title" => "Movie Management",
+    "title" => "Movie Information",
     "icon" => "ti-image",
     "active" => "",
     "sub_menu" => array(
-        "Add Movie/Show" => site_url("MovieEvent/newEvent"),
-        "Movie/Show List" => site_url("MovieEvent/eventList"),
+        "Add Movie Info" => site_url("MovieEvent/newEvent"),
+        "Movie List" => site_url("MovieEvent/eventList"),
 //        "Tags" => site_url("CMS/blogTag"),
     ),
 );
