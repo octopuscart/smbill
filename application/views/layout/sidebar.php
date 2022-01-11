@@ -45,19 +45,19 @@ $lookbook_menu = array(
 array_push($menu_control, $lookbook_menu);
 
 $blog_menu = array(
-    "title" => "Event Management",
+    "title" => "Theater Management",
     "icon" => "ti-video-camera",
     "active" => "",
     "sub_menu" => array(
-        "Create  Event" => site_url("MovieEvent/widgetEvent"),
-        "Event List" => site_url("MovieEvent/evenMovietList"),
-        "Release Hold Seat"=>site_url("MovieEvent/releaseHold"),
+        "Create  Event(s)" => site_url("MovieEvent/widgetEvent"),
+        "Event List(s)" => site_url("MovieEvent/evenMovietList"),
+        "Release Hold Seat(s)"=>site_url("MovieEvent/releaseHold"),
     ),
 );
 array_push($menu_control, $blog_menu);
 
 $theater = array(
-    "title" => "Theater Management",
+    "title" => "Theater Settings",
     "icon" => "ti-blackboard",
     "active" => "",
     "sub_menu" => array(
