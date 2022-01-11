@@ -255,7 +255,7 @@ class Movie extends CI_Model {
         $this->db->where('event_date>=', $cdate);
         $this->db->group_by("movie_id");
         $this->db->group_by("theater_id");
-        $this->db->group_by("id");
+//        $this->db->group_by("id");
         $query = $this->db->get('movie_event');
         $event_list = $query->result_array();
 
@@ -290,6 +290,37 @@ class Movie extends CI_Model {
             array_push($eventlistarray, $temparray);
         }
         return $eventlistarray;
+    }
+
+    function getEventsSingle($theater_id, $movie_id, $template_id) {
+
+        $this->db->where('theater_id', $theater_id);
+        $this->db->where("movie_id", $movie_id);
+        $this->db->where("theater_template_id", $template_id);
+        $query = $this->db->get('movie_event');
+        $evalue = $query->row_array();
+
+        $theaterobj = $this->theaterInformation($theater_id);
+        $temparray["theaterobj"] = $theaterobj;
+
+
+        $temparray["template"] = $this->theaterTemplate($theater_id)[$evalue["theater_template_id"]];
+
+        $movieobj = $this->movieInforamtion($movie_id);
+        $temparray["movie"] = $movieobj;
+
+
+        $this->db->where('movie_id', $movie_id);
+        $this->db->where('theater_id', $theater_id);
+        $this->db->where('theater_template_id', $template_id);
+        $this->db->order_by("event_date asc");
+        $query = $this->db->get('movie_event');
+        $theaterobj = $query->result_array();
+        $temparray["event_datetime"] = $theaterobj;
+
+
+
+        return $temparray;
     }
 
     function booking_mail($order_id, $subject = "") {

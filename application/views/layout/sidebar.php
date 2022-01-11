@@ -16,7 +16,7 @@ $order_menu = array(
     "sub_menu" => array(
         "Booking Reports" => site_url("MovieEvent/deshboard"),
         "Book Now" => site_url("MovieEvent/bookingList"),
-        "Search Booking"=>site_url("MovieEvent/eventReportAll"),
+        "Search Booking" => site_url("MovieEvent/eventReportAll"),
     ),
 );
 array_push($menu_control, $order_menu);
@@ -32,15 +32,26 @@ $client_menu = array(
 array_push($menu_control, $client_menu);
 
 
+$lookbook_menu = array(
+    "title" => "Movie Management",
+    "icon" => "ti-image",
+    "active" => "",
+    "sub_menu" => array(
+        "Add Movie/Show" => site_url("MovieEvent/newEvent"),
+        "Movie/Show List" => site_url("MovieEvent/eventList"),
+//        "Tags" => site_url("CMS/blogTag"),
+    ),
+);
+array_push($menu_control, $lookbook_menu);
 
 $blog_menu = array(
     "title" => "Event Management",
     "icon" => "ti-video-camera",
     "active" => "",
     "sub_menu" => array(
-        "Add Movie/Show" => site_url("MovieEvent/eventList"),
-        "Create Movie/Show Event" => site_url("MovieEvent/widgetEvent"),
-        "Movie/Show Event List" => site_url("MovieEvent/evenMovietList"),
+        "Create  Event" => site_url("MovieEvent/widgetEvent"),
+        "Event List" => site_url("MovieEvent/evenMovietList"),
+        "Release Hold Seat"=>site_url("MovieEvent/releaseHold"),
     ),
 );
 array_push($menu_control, $blog_menu);
@@ -58,16 +69,6 @@ array_push($menu_control, $theater);
 
 
 
-$lookbook_menu = array(
-    "title" => "Media Management",
-    "icon" => "ti-image",
-    "active" => "",
-    "sub_menu" => array(
-        "Images" => site_url("Media/images"),
-//        "Tags" => site_url("CMS/blogTag"),
-    ),
-);
-array_push($menu_control, $lookbook_menu);
 
 //
 //$cms_menu = array(

@@ -242,6 +242,40 @@ class MovieEvent extends CI_Controller {
         $this->load->view('Movie/eventlist', $data);
     }
 
+    public function manageEvent($theater_id, $movie_id, $template_id) {
+        $eventlist = $this->Movie->getEventsSingle($theater_id, $movie_id, $template_id);
+        $data['eventobj'] = $eventlist;
+
+        if (isset($_GET["manage_date_off"])) {
+            $event_id = $this->input->get("event_id");
+            $this->db->where("id", $event_id);
+            $this->db->set("status", "off");
+            $this->db->update('movie_event');
+            redirect("MovieEvent/manageEvent/$theater_id/$movie_id/$template_id");
+        }
+        if (isset($_GET["manage_date_on"])) {
+            $event_id = $this->input->get("event_id");
+            $this->db->where("id", $event_id);
+            $this->db->set("status", "");
+            $this->db->update('movie_event');
+            redirect("MovieEvent/manageEvent/$theater_id/$movie_id/$template_id");
+        }
+
+        if (isset($_POST["submitData"])) {
+            $datetimeselect = $this->input->post();
+            $eventdata = array(
+                "theater_id" => $theater_id,
+                "movie_id" => $movie_id,
+                "theater_template_id" => $template_id,
+                "event_date" => $datetimeselect["event_date"],
+                "event_time" => $datetimeselect["event_time"]
+            );
+            $this->db->insert('movie_event', $eventdata);
+            redirect("MovieEvent/manageEvent/$theater_id/$movie_id/$template_id");
+        }
+        $this->load->view('Movie/eventmanage', $data);
+    }
+
     public function yourTicket($bookingid) {
         $data["booking_id"] = $bookingid;
         $this->db->where('booking_id', $bookingid);
@@ -404,7 +438,7 @@ class MovieEvent extends CI_Controller {
         $this->email->subject($subject);
 
 
-         $message = $this->load->view('Movie/ticketviewemail', $data, true);
+        $message = $this->load->view('Movie/ticketviewemail', $data, true);
         setlocale(LC_MONETARY, 'en_US');
         $checkcode = REPORT_MODE;
 //        $checkcode = 0;
@@ -723,7 +757,7 @@ where 1 $daterangequery and mtb.event_id='$event_id' order by mtb.id desc";
             $querystr = "SELECT mtb.*, ms.title as movie, mt.title as theater FROM movie_ticket_booking as mtb
 join movie_theater as mt on mt.id = mtb.theater_id
 join movie_show as ms on ms.id = mtb.movie_id
-where 1 $daterangequery  order by mtb.id desc";
+where 1 $daterangequery and ms.status='active'  order by mtb.id desc";
             $query = $this->db->query($querystr);
             $orderlist = $query->result();
 
@@ -902,6 +936,39 @@ where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb
     function widgetTheaterPrice($theater_id, $movie_id) {
         $data = array();
         $data["theater_id"] = $theater_id;
+        $data["movie_id"] = $movie_id;
+        $this->db->where('reserve_seats!=', "");
+        $this->db->where('theater_id', $theater_id);
+        $query = $this->db->get('movie_theater_template');
+        $templatelist = $query->result_array();
+        $teamplateclass = [];
+        foreach ($templatelist as $key => $value) {
+            $template = array("template" => $value);
+            $this->db->where('template_id', $value["id"]);
+            $query = $this->db->get('movie_theater_template_class');
+            $templateclasslist = $query->result_array();
+            $template["templateclass"] = $templateclasslist;
+            array_push($teamplateclass, $template);
+        }
+
+
+        $data["templatelist"] = $teamplateclass;
+
+        $movies = $this->Movie->movieInforamtion($movie_id);
+        $data["movieobj"] = $movies;
+
+        $this->db->where('id', $theater_id);
+        $query = $this->db->get('movie_theater');
+        $theaterobj = $query->row_array();
+        $data["theaterobj"] = $theaterobj;
+
+
+        $this->load->view('MovieWidget/theater_template_select', $data);
+    }
+
+    function widgetTheaterPriceNew($theater_id, $movie_id) {
+        $data = array();
+        $data["theater_id"] = $theater_id;
         $query = $this->db->get('movie_theater');
         $theaterlist = $query->result_array();
         $data["theater_list"] = $theaterlist;
@@ -1001,6 +1068,27 @@ where 1 $datequery $booking_type_query and mtb.event_id='$event_id' order by mtb
         $query = $this->db->get('movie_event');
         $movieevents = $query->result_array();
         print_r($movieevents);
+    }
+
+    function releaseHold() {
+        $query = $this->db->get('movie_ticket_hold');
+        $holdseats = $query->result_array();
+        $holdseatsdict = array();
+        foreach ($holdseats as $key => $value) {
+            if (isset($holdseatsdict[$value["movie_event_id"]])) {
+                array_push($holdseatsdict[$value["movie_event_id"]]["hold"], $value["seat"]);
+            } else {
+                $holdseatsdict[$value["movie_event_id"]] = array("hold" => [$value["seat"]], "event" => $this->Movie->eventInformation($value["movie_event_id"]));
+            }
+        }
+        $data["holdevent"] = $holdseatsdict;
+        $this->load->view('MovieWidget/releaseHold', $data);
+    }
+
+    function removeHold() {
+        $this->db->where("id>1");
+        $this->db->delete('movie_ticket_hold');
+        redirect("MovieEvent/releaseHold");
     }
 
 }

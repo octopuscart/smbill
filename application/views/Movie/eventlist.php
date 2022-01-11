@@ -22,11 +22,11 @@ $this->load->view('layout/topmenu');
 
 
                 <div class="row el-element-overlay">
-                      <div class="col-lg-12 col-md-12">
-                    <?php
-                    foreach ($eventlist as $key => $value) {
-                        ?>
-                      
+                    <div class="col-lg-12 col-md-12">
+                        <?php
+                        foreach ($eventlist as $key => $value) {
+                            ?>
+
                             <div class="">
 
 
@@ -34,19 +34,18 @@ $this->load->view('layout/topmenu');
                                     <div class="row">
                                         <div class="card-body col-6" >
                                             <div class="row">
-                                                <div class="col-5">
-                                                    <center class="m-t-30"> <img src="<?php echo $value["movie"]['image']; ?>" class="" width="150">
-
+                                                <div class="col-4">
+                                                    <center class="m-t-30"> 
+                                                        <img src="<?php echo $value["movie"]['image']; ?>" class="" width="70"/></br>
                                                     </center>
+                                                    <br/>
+
                                                 </div>
-                                                <div class="col-7">
+                                                <div class="col-8">
                                                     <h4 class="card-title m-t-10"><?php echo $value["movie"]['title']; ?></h4>
                                                     <h6 class="card-subtitle"><?php echo $value["movie"]['attr']; ?></h6>
 
-                                                    <small class="text-muted">Description </small>
-                                                    <h6>  <p>
-                                                            <?php echo $value["movie"]['about']; ?>  
-                                                        </p></h6>
+
 
                                                     <small class="text-muted p-t-30 db">Theater</small>
                                                     <h6><?php echo $value["theaterobj"]["title"]; ?></h6> 
@@ -76,6 +75,7 @@ $this->load->view('layout/topmenu');
                                                     }
                                                     ?>
                                                 </table>
+
                                             </div>
 
 
@@ -92,9 +92,8 @@ $this->load->view('layout/topmenu');
                                                     </tr>
                                                     <?php
                                                     $theaterlist = $value["event_datetime"];
-                                               
+
                                                     foreach ($theaterlist as $key => $evalue) {
-                                                       
                                                         ?>
                                                         <tr >
 
@@ -105,6 +104,17 @@ $this->load->view('layout/topmenu');
                                                     }
                                                     ?>
                                                 </table>
+                                                <?php
+                                                if ($theaterlist) {
+                                                    $thobj = $theaterlist[0];
+                                                    $theater_id = $evalue["theater_id"];
+                                                    $movie_id = $evalue["movie_id"];
+                                                    $template_id = $evalue["theater_template_id"];
+                                                    ?>
+                                                    <a class="btn btn-default btn-block"  href="<?php echo site_url("MovieEvent/manageEvent/$theater_id/$movie_id/$template_id"); ?>">Manage Event</a>
+                                                    <?php
+                                                }
+                                                ?>
                                             </div>
 
                                         </div>

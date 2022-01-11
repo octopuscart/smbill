@@ -27,9 +27,29 @@ $this->load->view('layout/topmenu');
 
                         <!-- begin wrapper -->
                         <div class="wrapper">
-                            <div class="col-md-6">
-                                <!-- begin email form -->
-                                <form action="#" method="post" enctype="multipart/form-data">
+                            <!-- begin email form -->
+                            <form action="#" method="post" enctype="multipart/form-data" class="row">
+                                <div class="col-md-3">
+                                    <div class="thumbnail">
+                                        <img src="<?php echo (base_url() . "assets/movies/default.png"); ?>" style="    width: 100%;">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label class="control-label col-form-label">Set Cover Image</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Upload</span>
+                                                    </div>
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" name='picture' id="inputGroupFile01" file-model="filename" required="">
+                                                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+
                                     <!-- begin email to -->
                                     <div class="card-body bg-light">
                                         <h4 class="card-title">Add New Movie/Event</h4>
@@ -50,20 +70,7 @@ $this->load->view('layout/topmenu');
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-form-label">Set Cover Image</label>
-                                                    <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text">Upload</span>
-                                                        </div>
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" name='picture' id="inputGroupFile01">
-                                                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label class="control-label col-form-label">About Movie/Event</label>
@@ -86,9 +93,10 @@ $this->load->view('layout/topmenu');
 
 
                                     <!-- end email content -->
-                                </form>
-                                <!-- end email form -->
-                            </div>
+
+                                </div>
+                            </form>
+                            <!-- end email form -->
                         </div>
                         <!-- end wrapper -->
                     </div>
