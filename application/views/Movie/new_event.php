@@ -36,15 +36,15 @@ $this->load->view('layout/topmenu');
                                             <div class="form-group">
                                                 <label class="control-label col-form-label">Set Cover Image</label>
                                                 <div class="input-group">
-                              
+
                                                     <div class="custom-file">
                                                         <input type="file" class="custom-file-input" name='picture' id="inputGroupFile01" file-model="filename" required="">
                                                         <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                                                     </div>
                                                     <br/>
-                                                
+
                                                 </div>
-                                                    <p>Image size W:600px X H:800px</p>
+                                                <p>W:600px X H:800px</p>
                                             </div>
                                         </div>
                                     </div>
