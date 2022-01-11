@@ -225,6 +225,7 @@ $paymenttype = $statusarray[$bktype]["payment"];
                                                                 <option value="PayMe">PayMe</option>
                                                                 <option value="Bank Transfer">Bank Transfer</option>
                                                                 <option value="Not Paid">Not Paid</option>
+                                                                <option value="Null">Null</option>
                                                             </select>
                                                         </div>
                                                         <div class="form-group">
@@ -240,13 +241,13 @@ $paymenttype = $statusarray[$bktype]["payment"];
                                                         </div>
 
                                                       
-                                                        <div class="form-group">
+<!--                                                        <div class="form-group">
                                                             <span class="input-group-addon " id="sizing-addon2">Payment Time</span>
                                                             <input type="time" class="form-control" name='payment_time' required=false  aria-describedby="sizing-addon2" value="<?php echo $payment_time; ?>"/>
-                                                        </div>
+                                                        </div>-->
                                                     </div>
                                                 </div>
-                                                <button type="submit" class="btn waves-effect waves-light btn-success" name="paid">Set As Paid</button>
+                                                <button type="submit" class="btn waves-effect waves-light btn-success" name="paid">Confirm</button>
 
                                             </form>
 
