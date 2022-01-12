@@ -15,7 +15,8 @@ $bookingtype = $statusarray[$bktype]["status"];
 $paymenttype = $statusarray[$bktype]["payment"];
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
-
+<link href="<?php echo base_url(); ?>assets/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
+<script src="<?php echo base_url(); ?>assets/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
 <style>
 
 
@@ -116,7 +117,7 @@ $paymenttype = $statusarray[$bktype]["payment"];
                             .gn_table td{
                                 padding:3px 0px;
                             }
-                            .gn_table th{
+                            .carttable th{
                                 padding:3px 0px;
                                 text-align: left;
 
@@ -232,7 +233,7 @@ $paymenttype = $statusarray[$bktype]["payment"];
                                                             <span class="input-group-addon " id="sizing-addon2">Payment Date</span>
                                                             <div class="input-group date" id="datepicker">
 
-                                                                <input type="text" class="form-control" name='payment_date'  aria-describedby="sizing-addon2" value="<?php echo  $payment_date;  ?>">
+                                                                <input type="text" class="form-control" name='payment_date'  aria-describedby="sizing-addon2" value="<?php echo $payment_date; ?>">
                                                                 <span class="input-group-btn input-group-addon" >
                                                                     <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
                                                                 </span>
@@ -240,11 +241,11 @@ $paymenttype = $statusarray[$bktype]["payment"];
                                                             </div>
                                                         </div>
 
-                                                      
-<!--                                                        <div class="form-group">
-                                                            <span class="input-group-addon " id="sizing-addon2">Payment Time</span>
-                                                            <input type="time" class="form-control" name='payment_time' required=false  aria-describedby="sizing-addon2" value="<?php echo $payment_time; ?>"/>
-                                                        </div>-->
+
+                                                        <!--                                                        <div class="form-group">
+                                                                                                                    <span class="input-group-addon " id="sizing-addon2">Payment Time</span>
+                                                                                                                    <input type="time" class="form-control" name='payment_time' required=false  aria-describedby="sizing-addon2" value="<?php echo $payment_time; ?>"/>
+                                                                                                                </div>-->
                                                     </div>
                                                 </div>
                                                 <button type="submit" class="btn waves-effect waves-light btn-success" name="paid">Confirm</button>
@@ -298,17 +299,39 @@ $paymenttype = $statusarray[$bktype]["payment"];
                                     </td>
                                 </tr>
                             </table>
-                            <table class="carttable"  border-color= "#fff" align="center" border="0" cellpadding="0" cellspacing="0" width="700" style="background: #fff;padding:20px">
+                            <table class="carttable"  border-color= "#fff" align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="background: #fff;padding:20px">
                                 <tr>
-                                    <td style='width: 70%;'>
-                                        <p>Hi <?php echo $booking['name']; ?>,</p>
-                                        <p>Your Ticket(s) Has Been <?php echo $bookingtype; ?></p>
-                                    </td>
+                                    <th>Name</th>
                                     <td>
-                                        <b>Booking No.:</b><br/>
-                                        <p><?php echo $booking['booking_no']; ?></p>
+                                        <span  id="<?php echo $booking["id"]."1"; ?>" data-type="text" data-pk="<?php echo $booking["id"]; ?>" data-name="name" data-value="<?php echo $booking['name']; ?>" data-params ={'tablename':'movie_ticket_booking'} data-url="<?php echo site_url("LocalApi/updateCurd"); ?>" data-mode="inline" class="m-l-5 editable editable-click" tabindex="-1" > <?php echo $booking['name']; ?></span>
+
+                                     
                                     </td>
                                 </tr>
+                                <tr>
+                                    <th>Email</th>
+                                    <td>
+                                                                                <span  id="<?php echo $booking["id"]."1"; ?>" data-type="text" data-pk="<?php echo $booking["id"]; ?>" data-name="email" data-value="<?php echo $booking['email']; ?>" data-params ={'tablename':'movie_ticket_booking'} data-url="<?php echo site_url("LocalApi/updateCurd"); ?>" data-mode="inline" class="m-l-5 editable editable-click" tabindex="-1" > <?php echo $booking['email']; ?></span>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Contact No.</th>
+                                    <td>
+                                                                          <span  id="<?php echo $booking["id"]."1"; ?>" data-type="text" data-pk="<?php echo $booking["id"]; ?>" data-name="contact_no" data-value="<?php echo $booking['contact_no']; ?>" data-params ={'tablename':'movie_ticket_booking'} data-url="<?php echo site_url("LocalApi/updateCurd"); ?>" data-mode="inline" class="m-l-5 editable editable-click" tabindex="-1" > <?php echo $booking['contact_no']; ?></span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Booking No.</th>
+                                    <td><?php echo $booking['booking_no']; ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td><p>Your Ticket(s) Has Been <?php echo $bookingtype; ?></p></td>
+                                </tr>
+
+
                             </table>
                             <div class='ticketmainblock'>
                                 <table class="carttable"  border-color= "#fff" align="center" border="0" cellpadding="0" cellspacing="0" style="padding:10px;width:650px;">
@@ -426,8 +449,19 @@ $paymenttype = $statusarray[$bktype]["payment"];
 $this->load->view('layout/footer');
 ?>
 <script>
-// Date Picker
+
     $(function () {
+
+
+
+
+        $('.edit_detail').click(function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            $($(this).prev()).editable('toggle');
+        });
+
+        $(".editable").editable();
 
         jQuery('#datepicker').datepicker({
             format: 'yyyy-mm-dd',
@@ -437,7 +471,7 @@ $this->load->view('layout/footer');
         });
 
 
-      $("#inlineFormCustomSelect").val("<?php echo $booking["payment_type"]?>")
+        $("#inlineFormCustomSelect").val("<?php echo $booking["payment_type"] ?>")
 
     })
 </script>
