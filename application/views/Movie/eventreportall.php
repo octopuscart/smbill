@@ -196,6 +196,13 @@ $this->load->view('layout/topmenu');
                                                         <?php
                                                         echo $value->theater;
                                                         ?>
+                                                       
+                                                     
+                                                        <hr/>
+                                                       <b> <?php
+                                                        echo $value->event_date." ".$value->event_time;
+                                                        ?>
+                                                       </b>
                                                     </td>
                                                     <td>
                                                         <?php
@@ -216,7 +223,7 @@ $this->load->view('layout/topmenu');
                                                     </td>
                                                     <td>
 
-                                                        <a href="<?php echo site_url("MovieEvent/yourTicket/" . $value->booking_id); ?>" class="btn btn-primary btn-sm" style="    margin-top: 20%;">Update <i class="fa fa-arrow-circle-right"></i></a>
+                                                        <a href="<?php echo site_url("MovieEvent/yourTicket/" . $value->booking_id."?banklink=MovieEvent/eventReportAll"); ?>" class="btn btn-primary btn-sm" style="    margin-top: 20%;">Update <i class="fa fa-arrow-circle-right"></i></a>
 
                                                     </td>
                                                 </tr>

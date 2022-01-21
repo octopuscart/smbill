@@ -284,7 +284,7 @@ class MovieEvent extends CI_Controller {
         $movies = $this->Movie->movieInforamtion($bookingobj['movie_id']);
         $data['movieobj'] = $movies;
 
-
+        $backlink = $this->input->get("banklink");
 
         $data["payment_date"] = $bookingobj["payment_date"] != " " ? $bookingobj["payment_date"] : date("Y-m-d");
         $data["payment_time"] = $bookingobj["payment_time"] != " " ? $bookingobj["payment_time"] : date("h:m:s");
@@ -294,7 +294,13 @@ class MovieEvent extends CI_Controller {
             $this->db->set('remark', $remark);
             $this->db->where('booking_id', $bookingid);
             $this->db->update('movie_ticket_booking');
-            redirect(site_url("MovieEvent/yourTicket/$bookingid"));
+
+
+            if ($backlink) {
+                redirect(site_url($backlink));
+            } else {
+                redirect(site_url("MovieEvent/yourTicket/$bookingid"));
+            }
         }
 
         if (isset($_POST["paid"])) {
@@ -327,7 +333,7 @@ class MovieEvent extends CI_Controller {
             $this->db->set("status", "1");
             $this->db->where('movie_ticket_booking_id', $bid); //set column_name and value in which row need to update
             $this->db->update('movie_ticket');
-            redirect(site_url("MovieEvent/paidBookingv2/$bookingid/$paymentstatus"));
+            redirect(site_url("MovieEvent/paidBookingv2/$bookingid/$paymentstatus/$backlink"));
         }
 
 
@@ -339,8 +345,8 @@ class MovieEvent extends CI_Controller {
         $this->load->view('Movie/ticketviewv2', $data);
     }
 
-    function paidBookingv2($bookid, $paymentstatus) {
-        redirect("MovieEvent/yourTicketMail/$bookid");
+    function paidBookingv2($bookid, $paymentstatus, $backlink = "") {
+        redirect("MovieEvent/yourTicketMail/$bookid/$backlink");
     }
 
     function paidBooking($bookid, $paymentstatus) {
@@ -409,7 +415,7 @@ class MovieEvent extends CI_Controller {
         redirect("MovieEvent/yourTicketMail/$bookid");
     }
 
-    public function yourTicketMail($bookingid) {
+    public function yourTicketMail($bookingid, $backlink = "") {
         $this->db->where('booking_id', $bookingid);
         $query = $this->db->get('movie_ticket_booking');
         $bookingobj = $query->row_array();
@@ -447,13 +453,25 @@ class MovieEvent extends CI_Controller {
             $this->email->print_debugger();
             $send = $this->email->send();
             if ($send) {
-                redirect("MovieEvent/yourTicket/$bookingid");
+                if ($backlink) {
+                    redirect(site_url("MovieEvent/eventReportAll"));
+                } else {
+                    redirect("MovieEvent/yourTicket/$bookingid");
+                }
             } else {
                 $error = $this->email->print_debugger(array('headers'));
-                redirect("MovieEvent/yourTicket/$bookingid");
+                if ($backlink) {
+                    redirect(site_url("MovieEvent/eventReportAll"));
+                } else {
+                    redirect("MovieEvent/yourTicket/$bookingid");
+                }
             }
         } else {
-            redirect("MovieEvent/yourTicket/$bookingid");
+            if ($backlink) {
+                redirect(site_url("MovieEvent/eventReportAll"));
+            } else {
+                redirect("MovieEvent/yourTicket/$bookingid");
+            }
         }
     }
 
@@ -684,9 +702,10 @@ class MovieEvent extends CI_Controller {
 
         if ($this->user_type == 'Admin' || $this->user_type == 'Manager') {
 
-            $querystr = "SELECT mtb.*, ms.title as movie, mt.title as theater FROM movie_ticket_booking as mtb
+            $querystr = "SELECT mtb.*, ms.title as movie, me.event_date, me.event_time,  mt.title as theater FROM movie_ticket_booking as mtb
 join movie_theater as mt on mt.id = mtb.theater_id
 join movie_show as ms on ms.id = mtb.movie_id
+join movie_event as me on me.id  = mtb.event_id
 where 1 $daterangequery and mtb.event_id='$event_id' order by mtb.id desc";
             $query = $this->db->query($querystr);
             $orderlist = $query->result();
@@ -700,11 +719,13 @@ where 1 $daterangequery and mtb.event_id='$event_id' order by mtb.id desc";
                 $ticketprice = array();
 
                 foreach ($tickets as $tkey => $tvalue) {
-                    if (isset($seatscount[$tvalue->seat_price])) {
-                        $seatscount[$tvalue->seat_price]["count"] += 1;
-                        $seatscount[$tvalue->seat_price]["price"] += $tvalue->seat_price;
-                    } else {
-                        $seatscount[$tvalue->seat_price] = array("count" => 1, "price" => $tvalue->seat_price);
+                    if ($value->booking_type == "Paid") {
+                        if (isset($seatscount[$tvalue->seat_price])) {
+                            $seatscount[$tvalue->seat_price]["count"] += 1;
+                            $seatscount[$tvalue->seat_price]["price"] += $tvalue->seat_price;
+                        } else {
+                            $seatscount[$tvalue->seat_price] = array("count" => 1, "price" => $tvalue->seat_price);
+                        }
                     }
                     if (isset($ticketprice[$tvalue->seat_price])) {
                         $ticketprice[$tvalue->seat_price]["count"] += 1;
@@ -754,9 +775,10 @@ where 1 $daterangequery and mtb.event_id='$event_id' order by mtb.id desc";
 
         if ($this->user_type == 'Admin' || $this->user_type == 'Manager') {
 
-            $querystr = "SELECT mtb.*, ms.title as movie, mt.title as theater FROM movie_ticket_booking as mtb
+            $querystr = "SELECT mtb.*, me.event_date, me.event_time,  ms.title as movie, mt.title as theater FROM movie_ticket_booking as mtb
 join movie_theater as mt on mt.id = mtb.theater_id
 join movie_show as ms on ms.id = mtb.movie_id
+join movie_event as me on me.id  = mtb.event_id
 where 1 $daterangequery and ms.status='active'  order by mtb.id desc";
             $query = $this->db->query($querystr);
             $orderlist = $query->result();
@@ -785,6 +807,7 @@ where 1 $daterangequery and ms.status='active'  order by mtb.id desc";
                         $ticketprice[$tvalue->seat_price] = array("count" => 1, "price" => $tvalue->seat_price);
                     }
                 }
+
 
 
                 $value->seatsarray = $ticketprice;

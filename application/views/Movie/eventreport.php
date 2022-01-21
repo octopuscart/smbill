@@ -175,7 +175,7 @@ $this->load->view('layout/topmenu');
                                                         echo $ptkey;
                                                         ?>
                                                     </h6>
-                                                  
+
                                                     <b>Total Seats: <?php echo $ptvalue["total_seats"] ?></b>
                                                 </div>
                                             </div>
@@ -202,7 +202,7 @@ $this->load->view('layout/topmenu');
                                                     <h6 class="text-dark">
                                                         Total Seats: <?php echo $stvalue["count"]; ?>
                                                     </h6>
-                                                    
+
                                                     <b>Total Price: {{<?php echo $stvalue["price"]; ?>|currency}}</b>
                                                 </div>
                                             </div>
@@ -224,6 +224,7 @@ $this->load->view('layout/topmenu');
                                             <th style="width:25%">Booking Information</th>
                                             <th style="width:20%">Customer Information</th>
                                             <th style="width:25%">Seat(s) Information</th>
+                                            <th style="width:25%">Event Information</th>
                                             <th style="width:25%">Booking Type</th>
                                             <th style="width:25%">Action</th>
 
@@ -315,7 +316,23 @@ $this->load->view('layout/topmenu');
 
 
                                                     </td>
+ <td>
+                                                        <?php
+                                                        echo $value->movie;
+                                                        ?>
 
+                                                        <br/>
+                                                        <?php
+                                                        echo $value->theater;
+                                                        ?>
+                                                       
+                                                     
+                                                        <hr/>
+                                                       <b> <?php
+                                                        echo $value->event_date." ".$value->event_time;
+                                                        ?>
+                                                       </b>
+                                                    </td>
 
                                                     <td>
                                                         <?php
