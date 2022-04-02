@@ -20,6 +20,52 @@ class Invoice extends CI_Controller {
         $this->user_type = $this->session->logged_in['user_type'];
     }
 
+    function convert_num_word($number) {
+        $no = round($number);
+        $point = round($number - $no, 2) * 100;
+        $hundred = null;
+        $digits_1 = strlen($no);
+        $i = 0;
+        $str = array();
+        $wordsz = array('0' => 'zero', '1' => 'one', '2' => 'two',
+            '3' => 'three', '4' => 'four', '5' => 'five', '6' => 'six',
+            '7' => 'seven', '8' => 'eight', '9' => 'nine',);
+        $words = array('0' => '', '1' => 'one', '2' => 'two',
+            '3' => 'three', '4' => 'four', '5' => 'five', '6' => 'six',
+            '7' => 'seven', '8' => 'eight', '9' => 'nine',
+            '10' => 'ten', '11' => 'eleven', '12' => 'twelve',
+            '13' => 'thirteen', '14' => 'fourteen',
+            '15' => 'fifteen', '16' => 'sixteen', '17' => 'seventeen',
+            '18' => 'eighteen', '19' => 'nineteen', '20' => 'twenty',
+            '30' => 'thirty', '40' => 'forty', '50' => 'fifty',
+            '60' => 'sixty', '70' => 'seventy',
+            '80' => 'eighty', '90' => 'ninety');
+        $digits = array('', 'hundred', 'thousand', 'lakh', 'crore');
+        while ($i < $digits_1) {
+            $divider = ($i == 2) ? 10 : 100;
+            $number = floor($no % $divider);
+            $no = floor($no / $divider);
+            $i += ($divider == 10) ? 1 : 2;
+            if ($number) {
+                $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+                $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
+                $str [] = ($number < 21) ? $words[$number] .
+                        " " . $digits[$counter] . $plural . " " . $hundred :
+                        $words[floor($number / 10) * 10]
+                        . " " . $words[$number % 10] . " "
+                        . $digits[$counter] . $plural . " " . $hundred;
+            } else
+                $str[] = null;
+        }
+        $str = array_reverse($str);
+        $result = implode('', $str);
+        $result = $result ? $result : $wordsz[$result / 10];
+        $points = ($point) ?
+                " and " . $wordsz[$point / 10] . " " .
+                $wordsz[$point = $point % 10] : '';
+        return "Only " . GLOBAL_CURRENCY . $result . " " . ($points ? "" . $points . " Cents" : "") . "";
+    }
+
     function getDataArray($table_name) {
         $alldata = $this->db->get($table_name)->result_array();
         $resultarray = array();
@@ -147,14 +193,21 @@ class Invoice extends CI_Controller {
         $this->db->where("id", $invoice_id);
         $invoice_data = $this->db->get("billing_invoice")->row_array();
         $invoice_description = $this->db->where("billing_invoice_id", $invoice_id)->get("billing_invoice_description")->result_array();
-        $total_amount = 0;
+        $total = 0;
+        $deposite = $invoice_data["deposite"] ? $invoice_data["deposite"] : 0;
+        $other_charges = $invoice_data["other_charges"] ? $invoice_data["other_charges"] : 0;
+
         foreach ($invoice_description as $key => $value) {
-            $total_amount += $value["amount"];
+            $total += $value["amount"];
         }
+        $total_amount = ($total - $deposite) + $other_charges;
+
+        $amount_inwords = $this->convert_num_word($total_amount);
 
         $this->db->where("id", $invoice_id);
-        $this->db->set(array("current_balance" => $total_amount, "total_amount" => $total_amount));
+        $this->db->set(array("current_balance" => $total, "total_amount" => $total_amount));
         $this->db->update("billing_invoice");
+        $invoice_data["amount_inwords"] = $amount_inwords;
 
         $invoice_data["current_balance"] = $total_amount;
 

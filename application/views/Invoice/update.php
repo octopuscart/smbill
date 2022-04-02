@@ -17,7 +17,7 @@ $this->load->view('layout/topmenu');
     <div class="page-breadcrumb">
         <div class="row">
             <div class="col-5 align-self-center">
-                <h4 class="page-title">Invoice #<?php echo $invoice_data["invoice_no"];?></h4>
+                <h4 class="page-title">Invoice #<?php echo $invoice_data["invoice_no"]; ?></h4>
                 <div class="d-flex align-items-center">
 
                 </div>
@@ -27,7 +27,7 @@ $this->load->view('layout/topmenu');
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="<?php echo site_url("Invoice/reports")?>" class="btn btn-default"><i class="fa fa-backward"></i> Back to Reports</a>
+                                <a href="<?php echo site_url("Invoice/reports") ?>" class="btn btn-default"><i class="fa fa-backward"></i> Back to Reports</a>
                             </li>
                         </ol>
                     </nav>
@@ -65,12 +65,12 @@ $this->load->view('layout/topmenu');
                                 <center>
                                     <div class="print_invoice" id="printArea">
                                         <?php
-                                        $this->load->view('Invoice/createBase_update', array("invoice_data" => $invoice_data, "invoice_description" => $invoice_description, "header"=>1));
+                                        $this->load->view('Invoice/createBase_update', array("invoice_data" => $invoice_data, "invoice_description" => $invoice_description, "header" => 1));
                                         ?>
                                     </div>
                                     <div class="print_invoice" id="printAreaWithoutHeader" style="display: none">
                                         <?php
-                                        $this->load->view('Invoice/createBase_update', array("invoice_data" => $invoice_data, "invoice_description" => $invoice_description, "header"=>0));
+                                        $this->load->view('Invoice/createBase_update', array("invoice_data" => $invoice_data, "invoice_description" => $invoice_description, "header" => 0));
                                         ?>
                                     </div>
                                     <button type="button" class="btn btn-primary p-l-40 p-r-40"  data-toggle="modal" data-target="#add_item"><i class="fa fa-plus"></i> Add Transactions</button>
@@ -197,9 +197,9 @@ $this->load->view('layout/footer');
 <script src="<?php echo base_url(); ?>assets/assets/libs/moment/moment.js"></script>
 <script src="<?php echo base_url(); ?>assets/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 <script>
-                                        // Date Picker
+
                                         $(function () {
-//        jQuery('.mydatepicker, #datepicker, .input-group.date').datepicker();
+
                                             jQuery('.datepicker-autoclose').datepicker({
                                                 format: 'yyyy-mm-dd',
                                                 autoclose: true,
@@ -207,12 +207,7 @@ $this->load->view('layout/footer');
                                                 todayHighlight: true
 
                                             });
-//        jQuery('#date-range').datepicker({
-//            toggleActive: true
-//        });
-//        jQuery('#datepicker-inline').datepicker({
-//            todayHighlight: true
-//        });
+
                                             jQuery('.datepicker').datepicker({
                                                 format: 'yyyy-mm-dd',
                                                 autoclose: true,
@@ -236,11 +231,19 @@ $this->load->view('layout/footer');
                                                         emptytext: ""
 
                                                     });
+                                            $("#remarkid").editable(
+                                                    {
+                                                        format: 'yyyy-mm-dd',
+                                                        viewformat: 'yyyy-mm-dd',
+                                                        placeholder: "",
+                                                        emptytext: "Write Remark Here..."
+
+                                                    });
 
                                             $('.editable').on('save', function (e, params) {
                                                 window.location.reload();
                                             });
-                                        })
+                                        });
 </script>
 <script>
 
