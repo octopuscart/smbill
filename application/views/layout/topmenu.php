@@ -31,14 +31,14 @@ if ($userdata) {
                     <!-- ============================================================== -->
                     <!-- Logo -->
                     <!-- ============================================================== -->
-                    <a class="navbar-brand" href="index.html" style='display: inline;'>
+                    <a class="navbar-brand" href="" style='display: inline;'>
                         <!-- Logo icon -->
                      
                         <!--End Logo icon -->
                         <!-- Logo text -->
                         <span class="logo-text">
                             <!-- dark Logo text -->
-                            <img src="<?php echo base_url(); ?>assets/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                            <!--<img src="<?php echo base_url(); ?>assets/assets/images/logo-text.png" alt="homepage" class="dark-logo" />-->
                             <!-- Light Logo text -->
                         </span>
                     </a>
