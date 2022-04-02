@@ -10,100 +10,29 @@ $menu_control = array();
 
 
 $order_menu = array(
-    "title" => "Booking",
+    "title" => "Invoice Management",
     "icon" => "icon-Receipt-4",
     "active" => "",
     "sub_menu" => array(
-        "Booking Reports" => site_url("MovieEvent/deshboard"),
-        "Book Now" => site_url("MovieEvent/bookingList"),
-        "Search Booking" => site_url("MovieEvent/eventReportAll"),
+        "Invoice Reports" => site_url("Invoice/reports"),
+        "Create Invoice" => site_url("Invoice/create"),
+//        "Search Invoice" => site_url("Invoice/invoiceList"),
     ),
 );
 array_push($menu_control, $order_menu);
 
 $client_menu = array(
-    "title" => "Client Manegement",
+    "title" => "Party/Consignee Settings",
     "icon" => "icon-Add-User",
     "active" => "",
     "sub_menu" => array(
-        "Clients Reports" => site_url("UserManager/usersReport"),
+        "Party Settings" => site_url("CMS/partySetting"),
+        "Consignee Settings" => site_url("CMS/consigneeSetting"),
     ),
 );
 array_push($menu_control, $client_menu);
 
 
-$lookbook_menu = array(
-    "title" => "Movie Information",
-    "icon" => "ti-image",
-    "active" => "",
-    "sub_menu" => array(
-        "Add Movie Info" => site_url("MovieEvent/newEvent"),
-        "Movie List" => site_url("MovieEvent/eventList"),
-//        "Tags" => site_url("CMS/blogTag"),
-    ),
-);
-array_push($menu_control, $lookbook_menu);
-
-$blog_menu = array(
-    "title" => "Theater Management",
-    "icon" => "ti-video-camera",
-    "active" => "",
-    "sub_menu" => array(
-        "Create  Event(s)" => site_url("MovieEvent/widgetEvent"),
-        "Event List(s)" => site_url("MovieEvent/evenMovietList"),
-        "Release Hold Seat(s)"=>site_url("MovieEvent/releaseHold"),
-    ),
-);
-array_push($menu_control, $blog_menu);
-
-$theater = array(
-    "title" => "Theater Settings",
-    "icon" => "ti-blackboard",
-    "active" => "",
-    "sub_menu" => array(
-        "Theater(s) List" => site_url("CMS/theaterSetting"),
-        "Create Template" => site_url("MovieEvent/newsTheaterTemplate"),
-    ),
-);
-array_push($menu_control, $theater);
-
-
-
-
-//
-//$cms_menu = array(
-//    "title" => "Content Management",
-//    "icon" => "fa fa-file-text",
-//    "active" => "",
-//    "sub_menu" => array(
-//        "Look Book" => site_url("CMS/lookbook"),
-//        "Blog" => site_url("CMS/blog"),
-//    ),
-//);
-//array_push($menu_control, $cms_menu);
-
-
-$msg_menu2 = array(
-    "title" => "Message Management",
-    "icon" => "fa fa-envelope",
-    "active" => "",
-    "sub_menu" => array(
-        "Send Mail/Newsletter (Prm.)" => site_url("#"),
-        "Send Mail/Newsletter (Txn.)" => site_url("#"),
-    ),
-);
-
-$msg_menu = array(
-    "title" => "Message Management",
-    "icon" => "fa fa-envelope",
-    "active" => "",
-    "sub_menu" => array(
-//        "Report Configuration" => site_url("Configuration/reportConfiguration"),
-    ),
-);
-
-
-//array_push($menu_control, $msg_menu);
 
 
 
@@ -126,7 +55,7 @@ $setting_menu = array(
     "active" => "",
     "sub_menu" => array(
         "System Log" => site_url("Services/systemLogReport"),
-        "Report Configuration" => site_url("Configuration/reportConfiguration"),
+//        "Report Configuration" => site_url("Configuration/reportConfiguration"),
     ),
 );
 
@@ -135,27 +64,7 @@ array_push($menu_control, $setting_menu);
 
 
 
-$social_menu = array(
-    "title" => "Social Management",
-    "icon" => "ti-share-alt",
-    "active" => "",
-    "sub_menu" => array(
-        "Social Link" => site_url("CMS/socialLink"),
-    ),
-);
-array_push($menu_control, $social_menu);
 
-
-$seo_menu = array(
-    "title" => "SEO",
-    "icon" => "ti-world",
-    "active" => "",
-    "sub_menu" => array(
-        "General" => site_url("CMS/siteSEOConfigUpdate"),
-        "Page Wise Setting" => site_url("CMS/seoPageSetting"),
-    ),
-);
-array_push($menu_control, $seo_menu);
 
 
 

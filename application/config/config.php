@@ -25,10 +25,10 @@ $islocal = false;
 
 if (strpos($baselink, '192.168')) {
     $islocal = true;
-    $baselinkmain = 'http://' . $baselinkurl . '/maharajaticketsmanage';
+    $baselinkmain = 'http://' . $baselinkurl . '/smarttechbilling';
 } elseif (strpos($baselink, 'localhost')) {
     $islocal = true;
-    $baselinkmain = 'http://' . $baselinkurl . '/maharajaticketsmanage';
+    $baselinkmain = 'http://' . $baselinkurl . '/smarttechbilling';
 } else {
     $baselinkmain = 'https://' . $baselinkurl . '/';
 }

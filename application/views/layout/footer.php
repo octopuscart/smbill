@@ -17,7 +17,7 @@
 <!-- footer -->
 <!-- ============================================================== -->
 <footer class="footer text-center">
-    All Rights Reserved by Maharaja Tickets Admin. Designed and Developed by <a href="https://costcointernational.com.com">Costco Int'l Ltd.</a>.
+    All Rights Reserved by Smart-Tech Logistic Admin. Designed and Developed by <a href="https://costcointernational.com.com">Costco Int'l Ltd.</a>.
 </footer>
 <!-- ============================================================== -->
 <!-- End footer -->

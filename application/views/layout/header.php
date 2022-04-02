@@ -15,40 +15,40 @@
 
         <?php
         $styleSheetArray = array(
-
 //            "Animate" => "assets/css/animate.min.css",
             "Style" => "assets/dist/css/style.min.css",
-
 //            "CustomeStyle" => "assets/css/customstyle.css",
-
             "Gitter" => "assets/gritter/css/jquery.gritter.css",
         );
         foreach ($styleSheetArray as $title => $stylesheet) {
             ?>
-                                    <!-- ================== <?php echo $title ?> ================== -->
+                                                <!-- ================== <?php echo $title ?> ================== -->
             <link href="<?php echo base_url(); ?><?php echo $stylesheet; ?>" rel="stylesheet" />
             <?php
         }
         ?>
 
 
-<!-- ============================================================== -->
-<script src="<?php echo base_url(); ?>assets/assets/libs/jquery/dist/jquery.min.js"></script>
-<!-- Bootstrap tether Core JavaScript -->
-<script src="<?php echo base_url(); ?>assets/assets/libs/popper.js/dist/umd/popper.min.js"></script>
-<script src="<?php echo base_url(); ?>assets/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+        <!-- ============================================================== -->
+        <script src="<?php echo base_url(); ?>assets/assets/libs/jquery/dist/jquery.min.js"></script>
+        <!-- Bootstrap tether Core JavaScript -->
+        <script src="<?php echo base_url(); ?>assets/assets/libs/popper.js/dist/umd/popper.min.js"></script>
+        <script src="<?php echo base_url(); ?>assets/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
 
 
 
         <!--angular js-->
         <script src="<?php echo base_url(); ?>assets/angular/angular.min.js"></script>
-              <!--sweet alert-->
+        <!--sweet alert-->
         <script src="<?php echo base_url(); ?>assets/sweetalert2/sweetalert2.min.js"></script>
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/sweetalert2/sweetalert2.min.css">
 
         <!--custom style-->
         <style>
 <?php echo HEADERCSS; ?>
+            .datepicker-dropdown{
+                z-index: 2104!important;
+            }
         </style>
         <!--custom style-->
 

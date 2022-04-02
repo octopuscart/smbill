@@ -3,8 +3,10 @@ $this->load->view('layout/header');
 $this->load->view('layout/topmenu');
 ?>
 <!-- ================== BEGIN PAGE CSS STYLE ================== -->
-<link href="<?php echo base_url(); ?>assets/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
-<script src="<?php echo base_url(); ?>assets/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jqueryui-editable/css/jqueryui-editable.css" rel="stylesheet"/>
+<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jqueryui-editable/js/jqueryui-editable.min.js"></script>
+<!--<link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet" />-->
+
 
 <link href="<?php echo base_url(); ?>assets/plugins/jquery-tag-it/css/jquery.tagit.css" rel="stylesheet" />
 <script src="<?php echo base_url(); ?>assets/plugins/jquery-tag-it/js/tag-it.min.js"></script>
@@ -49,11 +51,14 @@ $this->load->view('layout/topmenu');
                             <table id="user" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
+                                        <th>ID#</th>
                                         <?php
-                                        foreach ($fields as $fkey => $fvalue) {
+                                        foreach ($form_attr as $fkey => $fvalue) {
+                                            if ($fvalue['type'] != "hidden") {
                                             ?> 
                                             <th style='width: <?php echo $fvalue['width']; ?>'><?php echo $fvalue['title']; ?></th>
                                             <?php
+                                            }
                                         }
                                         ?>
                                         <th></th>
@@ -64,20 +69,18 @@ $this->load->view('layout/topmenu');
                                     foreach ($list_data as $key => $vdata) {
                                         ?>  
                                         <tr>
+                                            <td>
+                                                <?php echo $vdata["id"]; ?>
+                                            </td>
                                             <?php
-                                            foreach ($fields as $fkey => $fvalue) {
-                                                ?> 
+                                            foreach ($form_attr as $fkey => $fvalue) {
+                                                if ($fvalue['type'] != "hidden") {
+                                                    ?> 
 
-                                                <td>
-                                                    <?php
-                                                    if ($fkey == 'id') {
-                                                        ?>
-                                                        <?php echo $vdata[$fkey]; ?>
+                                                    <td>
 
-                                                        <?php
-                                                    } else {
-                                                        ?>
-                                                        <span  id="<?php echo $fkey; ?>" data-type="textarea" data-pk="<?php echo $vdata['id']; ?>" data-name="<?php echo $fkey; ?>" data-value="<?php echo $vdata[$fkey]; ?>" data-params ={'tablename':'<?php echo $table_name; ?>'} data-url="<?php echo site_url("LocalApi/updateCurd"); ?>" data-mode="inline" class="m-l-5 editable editable-click" tabindex="-1" > <?php echo $vdata[$fkey]; ?></span>
+
+                                                        <span  id="<?php echo $vdata["id"]; ?>" data-type="<?php echo $fvalue['type']; ?>" data-pk="<?php echo $vdata['id']; ?>" data-name="<?php echo $fkey; ?>" data-value="<?php echo $vdata[$fkey]; ?>" data-params ={'tablename':'<?php echo $table_name; ?>'} data-url="<?php echo site_url("LocalApi/updateCurd"); ?>" data-mode="inline" class="m-l-5 editable editable-click" tabindex="-1" > <?php echo $vdata[$fkey]; ?></span>
 
                                                     </td>
                                                     <?php
@@ -106,8 +109,9 @@ $this->load->view('layout/topmenu');
                     <div class="modal-content">
                         <form action="#" method="post">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 <h4 class="modal-title" id="myModalLabel"><?php echo $form_title; ?></h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
                             </div>
                             <div class="modal-body">
                                 <?php
