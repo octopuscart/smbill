@@ -207,10 +207,11 @@ class Invoice extends CI_Controller {
         $amount_inwords = "";
         if ($total_amount > 0) {
             $amount_inwords = $this->convert_num_word($total_amount);
-        }
-        else{
-            $total_amount2 = $total_amount*(-1);
-            $amount_inwords = $this->convert_num_word($total_amount2). " (Credit)";
+        } else {
+            if ($total_amount) {
+                $total_amount2 = $total_amount * (-1);
+                $amount_inwords = $this->convert_num_word($total_amount2) . " (Credit)";
+            }
         }
 
         $this->db->where("id", $invoice_id);
