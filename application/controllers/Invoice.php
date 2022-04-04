@@ -126,7 +126,8 @@ class Invoice extends CI_Controller {
         $filename = $daterange . ".csv";
         $f = fopen('php://memory', 'w');
 
-        $fields = array('S. No.', 'Invoice No.', 'Party', 'Consignee', 'Trans. Date', 'Total Amount');
+        $fields = array('S. No.', 'Invoice No.', 'Party', 'Consignee',
+            'Invoice Date', 'Sub Total',  'Deposite',  'Other Charges', 'Total Amount');
         fputcsv($f, $fields, $delimiter);
 
         foreach ($invoiceslist as $key => $value) {
@@ -135,6 +136,9 @@ class Invoice extends CI_Controller {
                 $value["party_name"],
                 $value["consignee_name"],
                 $value["trans_date"],
+                $value["sub_total"],
+                $value["deposite"],
+                $value["other_charges"],
                 $value["total_amount"],
             );
             fputcsv($f, $lineData, $delimiter);

@@ -92,14 +92,14 @@ $this->load->view('layout/topmenu');
 
 
                                 <hr/>
-                                <table id="tableDataOrder" class="table table-bordered   tableDataOrder" >
+                                <table id="tableDataOrder" class="table table-bordered   tableDataOrder" style="    font-size: 12px;">
                                     <thead>
                                         <tr>
-                                            <th style="width: 80px">S. No.</th>
+                                            <th style="width: 100px">S. No.</th>
                                             <th style="width:130px;">Invoice No.</th>
                                             <th style="width:25%">Party</th>
                                             <th style="width:20%">Consignee</th>
-                                            <th style="width:25%">Trans. Date</th>
+                                            <th style="width:25%">Invoice. Date</th>
                                             <th style="width:25%">Total Amount</th>
                                             <th style="width:25%">Action</th>
                                         </tr>
@@ -118,7 +118,7 @@ $this->load->view('layout/topmenu');
                                                     <td><?php echo $value["trans_date"]; ?></td>
                                                     <td><?php echo $value["total_amount"]; ?></td>
                                                     <td>
-                                                        <a href="<?php echo site_url("Invoice/update/".$value["id"]);?>" class="btn btn-success p-l-40 p-r-40 pull-right"  onclick="printDiv('printAreaWithoutHeader')"><i class="fa fa-print"></i> View</a>
+                                                        <a href="<?php echo site_url("Invoice/update/" . $value["id"]); ?>" class="btn btn-success p-l-40 p-r-40 pull-right"  onclick="printDiv('printAreaWithoutHeader')"><i class="fa fa-print"></i> View</a>
 
                                                     </td>
                                                 </tr>
