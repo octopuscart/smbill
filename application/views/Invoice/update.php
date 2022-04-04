@@ -73,7 +73,6 @@ $this->load->view('layout/topmenu');
                                         $this->load->view('Invoice/createBase_update', array("invoice_data" => $invoice_data, "invoice_description" => $invoice_description, "header" => 0));
                                         ?>
                                     </div>
-                                    <button type="button" class="btn btn-primary p-l-40 p-r-40"  data-toggle="modal" data-target="#add_item"><i class="fa fa-plus"></i> Add Transactions</button>
 
                                 </center>
                             </div>
@@ -87,7 +86,7 @@ $this->load->view('layout/topmenu');
 
     <!-- Modal -->
     <div class="modal fade" id="add_item" tabindex="-1" role="dialog" aria-labelledby="changePassword">
-        <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <form action="#" method="post">
                     <div class="modal-header">
@@ -96,24 +95,16 @@ $this->load->view('layout/topmenu');
 
                     </div>
                     <div class="modal-body">
-                        <label style="width: 100%;">
-                            Transactions Date
-                            <div class="input-group date datepicker" id="">
-                                <input type="text" class="form-control" name='transaction_date' readonly=""  aria-describedby="sizing-addon2" value="<?php echo date("Y-m-d"); ?>">
-                                <span class="input-group-btn input-group-addon" >
-                                    <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
-                                </span>
-                            </div>
-                        </label>
+
                         <label  style="width: 100%;">
-                            Transactions Description
+                            Description
                             <div class="input-group" id="">
                                 <textarea type="text" class="form-control" name='description'  aria-describedby="sizing-addon2" required=""></textarea>
 
                             </div>
                         </label>
-                        <label  style="width: 100%;">
-                            FREIGHT AND OTHER CHARGES
+                        <label  style="">
+                            Amount
                             <div class="input-group" id="">
                                 <input type="text" class="form-control" name='amount'  aria-describedby="sizing-addon2" value="" required="">
 
@@ -136,7 +127,7 @@ $this->load->view('layout/topmenu');
 
 
     <!-- Modal -->
-    <div class="modal fade" id="changeparty" tabindex="-1" role="dialog" aria-labelledby="changePassword">
+    <div class="modal fade" id="changeparty" tabindex="-1" role="dialog" aria-labelledby="">
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
                 <form action="#" method="post">
@@ -183,6 +174,36 @@ $this->load->view('layout/topmenu');
                         <button type="submit" name="submitPaty" class="btn btn-primary">Submit</button>
 
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="remove_item" tabindex="-1" role="dialog" aria-labelledby="">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <form action="#" method="post">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Remove Transaction</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="">
+                            <p>Are you sure want to remove this transaction?</p>
+                        </div>
+                        <input type="hidden" name="transection_id" value="" id="transection_id">
+
+
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="submit" name="removeTransection" class="btn btn-primary">Yes</button>
+
+                        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                     </div>
                 </form>
             </div>
@@ -244,17 +265,26 @@ $this->load->view('layout/footer');
                                                 window.location.reload();
                                             });
                                         });
+                                        
+                                        $("form").on("submit", function(){
+                                            $("form button").hide();
+                                        })
 </script>
 <script>
-
+    function removeItem(itemid) {
+        $("#transection_id").val(itemid);
+    }
     function printDiv(divName) {
+        $("#add_transection").hide();
+        $(".remove_transections").hide();
         var printContents = document.getElementById(divName).innerHTML;
         var originalContents = document.body.innerHTML;
 
         document.body.innerHTML = printContents;
 
         window.print();
-
+        $("#add_transection").show();
+        $(".remove_transections").show();
         document.body.innerHTML = originalContents;
     }
 

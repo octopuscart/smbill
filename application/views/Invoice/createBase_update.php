@@ -71,13 +71,13 @@ $originalDate = date("Y-m-d");
                     <tr class=""  style="    width:50%;vertical-align: top;"  >
 
                         <td style="    width:30%;">
-                            Invoice NO#: <?php echo $invoice_data["invoice_no"]; ?>
+                            Invoice No: <?php echo $invoice_data["invoice_no"]; ?>
                         </td>
                         <td  style="text-align: center;height: 100px;   ">
                             <h3 style="font-size:25px;;margin: 0px;">INVOICE</h3>
                         </td>
                         <td style="    width:40%;text-align: right;">
-                            Trans. Date: <span placeholder="" id="<?php echo $invoice_data["id"]; ?>" data-type="text" data-pk="<?php echo $invoice_data['id']; ?>" data-name="trans_date" data-value="<?php echo $invoice_data["trans_date"]; ?>" data-params ={'tablename':'billing_invoice'} data-url="<?php echo site_url("LocalApi/updateCurd"); ?>" data-mode="inline" class="m-l-5 editable editable-click" tabindex="-1" ><?php echo $invoice_data["trans_date"]; ?></span>
+                            Invoice Date: <span placeholder="" id="<?php echo $invoice_data["id"]; ?>" data-type="text" data-pk="<?php echo $invoice_data['id']; ?>" data-name="trans_date" data-value="<?php echo $invoice_data["trans_date"]; ?>" data-params ={'tablename':'billing_invoice'} data-url="<?php echo site_url("LocalApi/updateCurd"); ?>" data-mode="inline" class="m-l-5 editable editable-click" tabindex="-1" ><?php echo $invoice_data["trans_date"]; ?></span>
 
                         </td>
                     </tr>
@@ -114,7 +114,11 @@ $originalDate = date("Y-m-d");
                 <table style="width: 100%;border-collapse: collapse;margin-top: 20px;   " >
                     <tr  class="border-td">
                         <td   colspan="5">
-                            <h4>Your Transactions</h4>
+                            <h4>
+                                Your Transaction(s)
+                                <button type="button" id="add_transection" class="btn btn-primary p-l-40 p-r-40" style="float: right;" data-toggle="modal" data-target="#add_item"><i class="fa fa-plus"></i> Add Transactions</button>
+
+                            </h4>
 
                         </td>
                     </tr>
@@ -123,12 +127,9 @@ $originalDate = date("Y-m-d");
                             <h4>S. No.</h4>
 
                         </td>
-                        <td style="width: 180px">
-                            <h4>Date</h4>
 
-                        </td>
                         <td >
-                            <h4>Description</h4>
+                            <h4>Description(s)</h4>
 
                         </td>
                         <td style="width: 180px;text-align: right;">
@@ -147,33 +148,27 @@ $originalDate = date("Y-m-d");
                             <td>
                                 <?php echo $key + 1; ?>
                             </td>
-                            <td>
-                                <?php
-                                $txndate = $value["transaction_date"];
-                                $newDate = date("F d-Y", strtotime($txndate));
-                                ?>
-                                <span  id="<?php echo $value["id"]; ?>" data-type="text" data-pk="<?php echo $value['id']; ?>" data-name="transaction_date" data-value="<?php echo $value["transaction_date"]; ?>" data-params ={'tablename':'billing_invoice_description'} data-url="<?php echo site_url("LocalApi/updateCurd"); ?>" data-mode="inline" class="m-l-5 editable editable-click" tabindex="-1" ><?php echo $value["transaction_date"]; ?></span>
 
-                            </td>
                             <td style="white-space: pre-line;">
                                 <?php $txndate = $value["description"]; ?>
                                 <span  id="<?php echo $value["id"]; ?>" data-type="textarea" data-pk="<?php echo $value['id']; ?>" data-name="description" data-value="<?php echo $value["description"]; ?>" data-params ={'tablename':'billing_invoice_description'} data-url="<?php echo site_url("LocalApi/updateCurd"); ?>" data-mode="inline" class="m-l-5 editable editable-click" tabindex="-1" ><?php echo $value["description"]; ?></span>
+                                <button type="button" class="btn btn-danger btn-sm p-l-40 p-r-40 remove_transections"  data-toggle="modal" data-target="#remove_item" onclick="removeItem(<?php echo $value["id"];?>)" style="margin-top: 10px;"><i class="fa fa-trash"></i> Remove</button>
 
                             </td>
                             <td style="text-align: right;">
                                 <?php
-                                $value["amount"];
+                                $sb_amount = $value["amount"] ? $value["amount"] : 0
                                 ?>
                                 <span  id="<?php echo $value["id"]; ?>" data-type="text" data-pk="<?php echo $value['id']; ?>" data-name="amount" data-value="<?php echo $value["amount"]; ?>" data-params ={'tablename':'billing_invoice_description'} data-url="<?php echo site_url("LocalApi/updateCurd"); ?>" data-mode="inline" class="m-l-5 editable editable-click" tabindex="-1" >
                                     <?php
-                                    echo GLOBAL_CURRENCY . " " . number_format($value["amount"], 2, '.', '');
+                                    echo GLOBAL_CURRENCY . " " . number_format($sb_amount, 2, '.', '');
                                     ?>
 
                                 </span>
                             </td>
                             <td style="text-align: right;">
                                 <?php
-                                echo GLOBAL_CURRENCY . " " . number_format($value["amount"], 2, '.', '');
+                                echo GLOBAL_CURRENCY . " " . number_format($sb_amount, 2, '.', '');
                                 ?>
                             </td>
                         </tr>
@@ -182,7 +177,7 @@ $originalDate = date("Y-m-d");
                     }
                     ?>
                     <tr style="text-align: right;" class="border-td">
-                        <td rowspan="4" colspan="3" style="text-align: left;">
+                        <td rowspan="4" colspan="2" style="text-align: left;">
 
 
                             <b>  NET AMOUNT IN WORDS</b> 
@@ -197,7 +192,7 @@ $originalDate = date("Y-m-d");
                         <th style="text-align: right;">
 
                             <?php
-                            echo GLOBAL_CURRENCY . " " . number_format($invoice_data["current_balance"], 2, '.', '');
+                            echo GLOBAL_CURRENCY . " " . number_format($invoice_data["sub_total"], 2, '.', '');
                             ?>
                         </th>
                     </tr>
@@ -251,7 +246,7 @@ $originalDate = date("Y-m-d");
 
 
                     <tr style="text-align: right;" class="border-td">
-                        <td  colspan="3" style="text-align: left;height: 100px;vertical-align: top">
+                        <td  colspan="2" style="text-align: left;height: 100px;vertical-align: top">
                             <b>Remark</b><br/>
                             <span  id="remarkid" data-type="textarea" data-pk="<?php echo $invoice_data['id']; ?>" data-name="remark" data-value="<?php echo $invoice_data["remark"]; ?>" data-params ={'tablename':'billing_invoice'} data-url="<?php echo site_url("LocalApi/updateCurd"); ?>" data-mode="inline" class="m-l-5  editable-click" tabindex="-1" ><?php echo $invoice_data["remark"]; ?></span>
 
@@ -270,20 +265,21 @@ $originalDate = date("Y-m-d");
                         <td  colspan="3" style="text-align: left;height: 100px;vertical-align: top">
                             <b>TRANSFER TO BELOW BANK DETAILS</b><br/>
                             <table border="0" class="nobordertable">
+                                 <tr>
+                                    <th>COMPANY NAME</th>
+                                    <td>SMART-TECH LOGISTICS (HK) LIMITED</td>
+                                </tr>
                                 <tr>
                                     <th>BANK NAME</th>
-                                    <td></td>
+                                    <td>HSBC (HONG KONG) LIMITED</td>
                                 </tr>
                                 <tr>
                                     <th>ACCOUNT NO.</th>
-                                    <td></td>
+                                    <td>012-844619-001</td>
                                 </tr>
-                                <tr>
-                                    <th>SWIFT CODE</th>
-                                    <td></td>
-                                </tr>
+                               
                             </table>
-    
+
 
 
                         </td>

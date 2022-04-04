@@ -168,10 +168,10 @@ class Invoice extends CI_Controller {
                 "consignee_address" => $consignee[$consignee_id]["address"],
                 "invoice_no" => "",
                 "trans_date" => $this->input->post("trans_date"),
-                "due_date" => $this->input->post("due_date"),
-                "deposite" => $this->input->post("deposite"),
-                "other_charges" => $this->input->post("other_charges"),
-                "current_balance" => "",
+                "due_date" => "",
+                "deposite" => "",
+                "other_charges" => "",
+                "sub_total" => "",
                 "total_amount" => "",
                 "remark" => "",
             );
@@ -194,22 +194,32 @@ class Invoice extends CI_Controller {
         $invoice_data = $this->db->get("billing_invoice")->row_array();
         $invoice_description = $this->db->where("billing_invoice_id", $invoice_id)->get("billing_invoice_description")->result_array();
         $total = 0;
+        $total_amount = 0;
         $deposite = $invoice_data["deposite"] ? $invoice_data["deposite"] : 0;
         $other_charges = $invoice_data["other_charges"] ? $invoice_data["other_charges"] : 0;
 
         foreach ($invoice_description as $key => $value) {
+            $value["amount"] = trim($value["amount"]) ? $value["amount"] : 0;
             $total += $value["amount"];
         }
-        $total_amount = ($total - $deposite) + $other_charges;
+        $total_amount = ($total + $other_charges) - $deposite;
 
-        $amount_inwords = $this->convert_num_word($total_amount);
+        $amount_inwords = "";
+        if ($total_amount > 0) {
+            $amount_inwords = $this->convert_num_word($total_amount);
+        }
+        else{
+            $total_amount2 = $total_amount*(-1);
+            $amount_inwords = $this->convert_num_word($total_amount2). " (Credit)";
+        }
 
         $this->db->where("id", $invoice_id);
-        $this->db->set(array("current_balance" => $total, "total_amount" => $total_amount));
+        $this->db->set(array("sub_total" => $total, "total_amount" => $total_amount));
         $this->db->update("billing_invoice");
         $invoice_data["amount_inwords"] = $amount_inwords;
 
-        $invoice_data["current_balance"] = $total_amount;
+        $invoice_data["sub_total"] = $total;
+        $invoice_data["total_amount"] = $total_amount;
 
         $data["invoice_data"] = $invoice_data;
         $data["invoice_description"] = $invoice_description;
@@ -224,7 +234,7 @@ class Invoice extends CI_Controller {
         if (isset($_POST["submitData"])) {
             $insertarray = array(
                 "billing_invoice_id" => $invoice_id,
-                "transaction_date" => $this->input->post("transaction_date"),
+                "transaction_date" => "",
                 "amount" => $this->input->post("amount"),
                 "description" => $this->input->post("description"),
             );
@@ -249,6 +259,13 @@ class Invoice extends CI_Controller {
             redirect(site_url("Invoice/update/$invoice_id"));
         }
 
+        if (isset($_POST["removeTransection"])) {
+            $tr_id = $this->input->post("transection_id");
+            $this->db->where("id", $tr_id);
+            $this->db->delete('billing_invoice_description');
+            redirect(site_url("Invoice/update/$invoice_id"));
+        }
+
 
         $this->load->view('Invoice/update', $data);
     }
@@ -263,7 +280,7 @@ class Invoice extends CI_Controller {
             $total_amount += $value["amount"];
         }
 
-        $invoice_data["current_balance"] = $total_amount;
+        $invoice_data["sub_total"] = $total_amount;
 
         $data["invoice_data"] = $invoice_data;
         $data["invoice_description"] = $invoice_description;
