@@ -99,7 +99,7 @@ $this->load->view('layout/topmenu');
                                             <th style="width:130px;">Invoice No.</th>
                                             <th style="width:25%">Party</th>
                                             <th style="width:20%">Consignee</th>
-                                            <th style="width:25%">Invoice. Date</th>
+                                            <th style="width:25%">Invoice Date</th>
                                             <th style="width:25%">Total Amount</th>
                                             <th style="width:25%">Action</th>
                                         </tr>

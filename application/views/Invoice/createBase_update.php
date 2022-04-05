@@ -262,7 +262,7 @@ $originalDate = date("Y-m-d");
                         </td>
                     </tr>
                     <tr style="text-align: right;" class="border-td">
-                        <td  colspan="3" style="text-align: left;height: 100px;vertical-align: top">
+                        <td  colspan="2" style="text-align: left;height: 100px;vertical-align: top">
                             <b>TRANSFER TO BELOW BANK DETAILS</b><br/>
                             <table border="0" class="nobordertable">
                                  <tr>
